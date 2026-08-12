@@ -1,0 +1,16 @@
+.venv/
+.env
+**/.env
+__pycache__/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+chroma_data/
+**/chroma_data/
+uploads/
+**/uploads/
+lexical_index.json
+*.log
+.DS_Store
+Thumbs.db

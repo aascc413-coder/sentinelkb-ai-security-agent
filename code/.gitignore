@@ -1,0 +1,47 @@
+# ── Python ────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.venv/
+venv/
+env/
+.env
+*.env.local
+
+
+
+# ── IDE ───────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ── Docker ────────────────────────
+docker-compose.override.yml
+
+# ── Data & Uploads ────────────────
+uploads/
+*.sqlite
+*.db
+data/
+
+# ── Logs ──────────────────────────
+*.log
+logs/
+
+# ── Secrets (永远不要提交) ────────
+*.pem
+*.key
+credentials.json
+secrets.yaml
+.env
+.env.*
+!.env.example

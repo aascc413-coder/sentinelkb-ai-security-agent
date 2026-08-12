@@ -1,0 +1,52 @@
+[
+  {
+    "id": "q01",
+    "question": "安全事件发生后为什么要保留日志和时间线？",
+    "relevant_sources": ["incident_response.txt"]
+  },
+  {
+    "id": "q02",
+    "question": "如何回溯防火墙、DNS 和 EDR 中的 IOC？",
+    "relevant_sources": ["incident_response.txt"]
+  },
+  {
+    "id": "q03",
+    "question": "勒索软件导致文件加密后应该怎样处理备份？",
+    "relevant_sources": ["ransomware_playbook.txt"]
+  },
+  {
+    "id": "q04",
+    "question": "发现感染主机和共享传播时如何处置？",
+    "relevant_sources": ["ransomware_playbook.txt"]
+  },
+  {
+    "id": "q05",
+    "question": "调查钓鱼邮件需要保存哪些邮件信息？",
+    "relevant_sources": ["phishing_handbook.txt"]
+  },
+  {
+    "id": "q06",
+    "question": "用户点击恶意链接后应该检查什么？",
+    "relevant_sources": ["phishing_handbook.txt"]
+  },
+  {
+    "id": "q07",
+    "question": "检测到 Mimikatz 凭证转储后如何处置账户？",
+    "relevant_sources": ["credential_access.txt"]
+  },
+  {
+    "id": "q08",
+    "question": "如何确定 LSASS 访问造成的影响范围？",
+    "relevant_sources": ["credential_access.txt"]
+  },
+  {
+    "id": "q09",
+    "question": "对外服务 CVE 漏洞应该如何确定修复优先级？",
+    "relevant_sources": ["vulnerability_response.txt"]
+  },
+  {
+    "id": "q10",
+    "question": "漏洞补丁完成后为什么还要回归验证？",
+    "relevant_sources": ["vulnerability_response.txt"]
+  }
+]

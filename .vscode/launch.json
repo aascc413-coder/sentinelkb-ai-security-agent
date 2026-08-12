@@ -1,0 +1,26 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "SentinelKB: 调试 API",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": [
+        "api.main:app",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "8080"
+      ],
+      "cwd": "${workspaceFolder}\\code\\python",
+      "env": {
+        "ENABLE_LLM": "0",
+        "DISABLE_LOCAL_EMBEDDINGS": "1",
+        "PYTHONUTF8": "1"
+      },
+      "console": "integratedTerminal",
+      "justMyCode": true
+    }
+  ]
+}

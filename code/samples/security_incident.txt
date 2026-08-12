@@ -1,0 +1,5 @@
+2026-07-18 09:30，SOC 在终端 10.10.8.23 发现异常 PowerShell EncodedCommand 执行。
+该主机随后访问 http://update-check.evil-example.top/payload，并向 203.0.113.10 建立周期性连接。
+EDR 检测到疑似 Mimikatz 凭证转储行为，随后出现通过 SMB 和 PsExec 向相邻服务器横向移动的迹象。
+恶意样本 SHA256：aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa。
+初步研判与 CVE-2025-12345 的对外服务漏洞利用有关，请给出处置优先级与排查建议。

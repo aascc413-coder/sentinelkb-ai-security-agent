@@ -1,0 +1,40 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "SentinelKB: 启动 API",
+      "type": "shell",
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}\\tools\\start_project.ps1"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "SentinelKB: 运行测试",
+      "type": "shell",
+      "command": "${workspaceFolder}\\..\\.venv\\Scripts\\python.exe",
+      "args": [
+        "-m",
+        "pytest",
+        "-q"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}\\code\\python",
+        "env": {
+          "ENABLE_LLM": "0",
+          "DISABLE_LOCAL_EMBEDDINGS": "1",
+          "PYTHONUTF8": "1"
+        }
+      },
+      "problemMatcher": []
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+# Core runtime dependencies verified on Windows + Python 3.12.
+fastapi==0.141.1
+uvicorn==0.52.1
+python-multipart==0.0.32
+pydantic-settings==2.15.0
+python-dotenv==1.2.2
+
+langgraph==0.6.11
+langchain-core==0.3.86
+langchain-openai==0.3.35
+
+chromadb==1.5.9
+neo4j==5.28.4
+PyPDF2==3.0.1
