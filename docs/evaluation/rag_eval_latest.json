@@ -1,0 +1,225 @@
+{
+  "generated_at": "2026-08-15T17:09:46+08:00",
+  "base_url": "http://127.0.0.1:8080",
+  "health": {
+    "status": "ok",
+    "mode": "online",
+    "service": "SentinelKB",
+    "version": "2.0.0",
+    "components": {
+      "llm": {
+        "status": "ready",
+        "detail": null
+      },
+      "vector_store": {
+        "status": "ready",
+        "detail": null
+      },
+      "knowledge_graph": {
+        "status": "ready",
+        "detail": null
+      },
+      "workflows": {
+        "status": "ready",
+        "detail": null
+      }
+    }
+  },
+  "dataset": {
+    "name": "SentinelKB security RAG baseline",
+    "version": "1.0.0"
+  },
+  "uploads": [],
+  "summary": {
+    "case_count": 10,
+    "passed": 10,
+    "pass_rate": 1.0,
+    "fact_coverage": 1.0,
+    "source_hit_rate": 1.0,
+    "abstention_accuracy": 1.0,
+    "retry_count": 0,
+    "api_error_count": 0,
+    "latency_p50_ms": 2950.67,
+    "latency_p95_ms": 20461.04,
+    "total_elapsed_ms": 71394.38
+  },
+  "results": [
+    {
+      "id": "blue-falcon-event-id",
+      "question": "蓝隼项目的安全事件编号是什么？",
+      "passed": true,
+      "should_abstain": false,
+      "abstained": false,
+      "fact_coverage": 1.0,
+      "source_hit": true,
+      "expected_source": "rag_test.txt",
+      "returned_sources": [
+        "rag_test.txt"
+      ],
+      "confidence": 0.6146221365874545,
+      "latency_ms": 4731.13,
+      "answer_excerpt": "根据提供的上下文，蓝隼项目的安全事件编号是 **SEC-731**。[来源: rag_test.txt]",
+      "retry_count": 0
+    },
+    {
+      "id": "blue-falcon-account-action",
+      "question": "SEC-731 检测到 Mimikatz 后需要处理哪个账户，并采取什么密码措施？",
+      "passed": true,
+      "should_abstain": false,
+      "abstained": false,
+      "fact_coverage": 1.0,
+      "source_hit": true,
+      "expected_source": "rag_test.txt",
+      "returned_sources": [
+        "rag_test.txt"
+      ],
+      "confidence": 0.4333243715553165,
+      "latency_ms": 14919.32,
+      "answer_excerpt": "根据处置规范，检测到 Mimikatz 后需要**禁用 `svc_backup` 账户**，并**轮换相关账户的密码**。同时建议立即隔离受影响主机，并检查 10.20.30.40 主机的 EDR、Windows 登录日志和 SMB 访问记录，完成后将取证结果提交安全运营负责人复核。[来源: rag_test.txt]",
+      "retry_count": 0
+    },
+    {
+      "id": "blue-falcon-log-scope",
+      "question": "蓝隼项目发生凭据窃取后，需要重点检查哪些主机和记录？",
+      "passed": true,
+      "should_abstain": false,
+      "abstained": false,
+      "fact_coverage": 1.0,
+      "source_hit": true,
+      "expected_source": "rag_test.txt",
+      "returned_sources": [
+        "rag_test.txt"
+      ],
+      "confidence": 0.5306604353708031,
+      "latency_ms": 20461.04,
+      "answer_excerpt": "根据《蓝隼项目安全事件处置规范》（事件编号 SEC-731），发生凭据窃取（如检测到 Mimikatz 凭证转储行为）后，需要重点检查的主机和记录如下：  - **重点主机**：**10.20.30.40** - **重点检查记录**：该主机的 **EDR**、**Windows 登录日志** 和 **SMB 访问记录**。  此外，规范要求立即隔离受影响主机、禁用 `svc_backup` 账户并轮换相关账户密码，完成处置后需将取证结果提交给安全运营负责人复核。[来源: r",
+      "retry_count": 0
+    },
+    {
+      "id": "blue-falcon-review-owner",
+      "question": "SEC-731 完成处置后，取证结果应该交给谁做什么？",
+      "passed": true,
+      "should_abstain": false,
+      "abstained": false,
+      "fact_coverage": 1.0,
+      "source_hit": true,
+      "expected_source": "rag_test.txt",
+      "returned_sources": [
+        "rag_test.txt"
+      ],
+      "confidence": 0.5432080924855491,
+      "latency_ms": 2216.54,
+      "answer_excerpt": "根据检索到的信息，SEC-731 事件完成处置后，**应将取证结果提交给安全运营负责人复核**。[来源: rag_test.txt]  具体来说，处置流程要求： 1. 完成处置后，将取证结果提交给安全运营负责人 2. 由安全运营负责人进行**复核**  **建议**：在提交前，请确保取证材料完整（包括 EDR 日志、Windows 登录日志、SMB 访问记录等），并附上处置动作说明（如隔离时间、账户禁用情况、密码轮换记录），以便负责人高效完成复核。",
+      "retry_count": 0
+    },
+    {
+      "id": "blue-falcon-unknown-manager",
+      "question": "蓝隼项目的项目经理叫什么名字？",
+      "passed": true,
+      "should_abstain": true,
+      "abstained": true,
+      "fact_coverage": 1.0,
+      "source_hit": true,
+      "expected_source": null,
+      "returned_sources": [
+        "rag_test.txt"
+      ],
+      "confidence": 0.2902697495183044,
+      "latency_ms": 1976.8,
+      "answer_excerpt": "根据提供的上下文，没有找到“蓝隼项目”项目经理的名字。上下文仅包含安全事件处置规范（事件编号 SEC-731），未提及项目管理人员信息。[来源: rag_test.txt]",
+      "retry_count": 0
+    },
+    {
+      "id": "incident-host-command",
+      "question": "2026-07-18 的安全事件涉及哪台终端和什么异常命令？",
+      "passed": true,
+      "should_abstain": false,
+      "abstained": false,
+      "fact_coverage": 1.0,
+      "source_hit": true,
+      "expected_source": "security_incident.txt",
+      "returned_sources": [
+        "rag_test.txt",
+        "security_incident.txt"
+      ],
+      "confidence": 0.25691111363685565,
+      "latency_ms": 2612.43,
+      "answer_excerpt": "根据检索到的信息，2026-07-18 的安全事件涉及终端 **10.10.8.23**，异常命令为 **PowerShell EncodedCommand 执行**。该主机随后访问了恶意地址并出现横向移动迹象。[来源: security_incident.txt]",
+      "retry_count": 0
+    },
+    {
+      "id": "incident-network-ioc",
+      "question": "安全事件中的可疑外联域名和周期性连接 IP 是什么？",
+      "passed": true,
+      "should_abstain": false,
+      "abstained": false,
+      "fact_coverage": 1.0,
+      "source_hit": true,
+      "expected_source": "security_incident.txt",
+      "returned_sources": [
+        "security_incident.txt",
+        "rag_test.txt"
+      ],
+      "confidence": 0.2319983098129815,
+      "latency_ms": 2950.67,
+      "answer_excerpt": "根据提供的上下文信息，该安全事件中的可疑外联域名和周期性连接 IP 如下：  - **可疑外联域名**：`http://update-check.evil-example.top/payload` [来源: security_incident.txt] - **周期性连接 IP**：`203.0.113.10` [来源: security_incident.txt]  **说明**：终端 10.10.8.23 在发现异常 PowerShell EncodedCommand 执",
+      "retry_count": 0
+    },
+    {
+      "id": "incident-lateral-movement",
+      "question": "2026-07-18 事件通过哪些远程服务或工具出现横向移动？",
+      "passed": true,
+      "should_abstain": false,
+      "abstained": false,
+      "fact_coverage": 1.0,
+      "source_hit": true,
+      "expected_source": "security_incident.txt",
+      "returned_sources": [
+        "security_incident.txt",
+        "rag_test.txt"
+      ],
+      "confidence": 0.2321477099093125,
+      "latency_ms": 1947.86,
+      "answer_excerpt": "根据检索到的上下文信息，该事件中横向移动主要通过以下方式实现：  1. **SMB（Server Message Block）**：攻击者通过 SMB 协议向相邻服务器进行横向移动 [来源: security_incident.txt] 2. **PsExec**：使用 PsExec 工具进行远程命令执行和横向移动 [来源: security_incident.txt]  **补充说明**： - 事件中检测到疑似 Mimikatz 凭证转储行为，这为后续通过 SMB/PsEx",
+      "retry_count": 0
+    },
+    {
+      "id": "incident-vulnerability-hash",
+      "question": "CVE-2025-12345 相关事件中的恶意样本 SHA256 是什么？",
+      "passed": true,
+      "should_abstain": false,
+      "abstained": false,
+      "fact_coverage": 1.0,
+      "source_hit": true,
+      "expected_source": "security_incident.txt",
+      "returned_sources": [
+        "knowledge_graph",
+        "knowledge_graph",
+        "knowledge_graph",
+        "security_incident.txt"
+      ],
+      "confidence": 0.7929725343320848,
+      "latency_ms": 3450.1,
+      "answer_excerpt": "根据提供的上下文，CVE-2025-12345 相关事件中的恶意样本 SHA256 为：  `aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`  该信息来自安全事件记录，其中明确记载了恶意样本的 SHA256 值，且事件初步研判与 CVE-2025-12345 的对外服务漏洞利用有关 [来源: security_incident.txt]。  **补充说明**：知识图谱中关联的两个安全事件（Se",
+      "retry_count": 0
+    },
+    {
+      "id": "unknown-annual-leave",
+      "question": "公司的年假制度规定每年可以休多少天？",
+      "passed": true,
+      "should_abstain": true,
+      "abstained": true,
+      "fact_coverage": 1.0,
+      "source_hit": true,
+      "expected_source": null,
+      "returned_sources": [
+        "rag_test.txt",
+        "security_incident.txt"
+      ],
+      "confidence": 0.04113215033772813,
+      "latency_ms": 7124.53,
+      "answer_excerpt": "根据您提供的上下文信息，**无法回答**关于公司年假制度的问题。  您提供的两份资料（[来源: rag_test.txt] 和 [来源: security_incident.txt]）均属于**网络安全事件处置规范**和**安全事件分析报告**，内容涉及 Mimikatz 凭证转储、主机隔离、横向移动排查等安全运营内容，**完全没有包含任何关于员工年假、休假制度或人力资源政策的信息**。  如果您需要查询年假制度，请提供相关的人力资源政策文档或规章制度，我将为您检索并解答。如",
+      "retry_count": 0
+    }
+  ]
+}

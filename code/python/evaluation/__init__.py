@@ -1,1 +1,1 @@
-"""Evaluation helpers for reproducible retrieval metrics."""
+"""Reproducible evaluation utilities for SentinelKB."""

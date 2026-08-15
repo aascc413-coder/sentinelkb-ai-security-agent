@@ -17,6 +17,8 @@
 - `code/`：可运行代码与 Docker 编排。
 - `code/samples/security_incident.txt`：开箱演示样例。
 - `evals/`：检索评测数据与离线基线报告。
+- `code/python/evaluation/`：可重复执行的在线 RAG 验收集与评测脚本。
+- `docs/evaluation/`：最近一次在线 RAG 评测的 JSON 原始结果与 Markdown 报告。
 - `docs/`：架构、接口和交付文档。
 - `学习资料/`：周末再使用的代码地图、学习计划与面试手册，不影响项目运行。
 
@@ -59,6 +61,18 @@ cd code/python
 python -m pytest tests/test_security_analysis_agent.py -q
 ```
 
+### 在线 RAG 评测
+
+项目运行并完成样例文档入库后，在 `code/python` 执行：
+
+```powershell
+python -m evaluation.runner --skip-upload
+```
+
+首次运行或需要自动补齐测试文档时，去掉 `--skip-upload`。评测固定覆盖事实问答、来源命中、跨文档隔离和知识库无答案拒答，并以 1 秒间隔请求；遇到 429、502 或超时会有限重试，重试次数和最终 API 错误都会写入报告。
+
+当前在线基线为 10/10 通过：关键事实覆盖率、来源命中率、拒答准确率均为 100%，P50 约 3.0 秒，P95 约 20.5 秒。详细结果见 `docs/evaluation/rag_eval_latest.md`；延迟会随所用模型服务和中转站变化。
+
 ## 核心改造（相对原项目）
 
 | 改造 | 实际效果 |
@@ -71,7 +85,7 @@ python -m pytest tests/test_security_analysis_agent.py -q
 | 图查询加固 | 模型生成的 Cypher 只能执行 MATCH/RETURN 只读查询 |
 | 产品界面 | 增加安全研判工作台和安全运营指标，完成 SentinelKB 品牌化 |
 | 离线知识图谱 | 无 API Key 时按安全规则生成事件、IOC、ATT&CK 节点及关系并写入 Neo4j |
-| 自动化测试 | 14 项测试覆盖安全分析、离线工作流、API 和检索评测指标 |
+| 自动化测试 | 27 项测试覆盖安全分析、离线工作流、API、幂等入库和 RAG 评测指标 |
 
 ## 技术栈
 

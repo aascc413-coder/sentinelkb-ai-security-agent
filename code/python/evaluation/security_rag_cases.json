@@ -1,0 +1,71 @@
+{
+  "name": "SentinelKB security RAG baseline",
+  "version": "1.0.0",
+  "documents": [
+    "../../samples/security_incident.txt",
+    "../../samples/rag_test.txt"
+  ],
+  "cases": [
+    {
+      "id": "blue-falcon-event-id",
+      "question": "蓝隼项目的安全事件编号是什么？",
+      "expected_source": "rag_test.txt",
+      "required_term_groups": [["SEC-731"]]
+    },
+    {
+      "id": "blue-falcon-account-action",
+      "question": "SEC-731 检测到 Mimikatz 后需要处理哪个账户，并采取什么密码措施？",
+      "expected_source": "rag_test.txt",
+      "required_term_groups": [["svc_backup"], ["轮换", "更换"]]
+    },
+    {
+      "id": "blue-falcon-log-scope",
+      "question": "蓝隼项目发生凭据窃取后，需要重点检查哪些主机和记录？",
+      "expected_source": "rag_test.txt",
+      "required_term_groups": [["10.20.30.40"], ["EDR"], ["Windows"], ["SMB"]]
+    },
+    {
+      "id": "blue-falcon-review-owner",
+      "question": "SEC-731 完成处置后，取证结果应该交给谁做什么？",
+      "expected_source": "rag_test.txt",
+      "required_term_groups": [["安全运营负责人"], ["复核"]]
+    },
+    {
+      "id": "blue-falcon-unknown-manager",
+      "question": "蓝隼项目的项目经理叫什么名字？",
+      "should_abstain": true
+    },
+    {
+      "id": "incident-host-command",
+      "question": "2026-07-18 的安全事件涉及哪台终端和什么异常命令？",
+      "expected_source": "security_incident.txt",
+      "required_term_groups": [["10.10.8.23"], ["PowerShell", "EncodedCommand"]]
+    },
+    {
+      "id": "incident-network-ioc",
+      "question": "安全事件中的可疑外联域名和周期性连接 IP 是什么？",
+      "expected_source": "security_incident.txt",
+      "required_term_groups": [["update-check.evil-example.top"], ["203.0.113.10"]]
+    },
+    {
+      "id": "incident-lateral-movement",
+      "question": "2026-07-18 事件通过哪些远程服务或工具出现横向移动？",
+      "expected_source": "security_incident.txt",
+      "required_term_groups": [["SMB"], ["PsExec"]]
+    },
+    {
+      "id": "incident-vulnerability-hash",
+      "question": "CVE-2025-12345 相关事件中的恶意样本 SHA256 是什么？",
+      "expected_source": "security_incident.txt",
+      "required_term_groups": [
+        ["CVE-2025-12345"],
+        ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"]
+      ]
+    },
+    {
+      "id": "unknown-annual-leave",
+      "question": "公司的年假制度规定每年可以休多少天？",
+      "should_abstain": true
+    }
+  ]
+}

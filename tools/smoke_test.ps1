@@ -29,7 +29,7 @@ $question = Invoke-RestMethod `
     -Method Post `
     -ContentType 'application/json; charset=utf-8' `
     -Body ([Text.Encoding]::UTF8.GetBytes($questionJson)) `
-    -TimeoutSec 30
+    -TimeoutSec 90
 Assert-Condition (-not [string]::IsNullOrWhiteSpace($question.answer)) 'Knowledge QA returned an answer'
 Assert-Condition ($question.sources.Count -gt 0) 'Knowledge QA returned traceable sources'
 
@@ -42,7 +42,7 @@ $analysis = Invoke-RestMethod `
     -Method Post `
     -ContentType 'application/json; charset=utf-8' `
     -Body ([Text.Encoding]::UTF8.GetBytes($analysisJson)) `
-    -TimeoutSec 30
+    -TimeoutSec 90
 Assert-Condition ($analysis.indicators.Count -ge 1) 'Security analysis extracted IOCs'
 Assert-Condition ($analysis.techniques.Count -ge 3) 'Security analysis mapped ATT&CK techniques'
 
