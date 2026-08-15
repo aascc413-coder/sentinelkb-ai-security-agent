@@ -112,7 +112,10 @@ app.mount("/static", StaticFiles(directory=static_dir), name="static")
 @app.get("/")
 async def serve_frontend():
     from fastapi.responses import FileResponse
-    return FileResponse(os.path.join(static_dir, "index.html"))
+    return FileResponse(
+        os.path.join(static_dir, "index.html"),
+        headers={"Cache-Control": "no-store"},
+    )
 
 
 # ── Request / Response Models ────────────────────────────────

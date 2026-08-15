@@ -370,10 +370,12 @@ async function uploadFiles(fileList) {
         throw new Error(formatApiError(err.detail, `HTTP ${r.status}`));
       }
       const data = await r.json();
-      addDocToList(file.name, data);
-      progress.textContent = data.duplicate
-        ? `已存在: ${file.name}（相同内容未重复入库）`
-        : `完成: ${file.name}（${data.chunks_count} 块 · ${data.vectors_stored} 条索引 · ${data.entities_stored} 个图谱实体 · ${data.ioc_count} IOC · 风险 ${data.security_risk}）`;
+      if (data.duplicate) {
+        progress.textContent = `已存在: ${file.name}（相同内容未重复入库）`;
+      } else {
+        addDocToList(file.name, data);
+        progress.textContent = `完成: ${file.name}（${data.chunks_count} 块 · ${data.vectors_stored} 条索引 · ${data.entities_stored} 个图谱实体 · ${data.ioc_count} IOC · 风险 ${data.security_risk}）`;
+      }
     } catch (err) {
       progress.textContent = `失败: ${file.name} — ${err.message}`;
       progress.classList.add('error');
