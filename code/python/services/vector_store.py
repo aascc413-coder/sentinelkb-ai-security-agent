@@ -10,6 +10,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import os
 import re
 from typing import Any
@@ -161,14 +162,15 @@ class VectorStoreService:
         if not chunks:
             return 0
 
-        for chunk in chunks:
-            self._lexical_docs[chunk.chunk_id] = {
+        lexical_updates = {
+            chunk.chunk_id: {
                 "content": chunk.content,
                 "source": chunk.metadata.get("source", ""),
                 "doc_id": chunk.doc_id,
                 "metadata": {**chunk.metadata, "doc_type": chunk.doc_type.value},
             }
-        self._save_lexical_index()
+            for chunk in chunks
+        }
 
         if self.embeddings_available and self._store is not None:
             texts = [chunk.content for chunk in chunks]
@@ -195,7 +197,19 @@ class VectorStoreService:
                 from langchain_core.documents import Document
                 documents = [Document(page_content=t, metadata=m) for t, m in zip(texts, metadatas)]
                 await self._store.aadd_documents(documents, ids=ids)
+
+        # Persist the lexical side only after the optional semantic write has
+        # succeeded.  A failed embedding call must not mark a document complete.
+        self._lexical_docs.update(lexical_updates)
+        self._save_lexical_index()
         return len(chunks)
+
+    def has_doc_id(self, doc_id: str) -> bool:
+        """Return whether a content-addressed document is fully indexed."""
+        return any(doc.get("doc_id") == doc_id for doc in self._lexical_docs.values())
+
+    def count_chunks_by_doc_id(self, doc_id: str) -> int:
+        return sum(1 for doc in self._lexical_docs.values() if doc.get("doc_id") == doc_id)
 
     async def search(self, query: str, top_k: int = 5) -> list[tuple[dict, float]]:
         """优先使用语义检索；无模型时自动回退到可解释的本地词法检索。"""
@@ -262,12 +276,44 @@ class VectorStoreService:
         words.update(chinese[i : i + 2] for i in range(max(0, len(chinese) - 1)))
         return {word for word in words if word}
 
+    @staticmethod
+    def _scope_anchors(text: str) -> list[str]:
+        """Extract strong document-scope anchors such as SEC-731 or 蓝隼项目."""
+        identifiers = re.findall(
+            r"\b(?:CVE-\d{4}-\d{4,}|[A-Z]{2,12}-\d{2,})\b",
+            text.upper(),
+        )
+        if identifiers:
+            return list(dict.fromkeys(identifiers))
+
+        anchors: list[str] = []
+        for segment in re.split(r"[\s，。！？、（）()：:]+", text):
+            marker = segment.find("项目")
+            if marker < 0:
+                continue
+            candidate = segment[: marker + 2]
+            candidate = re.sub(r"^(?:请问|关于|针对|这个|该|在)", "", candidate)
+            if len(candidate) > 10:
+                candidate = candidate[-10:]
+            if len(candidate) >= 4:
+                anchors.append(candidate)
+        return list(dict.fromkeys(anchors))
+
     def _lexical_search(self, query: str, top_k: int) -> list[tuple[dict, float]]:
         query_terms = self._terms(query)
         if not query_terms:
             return []
+        anchors = [anchor.lower() for anchor in self._scope_anchors(query)]
+        candidates = list(self._lexical_docs.values())
+        if anchors:
+            candidates = [
+                doc for doc in candidates
+                if all(anchor in doc.get("content", "").lower() for anchor in anchors)
+            ]
+            if not candidates:
+                return []
         ranked: list[tuple[dict, float]] = []
-        for doc in self._lexical_docs.values():
+        for doc in candidates:
             doc_terms = self._terms(doc.get("content", ""))
             overlap = len(query_terms & doc_terms)
             if overlap == 0:
@@ -284,9 +330,46 @@ class VectorStoreService:
             with open(self._lexical_index_path, "r", encoding="utf-8") as handle:
                 data = json.load(handle)
             if isinstance(data, dict):
-                self._lexical_docs = data
+                self._lexical_docs = self._migrate_content_addressed_ids(data)
         except (FileNotFoundError, json.JSONDecodeError, OSError):
             self._lexical_docs = {}
+
+    def _migrate_content_addressed_ids(self, docs: dict[str, dict[str, Any]]) -> dict[str, dict[str, Any]]:
+        """Collapse legacy path-based IDs when the original upload still exists."""
+        migrated: dict[str, dict[str, Any]] = {}
+        changed = False
+        for old_key, original in docs.items():
+            doc = {**original, "metadata": dict(original.get("metadata", {}))}
+            metadata = doc["metadata"]
+            candidate_path = metadata.get("stored_path") or doc.get("source", "")
+            doc_id = str(doc.get("doc_id", ""))
+            if candidate_path and os.path.isfile(candidate_path):
+                digest = hashlib.sha256()
+                with open(candidate_path, "rb") as handle:
+                    while block := handle.read(1024 * 1024):
+                        digest.update(block)
+                doc_id = digest.hexdigest()[:16]
+
+            chunk_match = re.search(r"#chunk-(\d+)$", old_key)
+            chunk_index = int(chunk_match.group(1)) if chunk_match else int(metadata.get("chunk_index", 0))
+            new_key = f"{doc_id}#chunk-{chunk_index}" if doc_id else old_key
+            doc["doc_id"] = doc_id
+            if new_key != old_key:
+                changed = True
+
+            existing = migrated.get(new_key)
+            # Prefer a user-facing source name over a legacy absolute path.
+            if existing and os.path.isabs(str(doc.get("source", ""))):
+                changed = True
+                continue
+            migrated[new_key] = doc
+
+        if len(migrated) != len(docs):
+            changed = True
+        if changed:
+            self._lexical_docs = migrated
+            self._save_lexical_index()
+        return migrated
 
     def _save_lexical_index(self) -> None:
         os.makedirs(os.path.dirname(self._lexical_index_path), exist_ok=True)

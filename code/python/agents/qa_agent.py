@@ -158,7 +158,39 @@ class QAAgent:
 
     async def _rewrite_query(self, question: str) -> dict:
         # 原问题直接用于检索。在线模型只负责最终答案生成，降低延迟与费用。
-        return {"queries": [question], "entities": [], "keywords": []}
+        import re
+        entities = re.findall(
+            r"\b(?:CVE-\d{4}-\d{4,}|T\d{4}(?:\.\d{3})?|[A-Z]{2,12}-\d{2,}|(?:\d{1,3}\.){3}\d{1,3})\b",
+            question.upper(),
+        )
+        if not entities:
+            entities = self._extract_project_anchors(question)
+        if not entities:
+            entities = [
+                token for token in re.findall(r"[A-Za-z][A-Za-z0-9_.-]{2,}", question)
+                if token.lower() not in {"http", "https", "windows"}
+            ][:5]
+        return {
+            "queries": [question],
+            "entities": list(dict.fromkeys(entities)),
+            "keywords": [],
+        }
+
+    @staticmethod
+    def _extract_project_anchors(question: str) -> list[str]:
+        import re
+        anchors: list[str] = []
+        for segment in re.split(r"[\s，。！？、（）()：:]+", question):
+            marker = segment.find("项目")
+            if marker < 0:
+                continue
+            candidate = segment[: marker + 2]
+            candidate = re.sub(r"^(?:请问|关于|针对|这个|该|在)", "", candidate)
+            if len(candidate) > 10:
+                candidate = candidate[-10:]
+            if len(candidate) >= 4:
+                anchors.append(candidate)
+        return list(dict.fromkeys(anchors))
 
     # ── vector retrieval ─────────────────────────────────────
 
@@ -182,38 +214,39 @@ class QAAgent:
     # ── graph retrieval ──────────────────────────────────────
 
     async def _graph_retrieve(self, question: str, rewritten: dict) -> list[RetrievedContext]:
-        if not self.knowledge_graph or self.llm is None:
+        if not self.knowledge_graph:
             return []
 
-        import json
         entities = rewritten.get("entities", [])
         if not entities:
             return []
-        messages = [
-            SystemMessage(content=CYPHER_GENERATION_PROMPT),
-            HumanMessage(content=f"问题: {question}\n实体: {entities}"),
-        ]
-        resp = await self.llm.ainvoke(messages)
-        try:
-            cleaned = resp.content.strip()
-            if cleaned.startswith("```"):
-                cleaned = cleaned.split("\n", 1)[1].rsplit("```", 1)[0]
-            cypher_data = json.loads(cleaned)
-        except (json.JSONDecodeError, IndexError):
-            cypher_data = {"queries": []}
 
         contexts: list[RetrievedContext] = []
-        for cypher in cypher_data.get("queries", []):
+        if not all(hasattr(self.knowledge_graph, method) for method in ("search_entities", "get_neighbors")):
+            return contexts
+        for keyword in entities[:5]:
             try:
-                records = await self.knowledge_graph.execute_read_cypher(cypher)
-                for record in records:
+                matches = await self.knowledge_graph.search_entities(keyword, limit=5)
+                for match in matches:
                     contexts.append(RetrievedContext(
-                        content=str(record),
+                        content=(
+                            f"实体: {match.get('name', '')}; 类型: {match.get('type', '')}; "
+                            f"描述: {match.get('description', '')}"
+                        ),
                         source="knowledge_graph",
-                        score=0.8,
+                        score=0.82,
                         retrieval_type="graph",
-                        metadata={"cypher": cypher},
+                        metadata={"matched_keyword": keyword},
                     ))
+                    neighbors = await self.knowledge_graph.get_neighbors(match.get("name", ""), hops=1)
+                    for neighbor in neighbors[:10]:
+                        contexts.append(RetrievedContext(
+                            content=str(neighbor),
+                            source="knowledge_graph",
+                            score=0.75,
+                            retrieval_type="graph",
+                            metadata={"matched_keyword": keyword, "entity": match.get("name", "")},
+                        ))
             except Exception:
                 continue
         return contexts

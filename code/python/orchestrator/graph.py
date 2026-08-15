@@ -132,13 +132,16 @@ def _build_ingest_graph(
         error = None
         if knowledge_graph:
             try:
-                for ext in extractions:
-                    for ent in ext.entities:
-                        await knowledge_graph.upsert_entity(ent, source=ext.source_chunk_id)
-                        entity_count += 1
-                    for rel in ext.relations:
-                        await knowledge_graph.add_relation(rel, source=ext.source_chunk_id)
-                        relation_count += 1
+                if hasattr(knowledge_graph, "store_extractions"):
+                    entity_count, relation_count = await knowledge_graph.store_extractions(extractions)
+                else:
+                    for ext in extractions:
+                        for ent in ext.entities:
+                            await knowledge_graph.upsert_entity(ent, source=ext.source_chunk_id)
+                            entity_count += 1
+                        for rel in ext.relations:
+                            await knowledge_graph.add_relation(rel, source=ext.source_chunk_id)
+                            relation_count += 1
             except Exception as exc:
                 error = f"{type(exc).__name__}: {exc}"
         return {
@@ -156,9 +159,11 @@ def _build_ingest_graph(
 
     graph.set_entry_point("parse")
     graph.add_edge("parse", "extract")
-    graph.add_edge("extract", "store_vectors")
-    graph.add_edge("store_vectors", "store_graph")
-    graph.add_edge("store_graph", END)
+    # Store the graph transaction first.  Vector/lexical indexing is the final
+    # completion marker used by duplicate detection.
+    graph.add_edge("extract", "store_graph")
+    graph.add_edge("store_graph", "store_vectors")
+    graph.add_edge("store_vectors", END)
 
     return graph.compile()
 

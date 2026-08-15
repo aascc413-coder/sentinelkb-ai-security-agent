@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pytest
 
+from agents.doc_parser_agent import DocParserAgent
 from agents.knowledge_extract_agent import KnowledgeExtractAgent
 from agents.qa_agent import QAAgent
 from orchestrator.graph import build_knowledge_graph_workflow
@@ -79,6 +80,44 @@ async def test_offline_ingest_still_parses_and_indexes_text(tmp_path: Path):
     assert result["knowledge_graph_error"] is None
 
 
+def test_document_id_depends_on_content_not_temporary_upload_path(tmp_path: Path):
+    first = tmp_path / "first.txt"
+    second = tmp_path / "random-prefix_second.txt"
+    content = "相同的安全处置规范。"
+    first.write_text(content, encoding="utf-8")
+    second.write_text(content, encoding="utf-8")
+
+    assert DocParserAgent._make_doc_id(str(first)) == DocParserAgent._make_doc_id(str(second))
+
+
+@pytest.mark.asyncio
+async def test_ingest_commits_graph_before_marking_vector_index_complete(tmp_path: Path):
+    events: list[str] = []
+
+    class OrderedVectorStore(FakeVectorStore):
+        async def add_chunks(self, chunks):
+            events.append("vector")
+            return await super().add_chunks(chunks)
+
+    class AtomicKnowledgeGraph:
+        async def store_extractions(self, extractions):
+            events.append("graph")
+            return (
+                sum(len(item.entities) for item in extractions),
+                sum(len(item.relations) for item in extractions),
+            )
+
+    document = tmp_path / "ordered.txt"
+    document.write_text("发现 PowerShell 异常行为。", encoding="utf-8")
+    workflows = build_knowledge_graph_workflow(OrderedVectorStore(), AtomicKnowledgeGraph())
+
+    result = await workflows["ingest"].ainvoke({"file_paths": [str(document)]})
+
+    assert events == ["graph", "vector"]
+    assert result["knowledge_graph_error"] is None
+    assert result["vector_store_error"] is None
+
+
 @pytest.mark.asyncio
 async def test_offline_qa_returns_retrieved_source_without_fabricating_an_answer():
     agent = QAAgent(vector_store=FakeVectorStore())
@@ -90,3 +129,21 @@ async def test_offline_qa_returns_retrieved_source_without_fabricating_an_answer
     assert result.contexts[0].source == "应急预案.txt"
     assert result.intent.value == "procedural"
     assert "词法检索: 1 条" in result.reasoning_steps
+
+
+@pytest.mark.asyncio
+async def test_graph_retrieval_uses_local_entity_lookup_without_llm():
+    class SearchableGraph:
+        async def search_entities(self, keyword, limit=5):
+            assert keyword == "SEC-731"
+            return [{"name": "SEC-731", "type": "Event", "description": "蓝隼项目安全事件"}]
+
+        async def get_neighbors(self, entity_name, hops=1):
+            return [{"source": entity_name, "relations": ["USES_TECHNIQUE"], "target": "T1003"}]
+
+    agent = QAAgent(vector_store=None, knowledge_graph=SearchableGraph())
+    rewritten = await agent._rewrite_query("SEC-731 涉及哪些技术？")
+    contexts = await agent._graph_retrieve("SEC-731 涉及哪些技术？", rewritten)
+
+    assert len(contexts) == 2
+    assert all(context.retrieval_type == "graph" for context in contexts)

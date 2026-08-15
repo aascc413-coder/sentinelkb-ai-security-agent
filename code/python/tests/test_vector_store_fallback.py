@@ -1,3 +1,4 @@
+import json
 import os
 
 import pytest
@@ -53,3 +54,81 @@ async def test_chroma_initializes_on_python_312_without_embeddings(tmp_path, mon
     assert store._store is not None
     assert stats["backend"] == "chroma+lexical"
     assert stats["semantic_enabled"] is False
+
+
+@pytest.mark.asyncio
+async def test_readding_same_content_addressed_chunk_is_idempotent(tmp_path, monkeypatch):
+    monkeypatch.setenv("DISABLE_LOCAL_EMBEDDINGS", "1")
+    store = VectorStoreService()
+    store._lexical_index_path = str(tmp_path / "lexical_index.json")
+    chunk = DocumentChunk(
+        content="蓝隼项目事件编号 SEC-731。",
+        doc_id="content-hash-1",
+        chunk_index=0,
+        doc_type=DocType.TEXT,
+        metadata={"source": "rag_test.txt"},
+    )
+
+    await store.add_chunks([chunk])
+    await store.add_chunks([chunk])
+
+    assert store.has_doc_id("content-hash-1") is True
+    assert store.count_chunks_by_doc_id("content-hash-1") == 1
+    assert len(store._lexical_docs) == 1
+
+
+@pytest.mark.asyncio
+async def test_incident_anchor_prevents_cross_event_context_mixing(tmp_path, monkeypatch):
+    monkeypatch.setenv("DISABLE_LOCAL_EMBEDDINGS", "1")
+    store = VectorStoreService()
+    store._lexical_index_path = str(tmp_path / "lexical_index.json")
+    await store.add_chunks([
+        DocumentChunk(
+            content="蓝隼项目事件 SEC-731 检测到 Mimikatz。",
+            doc_id="blue",
+            chunk_index=0,
+            doc_type=DocType.TEXT,
+            metadata={"source": "rag_test.txt"},
+        ),
+        DocumentChunk(
+            content="另一事件也检测到 Mimikatz 和横向移动。",
+            doc_id="other",
+            chunk_index=0,
+            doc_type=DocType.TEXT,
+            metadata={"source": "other.txt"},
+        ),
+    ])
+
+    results = await store.search("SEC-731 中 Mimikatz 如何处置？", top_k=5)
+
+    assert [item[0]["source"] for item in results] == ["rag_test.txt"]
+
+
+def test_legacy_path_ids_are_migrated_and_duplicate_content_is_collapsed(tmp_path):
+    first = tmp_path / "one.txt"
+    second = tmp_path / "two.txt"
+    first.write_text("same content", encoding="utf-8")
+    second.write_text("same content", encoding="utf-8")
+    index_path = tmp_path / "lexical_index.json"
+    index_path.write_text(json.dumps({
+        "old-one#chunk-0": {
+            "content": "same content",
+            "source": str(first),
+            "doc_id": "old-one",
+            "metadata": {"source": str(first)},
+        },
+        "old-two#chunk-0": {
+            "content": "same content",
+            "source": "friendly.txt",
+            "doc_id": "old-two",
+            "metadata": {"source": "friendly.txt", "stored_path": str(second)},
+        },
+    }), encoding="utf-8")
+    store = VectorStoreService()
+    store._lexical_index_path = str(index_path)
+
+    store._load_lexical_index()
+
+    assert len(store._lexical_docs) == 1
+    migrated = next(iter(store._lexical_docs.values()))
+    assert migrated["source"] == "friendly.txt"

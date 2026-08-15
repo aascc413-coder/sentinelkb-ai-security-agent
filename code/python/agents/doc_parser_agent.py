@@ -118,7 +118,16 @@ class DocParserAgent:
 
     @staticmethod
     def _make_doc_id(file_path: str) -> str:
-        return hashlib.sha256(file_path.encode()).hexdigest()[:16]
+        """Use file content instead of its temporary upload path as document ID.
+
+        Uploaded files receive a random storage prefix.  Hashing that path made
+        the same document look new on every upload and created duplicate chunks.
+        """
+        digest = hashlib.sha256()
+        with open(file_path, "rb") as handle:
+            while block := handle.read(1024 * 1024):
+                digest.update(block)
+        return digest.hexdigest()[:16]
 
     # ── PDF parsing ──────────────────────────────────────────
 

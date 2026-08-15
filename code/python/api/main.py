@@ -13,6 +13,7 @@ import os
 import re
 import secrets
 import logging
+import hashlib
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any
@@ -130,6 +131,7 @@ class QuestionResponse(BaseModel):
 
 
 class IngestResponse(BaseModel):
+    document_id: str
     file_name: str
     chunks_count: int
     entities_count: int
@@ -142,6 +144,8 @@ class IngestResponse(BaseModel):
     entities_stored: int
     relations_stored: int
     status: str
+    duplicate: bool = False
+    message: str = ""
 
 
 class StatsResponse(BaseModel):
@@ -186,7 +190,7 @@ ALLOWED_UPLOAD_EXTENSIONS = {".pdf", ".png", ".jpg", ".jpeg", ".csv", ".xlsx", "
 MAX_UPLOAD_BYTES = 25 * 1024 * 1024
 
 
-async def _save_upload_safely(file: UploadFile) -> tuple[str, str]:
+async def _save_upload_safely(file: UploadFile) -> tuple[str, str, str]:
     """使用白名单、大小限制和随机前缀保存文件，阻断路径穿越与覆盖。"""
     original_name = Path(file.filename or "unknown").name
     original_name = re.sub(r"[^\w.\- ()\u4e00-\u9fff]", "_", original_name)[:160]
@@ -197,33 +201,63 @@ async def _save_upload_safely(file: UploadFile) -> tuple[str, str]:
     stored_name = f"{secrets.token_hex(4)}_{original_name}"
     save_path = Path(settings.upload_dir).resolve() / stored_name
     written = 0
+    digest = hashlib.sha256()
     try:
         with save_path.open("wb") as destination:
             while chunk := await file.read(1024 * 1024):
                 written += len(chunk)
                 if written > MAX_UPLOAD_BYTES:
                     raise HTTPException(status_code=413, detail="文件不能超过 25 MB")
+                digest.update(chunk)
                 destination.write(chunk)
     except Exception:
         save_path.unlink(missing_ok=True)
         raise
     finally:
         await file.close()
-    return str(save_path), original_name
+    return str(save_path), original_name, digest.hexdigest()[:16]
 
 @app.post("/api/ingest/upload", response_model=IngestResponse, tags=["文档入库"])
 async def upload_document(file: UploadFile = File(...)):
     """上传并解析文档，自动入库到向量库和知识图谱"""
-    save_path, original_name = await _save_upload_safely(file)
+    save_path, original_name, document_id = await _save_upload_safely(file)
+
+    if vector_store.has_doc_id(document_id):
+        Path(save_path).unlink(missing_ok=True)
+        return IngestResponse(
+            document_id=document_id,
+            file_name=original_name,
+            chunks_count=vector_store.count_chunks_by_doc_id(document_id),
+            entities_count=0,
+            relations_count=0,
+            security_risk="unchanged",
+            ioc_count=0,
+            attack_technique_count=0,
+            extraction_mode="not_repeated",
+            vectors_stored=0,
+            entities_stored=0,
+            relations_stored=0,
+            status="duplicate",
+            duplicate=True,
+            message="相同内容已存在，未重复解析或写入。",
+        )
 
     ingest_wf = workflows.get("ingest")
     if not ingest_wf:
         raise HTTPException(status_code=503, detail="Ingest workflow not initialized")
 
-    result = await ingest_wf.ainvoke({
-        "file_paths": [save_path],
-        "source_names": {save_path: original_name},
-    })
+    try:
+        result = await ingest_wf.ainvoke({
+            "file_paths": [save_path],
+            "source_names": {save_path: original_name},
+        })
+    except Exception as exc:
+        Path(save_path).unlink(missing_ok=True)
+        logger.exception("Document ingestion failed before storage completed")
+        raise HTTPException(
+            status_code=502,
+            detail=f"文档解析或知识抽取失败（{type(exc).__name__}）。",
+        ) from exc
     storage_errors = [
         message for message in (
             result.get("vector_store_error"),
@@ -231,6 +265,7 @@ async def upload_document(file: UploadFile = File(...)):
         ) if message
     ]
     if storage_errors:
+        Path(save_path).unlink(missing_ok=True)
         raise HTTPException(status_code=503, detail={
             "message": "文档已解析，但知识存储失败",
             "errors": storage_errors,
@@ -245,6 +280,7 @@ async def upload_document(file: UploadFile = File(...)):
     )
 
     return IngestResponse(
+        document_id=document_id,
         file_name=original_name,
         chunks_count=len(chunks),
         entities_count=total_entities,
@@ -257,6 +293,8 @@ async def upload_document(file: UploadFile = File(...)):
         entities_stored=result.get("entities_stored", 0),
         relations_stored=result.get("relations_stored", 0),
         status="success",
+        duplicate=False,
+        message="文档解析、索引和知识图谱写入完成。",
     )
 
 

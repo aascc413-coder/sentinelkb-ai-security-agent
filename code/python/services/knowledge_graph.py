@@ -32,6 +32,7 @@ class KnowledgeGraphService:
         self._driver = AsyncGraphDatabase.driver(
             settings.neo4j_uri,
             auth=(settings.neo4j_user, settings.neo4j_password),
+            max_transaction_retry_time=15.0,
         )
         await self._ensure_indexes()
 
@@ -107,6 +108,75 @@ class KnowledgeGraphService:
                 "source": source,
                 "now": int(time.time()),
             })
+
+    async def store_extractions(self, extractions: list[Any]) -> tuple[int, int]:
+        """Atomically store one ingestion result with driver-managed retries.
+
+        ``execute_write`` retries transient Bolt failures.  Keeping all writes
+        in one transaction prevents half a document from appearing in Neo4j.
+        """
+        if not self._driver or not extractions:
+            return 0, 0
+
+        entity_rows: list[dict[str, Any]] = []
+        relation_rows: list[tuple[str, dict[str, Any]]] = []
+        now = int(time.time())
+        for extraction in extractions:
+            source = extraction.source_chunk_id
+            for entity in extraction.entities:
+                entity_rows.append({
+                    "name": entity.name,
+                    "type": entity.type,
+                    "description": entity.description,
+                    "version": 1,
+                    "source": source,
+                    "now": now,
+                })
+            for relation in extraction.relations:
+                rel_type = re.sub(
+                    r"[^A-Z0-9_]",
+                    "_",
+                    relation.relation.upper().replace(" ", "_"),
+                )[:64].strip("_") or "RELATED_TO"
+                relation_rows.append((rel_type, {
+                    "head": relation.head,
+                    "tail": relation.tail,
+                    "confidence": relation.confidence,
+                    "source": source,
+                    "now": now,
+                }))
+
+        entity_cypher = """
+        MERGE (e:Entity {name: $name})
+        ON CREATE SET
+            e.type = $type,
+            e.description = $description,
+            e.version = $version,
+            e.source = $source,
+            e.created_at = $now,
+            e.updated_at = $now
+        ON MATCH SET
+            e.description = CASE WHEN $description <> '' THEN $description ELSE e.description END,
+            e.version = $version,
+            e.updated_at = $now
+        """
+
+        async def write_all(tx):
+            for row in entity_rows:
+                result = await tx.run(entity_cypher, row)
+                await result.consume()
+            for rel_type, row in relation_rows:
+                result = await tx.run(f"""
+                    MATCH (h:Entity {{name: $head}})
+                    MATCH (t:Entity {{name: $tail}})
+                    MERGE (h)-[r:{rel_type}]->(t)
+                    SET r.confidence = $confidence, r.source = $source, r.updated_at = $now
+                """, row)
+                await result.consume()
+
+        async with self._driver.session() as session:
+            await session.execute_write(write_all)
+        return len(entity_rows), len(relation_rows)
 
     # ── query operations ─────────────────────────────────────
 

@@ -645,6 +645,11 @@ body {
   border-color: var(--red-100);
 }
 
+.upload-zone.busy {
+  pointer-events: none;
+  opacity: 0.65;
+}
+
 /* ════════════════════ Document List ═════════════════════════════ */
 .doc-list {
   display: flex;
@@ -771,6 +776,33 @@ body {
 
 .chat-bubble p + p {
   margin-top: 6px;
+}
+
+.chat-bubble ul,
+.chat-bubble ol {
+  margin: 8px 0;
+  padding-left: 22px;
+}
+
+.chat-bubble li + li {
+  margin-top: 4px;
+}
+
+.chat-bubble code {
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: rgba(15, 23, 42, 0.08);
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 0.92em;
+}
+
+.chat-bubble h4 {
+  margin: 8px 0 4px;
+  font-size: 14.5px;
+}
+
+.markdown-spacer {
+  height: 6px;
 }
 
 .chat-bubble-sub {

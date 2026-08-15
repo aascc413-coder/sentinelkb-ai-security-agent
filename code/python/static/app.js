@@ -8,6 +8,7 @@ const API = '/api';
 const state = {
   uploadedDocs: [],
   asking: false,
+  uploading: false,
 };
 
 /* ════════════════════ DOM refs ════════════════════ */
@@ -101,7 +102,7 @@ async function sendQuestion() {
     });
     if (!r.ok) {
       const err = await r.json().catch(() => ({}));
-      throw new Error(err.detail || `HTTP ${r.status}`);
+      throw new Error(formatApiError(err.detail, `HTTP ${r.status}`));
     }
     const data = await r.json();
 
@@ -169,9 +170,7 @@ function appendMessage(role, content, meta) {
   if (meta && meta.error) {
     bubble.innerHTML = `<p style="color:var(--red-500)">${escapeHtml(content)}</p>`;
   } else {
-    // Convert newlines to <br>, support simple markdown-like bold
-    const lines = escapeHtml(content).split('\n');
-    bubble.innerHTML = lines.map(line => `<p>${line || '&nbsp;'}</p>`).join('');
+    bubble.innerHTML = renderSafeMarkdown(content);
   }
 
   body.appendChild(bubble);
@@ -241,6 +240,44 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
+function renderSafeMarkdown(text) {
+  const inline = value => value
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>');
+  const lines = escapeHtml(text).split('\n');
+  const html = [];
+  let listType = null;
+  const closeList = () => {
+    if (listType) html.push(`</${listType}>`);
+    listType = null;
+  };
+
+  for (const line of lines) {
+    const unordered = line.match(/^\s*[-*]\s+(.+)$/);
+    const ordered = line.match(/^\s*\d+[.)]\s+(.+)$/);
+    if (unordered || ordered) {
+      const nextType = unordered ? 'ul' : 'ol';
+      if (listType !== nextType) {
+        closeList();
+        listType = nextType;
+        html.push(`<${listType}>`);
+      }
+      html.push(`<li>${inline((unordered || ordered)[1])}</li>`);
+      continue;
+    }
+    closeList();
+    if (!line.trim()) {
+      html.push('<div class="markdown-spacer"></div>');
+    } else if (/^###\s+/.test(line)) {
+      html.push(`<h4>${inline(line.replace(/^###\s+/, ''))}</h4>`);
+    } else {
+      html.push(`<p>${inline(line)}</p>`);
+    }
+  }
+  closeList();
+  return html.join('');
+}
+
 /* ════════════════════ Security Analysis ════════════════════ */
 dom.analyzeBtn.addEventListener('click', analyzeSecurityEvent);
 
@@ -256,7 +293,7 @@ async function analyzeSecurityEvent() {
       body: JSON.stringify({ text: input, source: 'web-console' }),
     });
     const data = await response.json();
-    if (!response.ok) throw new Error(data.detail || `HTTP ${response.status}`);
+    if (!response.ok) throw new Error(formatApiError(data.detail, `HTTP ${response.status}`));
     renderSecurityResult(data);
   } catch (err) {
     dom.securityResult.classList.remove('hidden');
@@ -307,7 +344,11 @@ dom.uploadZone.addEventListener('drop', e => {
 
 async function uploadFiles(fileList) {
   const files = Array.from(fileList);
-  if (!files.length) return;
+  if (!files.length || state.uploading) return;
+
+  state.uploading = true;
+  dom.fileInput.disabled = true;
+  dom.uploadZone.classList.add('busy');
 
   const progress = dom.uploadProgress;
   progress.classList.add('show');
@@ -315,25 +356,47 @@ async function uploadFiles(fileList) {
 
   for (const file of files) {
     progress.textContent = `正在处理: ${file.name} ...`;
+    const startedAt = Date.now();
+    const elapsedTimer = setInterval(() => {
+      const seconds = Math.floor((Date.now() - startedAt) / 1000);
+      progress.textContent = `正在处理: ${file.name}（解析、知识抽取与存储，已等待 ${seconds} 秒）`;
+    }, 5000);
     try {
       const form = new FormData();
       form.append('file', file);
       const r = await fetch(`${API}/ingest/upload`, { method: 'POST', body: form });
       if (!r.ok) {
         const err = await r.json().catch(() => ({}));
-        throw new Error(err.detail || `HTTP ${r.status}`);
+        throw new Error(formatApiError(err.detail, `HTTP ${r.status}`));
       }
       const data = await r.json();
       addDocToList(file.name, data);
-      progress.textContent = `完成: ${file.name}（${data.chunks_count} 块 · ${data.vectors_stored} 条索引 · ${data.entities_stored} 个图谱实体 · ${data.ioc_count} IOC · 风险 ${data.security_risk}）`;
+      progress.textContent = data.duplicate
+        ? `已存在: ${file.name}（相同内容未重复入库）`
+        : `完成: ${file.name}（${data.chunks_count} 块 · ${data.vectors_stored} 条索引 · ${data.entities_stored} 个图谱实体 · ${data.ioc_count} IOC · 风险 ${data.security_risk}）`;
     } catch (err) {
       progress.textContent = `失败: ${file.name} — ${err.message}`;
       progress.classList.add('error');
+    } finally {
+      clearInterval(elapsedTimer);
     }
   }
 
   setTimeout(() => progress.classList.remove('show'), 6000);
   dom.fileInput.value = '';
+  dom.fileInput.disabled = false;
+  dom.uploadZone.classList.remove('busy');
+  state.uploading = false;
+}
+
+function formatApiError(detail, fallback) {
+  if (!detail) return fallback;
+  if (typeof detail === 'string') return detail;
+  if (detail.message) {
+    const errors = Array.isArray(detail.errors) ? `：${detail.errors.join('；')}` : '';
+    return `${detail.message}${errors}`;
+  }
+  return JSON.stringify(detail);
 }
 
 function addDocToList(name, data) {
