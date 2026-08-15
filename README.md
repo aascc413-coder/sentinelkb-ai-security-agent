@@ -1,5 +1,7 @@
 # SentinelKB · AI 安全知识中枢
 
+[![Python tests](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/workflows/python-tests.yml/badge.svg)](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/workflows/python-tests.yml)
+
 SentinelKB 是面向 SOC、安全运营和应急响应场景的中文 **AI + 网络安全** 私有知识库。它把漏洞通告、安全制度、告警报告和威胁情报转为可检索、可关联、可追溯的安全知识。
 
 ## 你可以用它做什么
