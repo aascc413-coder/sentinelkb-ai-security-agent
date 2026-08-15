@@ -105,6 +105,8 @@ class KnowledgeExtractAgent:
                 api_key=settings.openai_api_key,
                 base_url=settings.openai_base_url,
                 temperature=0,
+                timeout=settings.llm_timeout_seconds,
+                max_retries=settings.llm_max_retries,
             )
 
     @property

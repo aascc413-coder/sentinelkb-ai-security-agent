@@ -279,7 +279,14 @@ async def ask_question(req: QuestionRequest):
     if not qa_wf:
         raise HTTPException(status_code=503, detail="QA workflow not initialized")
 
-    result = await qa_wf.ainvoke({"question": req.question})
+    try:
+        result = await qa_wf.ainvoke({"question": req.question})
+    except Exception as exc:
+        logger.exception("Online QA request failed")
+        raise HTTPException(
+            status_code=502,
+            detail=f"模型服务调用失败（{type(exc).__name__}）。请稍后重试或切换离线模式。",
+        ) from exc
     qa_result = result.get("result")
     if not qa_result:
         raise HTTPException(status_code=500, detail="QA failed")

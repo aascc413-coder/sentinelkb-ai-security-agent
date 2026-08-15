@@ -12,6 +12,8 @@ class Settings(BaseSettings):
     openai_model: str = "gpt-4o"
     embedding_model: str = "text-embedding-3-small"
     enable_llm: bool = False
+    llm_timeout_seconds: float = 45.0
+    llm_max_retries: int = 1
     disable_local_embeddings: bool = True
 
     # Neo4j

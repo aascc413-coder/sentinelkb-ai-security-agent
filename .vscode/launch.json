@@ -15,8 +15,6 @@
       ],
       "cwd": "${workspaceFolder}\\code\\python",
       "env": {
-        "ENABLE_LLM": "0",
-        "DISABLE_LOCAL_EMBEDDINGS": "1",
         "PYTHONUTF8": "1"
       },
       "console": "integratedTerminal",

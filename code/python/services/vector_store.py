@@ -20,6 +20,20 @@ from agents.doc_parser_agent import DocumentChunk
 from config import settings
 
 
+def _embeddings_disabled() -> bool:
+    """Read the switch from either the process environment or Settings.
+
+    Settings loads values from ``.env`` without copying them into
+    ``os.environ``.  Checking only ``os.environ`` therefore ignored the
+    project's normal configuration file and accidentally enabled the remote
+    embedding endpoint.
+    """
+    raw_value = os.environ.get("DISABLE_LOCAL_EMBEDDINGS")
+    if raw_value is not None:
+        return raw_value.strip().lower() in {"1", "true", "yes", "on"}
+    return settings.disable_local_embeddings
+
+
 class _SubprocessEmbeddings:
     """Embedding wrapper that delegates to a separate subprocess to avoid
     PyTorch segfaults from crashing the main server process."""
@@ -52,8 +66,7 @@ class _SubprocessEmbeddings:
 
 def _create_embeddings():
     """根据配置创建 Embedding 实例，使用子进程隔离避免 segfault"""
-    import os
-    if os.environ.get("DISABLE_LOCAL_EMBEDDINGS") == "1":
+    if _embeddings_disabled():
         return None
     if "deepseek" in settings.openai_base_url:
         return _SubprocessEmbeddings()
@@ -89,10 +102,9 @@ class VectorStoreService:
     @property
     def embeddings(self):
         if self._embeddings is None:
-            import os
             # Skip HuggingFace embedding model if it causes instability
             # Use DISABLE_LOCAL_EMBEDDINGS=1 to force LLM-only mode
-            if os.environ.get("DISABLE_LOCAL_EMBEDDINGS") == "1":
+            if _embeddings_disabled():
                 return None
             try:
                 self._embeddings = _create_embeddings()
@@ -102,8 +114,7 @@ class VectorStoreService:
 
     @property
     def embeddings_available(self) -> bool:
-        import os
-        if os.environ.get("DISABLE_LOCAL_EMBEDDINGS") == "1":
+        if _embeddings_disabled():
             return False
         if self._embeddings is not None:
             return True

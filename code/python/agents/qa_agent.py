@@ -110,6 +110,8 @@ class QAAgent:
                 api_key=settings.openai_api_key,
                 base_url=settings.openai_base_url,
                 temperature=0,
+                timeout=settings.llm_timeout_seconds,
+                max_retries=settings.llm_max_retries,
             )
         self.vector_store = vector_store
         self.knowledge_graph = knowledge_graph
@@ -141,43 +143,22 @@ class QAAgent:
     # ── intent classification ────────────────────────────────
 
     async def _classify_intent(self, question: str) -> QueryIntent:
-        if self.llm is None:
-            if any(word in question for word in ("怎么", "如何", "步骤", "流程")):
-                return QueryIntent.PROCEDURAL
-            if any(word in question for word in ("区别", "比较", "对比")):
-                return QueryIntent.COMPARATIVE
-            if any(word in question for word in ("为什么", "分析", "原因")):
-                return QueryIntent.ANALYTICAL
-            return QueryIntent.FACTOID
-        messages = [
-            SystemMessage(content=INTENT_PROMPT),
-            HumanMessage(content=question),
-        ]
-        resp = await self.llm.ainvoke(messages)
-        raw = resp.content.strip().lower()
-        for intent in QueryIntent:
-            if intent.value in raw:
-                return intent
+        # 意图分类使用确定性本地规则，避免为一次问答额外调用模型。
+        if any(word in question for word in ("怎么", "如何", "步骤", "流程", "处置", "排查")):
+            return QueryIntent.PROCEDURAL
+        if any(word in question for word in ("区别", "比较", "对比")):
+            return QueryIntent.COMPARATIVE
+        if any(word in question for word in ("为什么", "分析", "原因")):
+            return QueryIntent.ANALYTICAL
+        if any(word in question for word in ("哪些", "有哪些", "概述", "总结")):
+            return QueryIntent.EXPLORATORY
         return QueryIntent.FACTOID
 
     # ── query rewriting ──────────────────────────────────────
 
     async def _rewrite_query(self, question: str) -> dict:
-        import json
-        if self.llm is None:
-            return {"queries": [question], "entities": [], "keywords": []}
-        messages = [
-            SystemMessage(content=QUERY_REWRITE_PROMPT),
-            HumanMessage(content=question),
-        ]
-        resp = await self.llm.ainvoke(messages)
-        try:
-            cleaned = resp.content.strip()
-            if cleaned.startswith("```"):
-                cleaned = cleaned.split("\n", 1)[1].rsplit("```", 1)[0]
-            return json.loads(cleaned)
-        except (json.JSONDecodeError, IndexError):
-            return {"queries": [question], "entities": [], "keywords": []}
+        # 原问题直接用于检索。在线模型只负责最终答案生成，降低延迟与费用。
+        return {"queries": [question], "entities": [], "keywords": []}
 
     # ── vector retrieval ─────────────────────────────────────
 
@@ -206,6 +187,8 @@ class QAAgent:
 
         import json
         entities = rewritten.get("entities", [])
+        if not entities:
+            return []
         messages = [
             SystemMessage(content=CYPHER_GENERATION_PROMPT),
             HumanMessage(content=f"问题: {question}\n实体: {entities}"),

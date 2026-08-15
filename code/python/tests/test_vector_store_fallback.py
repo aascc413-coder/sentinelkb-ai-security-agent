@@ -7,6 +7,18 @@ from config import settings
 from services.vector_store import VectorStoreService
 
 
+def test_dotenv_setting_disables_remote_embeddings(monkeypatch):
+    """The .env flag must work even when it is absent from os.environ."""
+    monkeypatch.delenv("DISABLE_LOCAL_EMBEDDINGS", raising=False)
+    monkeypatch.setattr(settings, "disable_local_embeddings", True)
+    monkeypatch.setattr(settings, "openai_api_key", "sk-test-only")
+
+    store = VectorStoreService()
+
+    assert store.embeddings is None
+    assert store.embeddings_available is False
+
+
 @pytest.mark.asyncio
 async def test_offline_lexical_retrieval(tmp_path, monkeypatch):
     monkeypatch.setenv("DISABLE_LOCAL_EMBEDDINGS", "1")

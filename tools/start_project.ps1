@@ -30,8 +30,6 @@ if (-not (Test-Path -LiteralPath $envFile)) {
     Write-Host 'Offline mode is enabled by default; no API key is required for health checks and security analysis.'
 }
 
-$env:DISABLE_LOCAL_EMBEDDINGS = '1'
-$env:ENABLE_LLM = '0'
 $env:PYTHONUTF8 = '1'
 
 if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {

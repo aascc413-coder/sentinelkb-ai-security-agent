@@ -35,6 +35,8 @@
 
 即使 `.env` 已保存 API Key，项目也不会自动联网。只有在确认 Base URL 与模型名正确后显式设置 `ENABLE_LLM=1`，才会启用大模型调用；`DISABLE_LOCAL_EMBEDDINGS=0` 则单独控制在线 Embedding。
 
+`启动项目.cmd` 会直接采用 `.env` 中的模式开关，不会覆盖 `ENABLE_LLM` 或 `DISABLE_LOCAL_EMBEDDINGS`。修改 `.env` 后必须停止并重新启动 API，健康页才会显示新的运行模式。
+
 本机调试也可以只启动 Neo4j，再在 `code/python` 中安装依赖并执行：
 
 ```powershell
