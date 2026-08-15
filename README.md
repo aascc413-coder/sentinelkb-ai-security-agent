@@ -20,7 +20,6 @@
 - `code/python/evaluation/`：可重复执行的在线 RAG 验收集与评测脚本。
 - `docs/evaluation/`：最近一次在线 RAG 评测的 JSON 原始结果与 Markdown 报告。
 - `docs/`：架构、接口和交付文档。
-- `学习资料/`：周末再使用的代码地图、学习计划与面试手册，不影响项目运行。
 
 ## 最快启动
 
@@ -100,4 +99,4 @@ Python 3.12、FastAPI、LangGraph、LangChain、ChromaDB/PGVector、Neo4j、Kafk
 
 ## 建议阅读顺序
 
-`README` → 项目全景 → 跑通样例 → 21 天计划 → 按代码地图逐模块调试 → 完成闭卷演示与二次开发。
+`README` → 启动项目 → 跑通样例 → 查看验收报告与 RAG 评测 → 按业务链路阅读核心代码。

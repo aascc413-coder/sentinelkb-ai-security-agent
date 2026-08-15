@@ -14,3 +14,8 @@ lexical_index.json
 *.log
 .DS_Store
 Thumbs.db
+
+# Personal learning and interview notes are stored outside the public project.
+学习资料/
+docs/*秋招*
+docs/*代码审计*
