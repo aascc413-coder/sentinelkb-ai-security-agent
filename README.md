@@ -1,6 +1,6 @@
 # SentinelKB · AI 安全知识中枢
 
-这是从通用企业知识库改造而来的 **AI + 网络安全** 项目。它面向 SOC、安全运营和应急响应场景，把漏洞通告、安全制度、告警报告、威胁情报等私有资料转为可检索、可关联、可追溯的安全知识。
+SentinelKB 是面向 SOC、安全运营和应急响应场景的中文 **AI + 网络安全** 私有知识库。它把漏洞通告、安全制度、告警报告和威胁情报转为可检索、可关联、可追溯的安全知识。
 
 ## 你可以用它做什么
 
@@ -11,6 +11,35 @@
 - 通过 LangGraph 编排文档入库、问答和增量更新流程。
 
 > 定位边界：这是辅助研判系统，不替代 EDR/SIEM，也不会自动执行封禁、隔离等高风险操作。
+
+![SentinelKB 中文产品首页](docs/assets/sentinelkb-home.png)
+
+## 项目状态
+
+| 检查项 | 当前结果 |
+|---|---|
+| Python 自动化测试 | 27 项全部通过 |
+| 在线 RAG 固定评测 | 10/10 通过 |
+| 关键事实覆盖率 | 100% |
+| 来源命中率 | 100% |
+| 无答案拒答准确率 | 100% |
+| 端到端验收 | 健康检查、问答、研判、检索和 Neo4j 全部通过 |
+
+详细数据见 [RAG 评测报告](docs/evaluation/rag_eval_latest.md) 和 [项目验收报告](docs/项目验收报告.md)。固定演示集结果不等同于生产环境准确率。
+
+## 业务链路
+
+```mermaid
+flowchart LR
+    A["安全制度 / 漏洞通告 / 事件报告"] --> B["文档解析与内容分块"]
+    B --> C["词法或向量检索索引"]
+    B --> D["IOC 与 ATT&CK 抽取"]
+    D --> E["Neo4j 安全知识图谱"]
+    F["用户问题"] --> G["LangGraph 问答编排"]
+    C --> G
+    E --> G
+    G --> H["带来源的回答与处置建议"]
+```
 
 ## 目录导航
 
@@ -23,10 +52,21 @@
 
 ## 最快启动
 
+环境要求：Windows 10/11、Python 3.12 和使用 WSL 2 后端的 Docker Desktop。
+
+首次运行先在项目根目录安装依赖：
+
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r code\python\requirements-dev.txt
+```
+
+然后：
+
 1. 启动 Docker Desktop。
 2. 双击根目录的 `启动项目.cmd`（脚本会启动并等待 Neo4j 就绪，然后启动 FastAPI）。
-3. 打开 `http://localhost:8080`；接口文档位于 `http://localhost:8080/docs`。
-4. 打开 `http://localhost:8080/api/health`，看到 `status: ok` 即启动成功。
+3. 打开 <http://localhost:8080>；接口文档位于 <http://localhost:8080/docs>。
+4. 打开 <http://localhost:8080/api/health>，看到 `status: ok` 即启动成功。
 
 关闭时先在 API 终端按 `Ctrl+C`，再双击 `关闭项目.cmd`。关闭脚本只停止容器，不删除 Neo4j 数据卷，下一次启动仍保留图谱数据。
 
@@ -37,6 +77,20 @@
 即使 `.env` 已保存 API Key，项目也不会自动联网。只有在确认 Base URL 与模型名正确后显式设置 `ENABLE_LLM=1`，才会启用大模型调用；`DISABLE_LOCAL_EMBEDDINGS=0` 则单独控制在线 Embedding。
 
 `启动项目.cmd` 会直接采用 `.env` 中的模式开关，不会覆盖 `ENABLE_LLM` 或 `DISABLE_LOCAL_EMBEDDINGS`。修改 `.env` 后必须停止并重新启动 API，健康页才会显示新的运行模式。
+
+### 国内模型服务配置
+
+项目兼容提供 OpenAI 风格接口的国内模型平台和中转站。推荐先采用“在线对话 + 本地词法检索”，避免因服务商没有 Embedding 权限导致入库失败：
+
+```env
+OPENAI_API_KEY=请填写自己的密钥
+OPENAI_BASE_URL=https://服务商提供的接口地址/v1
+OPENAI_MODEL=服务商控制台中的准确模型名称
+ENABLE_LLM=1
+DISABLE_LOCAL_EMBEDDINGS=1
+```
+
+修改 `code/python/.env` 后必须重启项目。详细说明见 [国内模型服务配置指南](docs/国内模型服务配置指南.md)。任何真实 API Key 都不能写入 README、截图、代码或 Git 提交。
 
 ### 最短验收流程
 
@@ -88,7 +142,7 @@ python -m evaluation.runner --skip-upload
 
 ## 技术栈
 
-Python 3.12、FastAPI、LangGraph、LangChain、ChromaDB/PGVector、Neo4j、Kafka、PyPDF2、Tesseract、原生 HTML/CSS/JavaScript、Pytest、Docker Compose。
+Python 3.12、FastAPI、LangGraph、LangChain、ChromaDB、Neo4j、原生 HTML/CSS/JavaScript、Pytest、Docker Compose；PGVector 和 Kafka 为可选扩展。
 
 ## 真实限制
 
@@ -100,3 +154,5 @@ Python 3.12、FastAPI、LangGraph、LangChain、ChromaDB/PGVector、Neo4j、Kafk
 ## 建议阅读顺序
 
 `README` → 启动项目 → 跑通样例 → 查看验收报告与 RAG 评测 → 按业务链路阅读核心代码。
+
+启动失败、模型接口报错、文档长时间处理中和 Neo4j 登录等问题见 [常见问题](docs/常见问题.md)。

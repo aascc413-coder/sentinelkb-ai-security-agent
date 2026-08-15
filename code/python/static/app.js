@@ -4,6 +4,54 @@
 
 const API = '/api';
 
+const INTENT_LABELS = {
+  factoid: '事实检索',
+  procedural: '处置流程',
+  exploratory: '关联分析',
+  general: '综合问答',
+};
+
+const RISK_LABELS = {
+  low: '低风险',
+  medium: '中风险',
+  high: '高风险',
+  critical: '严重风险',
+  unchanged: '风险未变化',
+};
+
+const TACTIC_LABELS = {
+  'Initial Access': '初始访问',
+  Execution: '执行',
+  Persistence: '持久化',
+  'Privilege Escalation': '权限提升',
+  'Defense Evasion': '防御规避',
+  'Credential Access': '凭据访问',
+  Discovery: '环境发现',
+  'Lateral Movement': '横向移动',
+  Collection: '信息收集',
+  'Command and Control': '命令与控制',
+  Exfiltration: '数据外传',
+  Impact: '影响',
+};
+
+const INDICATOR_LABELS = {
+  ipv4: 'IPv4 地址',
+  ipv6: 'IPv6 地址',
+  url: '网址',
+  domain: '域名',
+  cve: 'CVE 漏洞编号',
+  sha256: 'SHA-256 哈希',
+  md5: 'MD5 哈希',
+  email: '邮箱地址',
+};
+
+const BACKEND_LABELS = {
+  lexical: '本地词法检索',
+  chroma: 'Chroma 向量库',
+  'chroma+lexical': 'Chroma + 本地词法检索',
+  pgvector: 'PGVector 向量库',
+};
+
 /* ════════════════════ State ════════════════════ */
 const state = {
   uploadedDocs: [],
@@ -102,7 +150,7 @@ async function sendQuestion() {
     });
     if (!r.ok) {
       const err = await r.json().catch(() => ({}));
-      throw new Error(formatApiError(err.detail, `HTTP ${r.status}`));
+      throw new Error(formatApiError(err.detail, httpStatusMessage(r.status)));
     }
     const data = await r.json();
 
@@ -137,6 +185,7 @@ function showTypingIndicator() {
         <div class="typing-dots">
           <span></span><span></span><span></span>
         </div>
+        <div class="typing-status">正在检索知识库并生成回答，请稍候…</div>
       </div>
     </div>
   `;
@@ -183,14 +232,14 @@ function appendMessage(role, content, meta) {
     if (meta.intent) {
       const intentTag = document.createElement('span');
       intentTag.className = 'chat-tag chat-tag--intent';
-      intentTag.textContent = meta.intent;
+      intentTag.textContent = `问答类型：${INTENT_LABELS[meta.intent] || meta.intent}`;
       metaRow.appendChild(intentTag);
     }
 
     if (meta.confidence > 0) {
       const confTag = document.createElement('span');
       confTag.className = 'chat-tag chat-tag--confidence';
-      confTag.textContent = `置信度 ${(meta.confidence * 100).toFixed(0)}%`;
+      confTag.textContent = `回答置信度 ${(meta.confidence * 100).toFixed(0)}%`;
       metaRow.appendChild(confTag);
     }
 
@@ -204,7 +253,7 @@ function appendMessage(role, content, meta) {
       src.className = 'chat-sources';
       src.innerHTML = '<strong>参考来源</strong> &nbsp;' +
         meta.sources.map((s, i) =>
-          `[${i + 1}] ${escapeHtml(s.source)} (${(s.score * 100).toFixed(0)}%)`
+          `[${i + 1}] ${escapeHtml(displaySourceName(s.source))}（相关度 ${(s.score * 100).toFixed(0)}%）`
         ).join(' &nbsp;·&nbsp; ');
       body.appendChild(src);
     }
@@ -290,10 +339,10 @@ async function analyzeSecurityEvent() {
     const response = await fetch(`${API}/security/analyze`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: input, source: 'web-console' }),
+      body: JSON.stringify({ text: input, source: '网页端手工输入' }),
     });
     const data = await response.json();
-    if (!response.ok) throw new Error(formatApiError(data.detail, `HTTP ${response.status}`));
+    if (!response.ok) throw new Error(formatApiError(data.detail, httpStatusMessage(response.status)));
     renderSecurityResult(data);
   } catch (err) {
     dom.securityResult.classList.remove('hidden');
@@ -311,14 +360,14 @@ function renderSecurityResult(data) {
   dom.securityResult.classList.remove('hidden');
   dom.securityResult.innerHTML = `
     <div class="risk-banner ${escapeHtml(data.severity)}">
-      <div><strong>${escapeHtml(data.summary)}</strong><br><small>风险等级 ${escapeHtml(data.severity).toUpperCase()}</small></div>
+      <div><strong>${escapeHtml(data.summary)}</strong><br><small>风险等级：${escapeHtml(riskLabel(data.severity))}</small></div>
       <div class="risk-score">${Number(data.risk_score)}/100</div>
     </div>
     <div class="security-block"><h3>IOC 指标（${indicators.length}）</h3><div class="security-tags">
-      ${indicators.length ? indicators.map(item => `<span class="security-tag">${escapeHtml(item.type)} · ${escapeHtml(item.value)}</span>`).join('') : '<span class="security-note">未发现明确 IOC</span>'}
+      ${indicators.length ? indicators.map(item => `<span class="security-tag">${escapeHtml(INDICATOR_LABELS[item.type] || item.type)} · ${escapeHtml(item.value)}</span>`).join('') : '<span class="security-note">未发现明确威胁指标</span>'}
     </div></div>
     <div class="security-block"><h3>MITRE ATT&CK（${techniques.length}）</h3><div class="security-tags">
-      ${techniques.length ? techniques.map(item => `<span class="security-tag">${escapeHtml(item.technique_id)} · ${escapeHtml(item.name)} · ${escapeHtml(item.tactic)}</span>`).join('') : '<span class="security-note">未匹配攻击技术</span>'}
+      ${techniques.length ? techniques.map(item => `<span class="security-tag">${escapeHtml(item.technique_id)} · ${escapeHtml(item.name)} · ${escapeHtml(TACTIC_LABELS[item.tactic] || item.tactic)}</span>`).join('') : '<span class="security-note">未匹配攻击技术</span>'}
     </div></div>
     <div class="security-block"><h3>建议处置</h3><ol class="security-list">
       ${recommendations.map(item => `<li>${escapeHtml(item)}</li>`).join('')}
@@ -355,11 +404,11 @@ async function uploadFiles(fileList) {
   progress.classList.remove('error');
 
   for (const file of files) {
-    progress.textContent = `正在处理: ${file.name} ...`;
+    progress.textContent = `正在处理：${file.name}…`;
     const startedAt = Date.now();
     const elapsedTimer = setInterval(() => {
       const seconds = Math.floor((Date.now() - startedAt) / 1000);
-      progress.textContent = `正在处理: ${file.name}（解析、知识抽取与存储，已等待 ${seconds} 秒）`;
+      progress.textContent = `正在处理：${file.name}（正在解析、抽取知识并写入存储，已等待 ${seconds} 秒）`;
     }, 5000);
     try {
       const form = new FormData();
@@ -367,17 +416,17 @@ async function uploadFiles(fileList) {
       const r = await fetch(`${API}/ingest/upload`, { method: 'POST', body: form });
       if (!r.ok) {
         const err = await r.json().catch(() => ({}));
-        throw new Error(formatApiError(err.detail, `HTTP ${r.status}`));
+        throw new Error(formatApiError(err.detail, httpStatusMessage(r.status)));
       }
       const data = await r.json();
       if (data.duplicate) {
-        progress.textContent = `已存在: ${file.name}（相同内容未重复入库）`;
+        progress.textContent = `文件已存在：${file.name}（相同内容未重复入库）`;
       } else {
         addDocToList(file.name, data);
-        progress.textContent = `完成: ${file.name}（${data.chunks_count} 块 · ${data.vectors_stored} 条索引 · ${data.entities_stored} 个图谱实体 · ${data.ioc_count} IOC · 风险 ${data.security_risk}）`;
+        progress.textContent = `入库完成：${file.name}（${data.chunks_count} 个片段 · ${data.vectors_stored} 条索引 · ${data.entities_stored} 个图谱实体 · ${data.ioc_count} 个威胁指标 · ${riskLabel(data.security_risk)}）`;
       }
     } catch (err) {
-      progress.textContent = `失败: ${file.name} — ${err.message}`;
+      progress.textContent = `入库失败：${file.name}；${err.message}`;
       progress.classList.add('error');
     } finally {
       clearInterval(elapsedTimer);
@@ -401,6 +450,34 @@ function formatApiError(detail, fallback) {
   return JSON.stringify(detail);
 }
 
+function httpStatusMessage(status) {
+  const messages = {
+    400: '请求内容不符合要求',
+    401: '模型服务认证失败，请检查 API Key',
+    403: '模型服务拒绝访问，请检查账户或模型权限',
+    404: '请求的接口或模型不存在',
+    413: '文件过大，请选择不超过 25 MB 的文件',
+    422: '提交内容格式不正确',
+    429: '请求过于频繁，请稍后重试',
+    500: '服务内部处理失败，请查看运行终端日志',
+    502: '上游模型服务暂时不可用，请稍后重试',
+    503: '服务尚未准备完成，请稍后重试',
+    504: '上游模型响应超时，请稍后重试',
+  };
+  const message = messages[status] || '请求失败';
+  return `${message}（HTTP ${status}）`;
+}
+
+function displaySourceName(source) {
+  const normalized = String(source || '').replaceAll('\\', '/');
+  return normalized.split('/').filter(Boolean).pop() || '未知来源';
+}
+
+function riskLabel(value) {
+  const key = String(value || 'low').toLowerCase();
+  return RISK_LABELS[key] || value || '未知风险';
+}
+
 function addDocToList(name, data) {
   const item = document.createElement('div');
   item.className = 'doc-item';
@@ -409,7 +486,7 @@ function addDocToList(name, data) {
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--emerald-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
     </span>
     <span class="doc-name">${escapeHtml(name)}</span>
-    <span class="doc-meta">${data.chunks_count} 块 · ${data.entities_stored ?? data.entities_count ?? 0} 实体 · ${data.ioc_count} IOC · ${escapeHtml(data.security_risk || 'low').toUpperCase()}</span>
+    <span class="doc-meta">${data.chunks_count} 个片段 · ${data.entities_stored ?? data.entities_count ?? 0} 个实体 · ${data.ioc_count} 个威胁指标 · ${escapeHtml(riskLabel(data.security_risk))}</span>
   `;
   dom.docList.prepend(item);
   state.uploadedDocs.push({ name, data });
@@ -424,7 +501,7 @@ async function loadStats() {
 
   try {
     const r = await fetch(`${API}/admin/stats`);
-    if (!r.ok) throw new Error('Failed');
+    if (!r.ok) throw new Error(httpStatusMessage(r.status));
     const d = await r.json();
 
     animateValue($('#statVectors'), d.vector_store?.total_vectors ?? 0);
@@ -434,12 +511,13 @@ async function loadStats() {
     animateValue($('#statIocs'), d.security?.total_indicators ?? 0);
 
     const backendEl = $('#statBackend');
-    backendEl.textContent = d.vector_store?.backend ?? '--';
+    const backend = d.vector_store?.backend;
+    backendEl.textContent = BACKEND_LABELS[backend] || backend || '--';
     backendEl.style.fontSize = '18px';
     backendEl.style.fontWeight = '700';
   } catch {
     ['statVectors', 'statEntities', 'statRelations', 'statBackend', 'statAnalyses', 'statIocs'].forEach(id => {
-      $(`#${id}`).textContent = 'ERR';
+      $(`#${id}`).textContent = '加载失败';
     });
   }
 }

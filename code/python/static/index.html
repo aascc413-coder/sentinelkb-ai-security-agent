@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SentinelKB — AI 安全知识中枢</title>
-<link rel="stylesheet" href="/static/style.css?v=20260815-2">
+<title>SentinelKB｜AI 安全知识中枢</title>
+<link rel="stylesheet" href="/static/style.css?v=20260815-3">
 </head>
 <body>
 
@@ -27,12 +27,12 @@
       </div>
       <div class="brand-info">
         <h1 class="brand-title">SentinelKB · AI 安全知识中枢</h1>
-        <p class="brand-tagline">安全私有知识库 · IOC 研判 · ATT&CK 映射 · GraphRAG</p>
+        <p class="brand-tagline">安全私有知识库 · 威胁指标（IOC）研判 · ATT&CK 映射 · 图谱增强检索</p>
       </div>
     </div>
     <div class="brand-status">
       <span class="status-dot" id="statusDot"></span>
-      <span class="status-text" id="statusText">连接中...</span>
+      <span class="status-text" id="statusText">正在连接…</span>
     </div>
   </header>
 
@@ -75,7 +75,7 @@
         </div>
         <div class="chat-body">
           <div class="chat-bubble chat-bubble--agent">
-            <p>你好，我是 <strong>SentinelKB 安全运营 Copilot</strong>。</p>
+            <p>你好，我是 <strong>SentinelKB 安全运营智能助手</strong>。</p>
             <p class="chat-bubble-sub">可检索漏洞通告、应急预案、告警报告和威胁情报，并给出带来源的防御建议。</p>
           </div>
           <div class="chat-meta">
@@ -120,7 +120,7 @@
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
       </div>
       <div class="upload-zone-text">点击或拖拽文件到此处上传</div>
-      <div class="upload-zone-hint">支持 PDF · TXT · Markdown · CSV · XLSX · PNG/JPG，单文件不超过 25 MB</div>
+      <div class="upload-zone-hint">支持 PDF、TXT、Markdown、CSV、Excel、PNG/JPG；单文件不超过 25 MB</div>
       <input type="file" id="fileInput" accept=".pdf,.txt,.md,.csv,.xlsx,.xls,.png,.jpg,.jpeg" multiple>
     </div>
 
@@ -136,7 +136,7 @@
       </div>
       <div>
         <h2 class="card-header-title">安全事件研判</h2>
-        <p class="card-header-desc">粘贴告警、日志摘要或事件描述，离线提取 IOC、映射 MITRE ATT&CK 并生成处置清单</p>
+        <p class="card-header-desc">粘贴告警、日志摘要或事件描述，离线提取威胁指标（IOC）、映射 MITRE ATT&CK 并生成处置清单</p>
       </div>
     </div>
     <textarea id="securityInput" class="security-input" rows="9" placeholder="示例：主机发现 PowerShell EncodedCommand 执行，随后连接 http://evil-example.top/a，疑似凭证转储并横向移动。关联 CVE-2025-12345，源 IP 203.0.113.10。"></textarea>
@@ -165,7 +165,7 @@
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
         </div>
         <div class="stat-value" id="statVectors">--</div>
-        <div class="stat-label">向量索引数</div>
+        <div class="stat-label">知识检索片段</div>
       </div>
       <div class="stat-card stat-card--indigo">
         <div class="stat-icon">
@@ -186,7 +186,7 @@
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
         </div>
         <div class="stat-value" id="statBackend">--</div>
-        <div class="stat-label">向量存储后端</div>
+        <div class="stat-label">检索存储方式</div>
       </div>
       <div class="stat-card stat-card--purple">
         <div class="stat-value" id="statAnalyses">--</div>
@@ -194,7 +194,7 @@
       </div>
       <div class="stat-card stat-card--blue">
         <div class="stat-value" id="statIocs">--</div>
-        <div class="stat-label">已识别 IOC</div>
+        <div class="stat-label">已识别威胁指标</div>
       </div>
     </div>
 
@@ -211,14 +211,14 @@
     <div class="footer-content">
       <span class="footer-brand">SentinelKB</span>
       <span class="footer-sep">·</span>
-      <span>LangGraph + Neo4j + ChromaDB</span>
+      <span>LangGraph 编排 · Neo4j 图谱 · ChromaDB 检索</span>
       <span class="footer-sep">·</span>
-      <span>Defensive AI · Human-in-the-loop</span>
+      <span>防御型人工智能 · 关键结论人工复核</span>
     </div>
   </footer>
 
 </div>
 
-<script src="/static/app.js?v=20260815-2"></script>
+<script src="/static/app.js?v=20260815-3"></script>
 </body>
 </html>
