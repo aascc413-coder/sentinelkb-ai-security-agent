@@ -1,0 +1,15 @@
+# 运行产物（trace、manifest、汇总）默认不入库，见实施计划第 5 节
+runs/
+
+# 虚拟环境
+.venv/
+venv/
+
+# Python 构建与缓存
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/

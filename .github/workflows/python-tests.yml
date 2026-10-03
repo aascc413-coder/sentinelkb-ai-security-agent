@@ -35,3 +35,31 @@ jobs:
 
       - name: Run offline test suite
         run: python -m pytest tests -q
+
+  investigation-tests:
+    # 独立实验包 job：干净环境只安装 investigation 自身锁定依赖，
+    # 与产品测试 job 互不依赖，结果分开显示（实施计划 M0/R7）。
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: investigation
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: investigation/requirements-lock.txt
+
+      - name: Install locked dependencies and package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-lock.txt
+          python -m pip install --no-deps -e .
+
+      - name: Run investigation test suite
+        run: python -m pytest tests -q
