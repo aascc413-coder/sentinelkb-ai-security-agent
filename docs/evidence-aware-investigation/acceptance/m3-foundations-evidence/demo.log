@@ -1,0 +1,30 @@
+{
+  "mode": "generic offline demo; not M2 replay",
+  "calls": [
+    {
+      "call_id": "first",
+      "status": "ok",
+      "records": 1,
+      "cost_units": 2.0,
+      "simulated_latency_ms": 200
+    },
+    {
+      "call_id": "cached",
+      "status": "ok",
+      "records": 1,
+      "cost_units": 0.0,
+      "simulated_latency_ms": 0
+    },
+    {
+      "call_id": "unknown",
+      "status": "unavailable",
+      "coverage": "unknown",
+      "error_code": "no_matching_rule"
+    }
+  ],
+  "stats": {
+    "attempts": 3,
+    "backend_calls": 2,
+    "cache_hits": 1
+  }
+}

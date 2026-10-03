@@ -1,0 +1,46 @@
+{
+  "review_root": "D:\\project\\Agent\\m3-docs-independent-audit",
+  "files": [
+    {
+      "path": ".github/workflows/python-tests.yml",
+      "sha256": "3f02078656b8ea2d5fd342a6d2399bf0cbc135b17fd003c42609b57138c061eb",
+      "same_as_source": true
+    },
+    {
+      "path": "investigation/README.md",
+      "sha256": "7becd08317b3bd937c42e733579c03e1f2d7699e46458158fe48bdeed1baab6a",
+      "same_as_source": true
+    },
+    {
+      "path": "docs/evidence-aware-investigation/phase-2-implementation-plan.md",
+      "sha256": "8e27f576c5bf3f62cc4181799b6b46341fc1bf656c38ba08d84865f0a6b5fb95",
+      "same_as_source": true
+    },
+    {
+      "path": "docs/evidence-aware-investigation/acceptance/m3-foundations-acceptance.md",
+      "sha256": "c9bd22ab754ddc667256ba949b2f87d8d26c681a37fcd200f920afd90f0e5129",
+      "same_as_source": true
+    },
+    {
+      "path": "docs/evidence-aware-investigation/acceptance/m2-helper-preparation.md",
+      "sha256": "78f2449e6fd07856d27e85bdf44b51c79fac1a2d09cfffd6bffafafdbfa6c942",
+      "same_as_source": true
+    }
+  ],
+  "m2_external_copy_equal": true,
+  "external_m2_sha256": "78f2449e6fd07856d27e85bdf44b51c79fac1a2d09cfffd6bffafafdbfa6c942",
+  "tests_xml_exists": true,
+  "tests_xml_suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "275",
+      "time": "0.709",
+      "timestamp": "2026-10-04T02:28:45.838117+08:00",
+      "hostname": "LAPTOP-BTPEDGKK"
+    }
+  ],
+  "review_manifest_exists": true
+}

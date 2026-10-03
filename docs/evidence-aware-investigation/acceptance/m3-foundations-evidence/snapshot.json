@@ -1,0 +1,169 @@
+{
+  "scope": "generic M3 tools and early M4 budget only; not complete M2/M3/M4 acceptance",
+  "base_commit": "63fa8089845a05ad7e45d785b0adf081fa2dd52e",
+  "recorded_at": "2026-10-03T18:29:34.419616+00:00",
+  "python": "3.12.10",
+  "package_path": "D:\\project\\Agent\\m3-independent-foundations\\investigation\\src\\evidence_investigation\\__init__.py",
+  "locked_dependencies": [
+    {
+      "name": "anyio",
+      "version": "4.15.1"
+    },
+    {
+      "name": "attrs",
+      "version": "26.1.0"
+    },
+    {
+      "name": "certifi",
+      "version": "2026.7.22"
+    },
+    {
+      "name": "colorama",
+      "version": "0.4.6"
+    },
+    {
+      "name": "h11",
+      "version": "0.16.0"
+    },
+    {
+      "name": "httpcore",
+      "version": "1.0.9"
+    },
+    {
+      "name": "httpx",
+      "version": "0.28.1"
+    },
+    {
+      "name": "idna",
+      "version": "3.20"
+    },
+    {
+      "name": "iniconfig",
+      "version": "2.3.0"
+    },
+    {
+      "name": "jsonschema",
+      "version": "4.26.0"
+    },
+    {
+      "name": "jsonschema-specifications",
+      "version": "2025.9.1"
+    },
+    {
+      "name": "packaging",
+      "version": "26.3"
+    },
+    {
+      "name": "pluggy",
+      "version": "1.6.0"
+    },
+    {
+      "name": "Pygments",
+      "version": "2.21.0"
+    },
+    {
+      "name": "pytest",
+      "version": "9.1.1"
+    },
+    {
+      "name": "pytest-asyncio",
+      "version": "1.4.0"
+    },
+    {
+      "name": "referencing",
+      "version": "0.37.0"
+    },
+    {
+      "name": "rfc3339-validator",
+      "version": "0.1.4"
+    },
+    {
+      "name": "rpds-py",
+      "version": "2026.6.3"
+    },
+    {
+      "name": "six",
+      "version": "1.17.0"
+    },
+    {
+      "name": "typing_extensions",
+      "version": "4.16.0"
+    }
+  ],
+  "official_tests_passed": 275,
+  "files": [
+    {
+      "path": ".github/workflows/python-tests.yml",
+      "sha256": "3f02078656b8ea2d5fd342a6d2399bf0cbc135b17fd003c42609b57138c061eb"
+    },
+    {
+      "path": "docs/evidence-aware-investigation/acceptance/m2-helper-preparation.md",
+      "sha256": "78f2449e6fd07856d27e85bdf44b51c79fac1a2d09cfffd6bffafafdbfa6c942"
+    },
+    {
+      "path": "docs/evidence-aware-investigation/acceptance/m3-foundations-acceptance.md",
+      "sha256": "c9bd22ab754ddc667256ba949b2f87d8d26c681a37fcd200f920afd90f0e5129"
+    },
+    {
+      "path": "docs/evidence-aware-investigation/phase-2-implementation-plan.md",
+      "sha256": "8e27f576c5bf3f62cc4181799b6b46341fc1bf656c38ba08d84865f0a6b5fb95"
+    },
+    {
+      "path": "investigation/README.md",
+      "sha256": "7becd08317b3bd937c42e733579c03e1f2d7699e46458158fe48bdeed1baab6a"
+    },
+    {
+      "path": "investigation/scripts/demo_tools.py",
+      "sha256": "080ff30b8fe12f0c78670da097e1d70f6456d78fd31ab76e82f45683396d28a5"
+    },
+    {
+      "path": "investigation/src/evidence_investigation/runtime/__init__.py",
+      "sha256": "aa62f2c64a306fd6d67527bdb3706a442facf1083622eb20ade11a1bb030470a"
+    },
+    {
+      "path": "investigation/src/evidence_investigation/runtime/budget.py",
+      "sha256": "65ad475884e60c1419754832fd0e2400db8c1ff2dee61218113a1297f4965c3e"
+    },
+    {
+      "path": "investigation/src/evidence_investigation/tools/__init__.py",
+      "sha256": "2288e587478d589fab08ed94939fe3b985fe5abef9d3ae3c59f4b39f4c7a4944"
+    },
+    {
+      "path": "investigation/src/evidence_investigation/tools/contracts.py",
+      "sha256": "1f24adbae51dad8ff784ed40f21f34aeb0a472bfb72bcd523666981ee53d8b71"
+    },
+    {
+      "path": "investigation/src/evidence_investigation/tools/selection.py",
+      "sha256": "016651842cc44ac8fd3b933180aed69d2732b41502f5b5a57766d343ad62b8e1"
+    },
+    {
+      "path": "investigation/src/evidence_investigation/tools/server.py",
+      "sha256": "19af72dee7792475888f6b187d1b08b85accabb568f3d0e05c86ebf143064034"
+    },
+    {
+      "path": "investigation/src/evidence_investigation/tools/signatures.py",
+      "sha256": "059e0c1acd560e429b91b156cbf5ba1ddbfa41a434a42a25d9ddd1d2b3d64332"
+    },
+    {
+      "path": "investigation/tests/test_budget.py",
+      "sha256": "51383c837373db22171752c5bb1e4a46d3397f10304d026b2886bca25e9e56c5"
+    },
+    {
+      "path": "investigation/tests/test_foundations_integration.py",
+      "sha256": "aa0906cad5037a2fbfe94ece5b451f659768c1e902c5c35ff5e85455d72b7014"
+    },
+    {
+      "path": "investigation/tests/test_tool_selection.py",
+      "sha256": "f966d91f833aaa5d214218ba95f461e9dfe620098806cef6bae74343478dbc6a"
+    },
+    {
+      "path": "investigation/tests/test_tool_server.py",
+      "sha256": "55be88814fe1a0f50142ddb4e17e164cb717b4a589c8766c9daac12c254ba7b5"
+    },
+    {
+      "path": "investigation/tests/test_tool_signatures.py",
+      "sha256": "1b1d6f4bd47dac3c22bb1eb99ebc73dedeb9bd0d6cb2dee3bf8a63e6c2c6e625"
+    }
+  ],
+  "excluded": "evidence records, test logs and review records to avoid self-reference; Git blob hashes recorded at submission"
+}

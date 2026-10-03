@@ -17,6 +17,12 @@ SentinelKB 的独立实验包：实现"带调查预算和拒判机制"的安全�
 
 ## 本地开发
 
+并行开发中的通用工具和预算组件见 [组件交付记录](../docs/evidence-aware-investigation/acceptance/m3-foundations-acceptance.md)。这些组件使用独立测试样例，尚未完成 M2 五案集成，不代表 M3 / M4 整体完成。离线演示：
+
+```powershell
+investigation\.venv\Scripts\python.exe investigation\scripts\demo_tools.py
+```
+
 使用本包自己的虚拟环境（不入库）：
 
 ```powershell
