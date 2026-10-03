@@ -1,7 +1,7 @@
 # M0 人工验收说明
 
 按 [实施计划（v5）](../phase-2-implementation-plan.md) 第 7.4 节模板编制。
-状态：**已通过（本地人工验收，2026-10-04）**；远端 CI 未运行，本里程碑处于"待远端验证"。
+状态：**已完成**（本地人工验收通过 2026-10-04；远端 CI 双 job 通过于 commit `e6c4473`）。
 
 ## 里程碑
 
@@ -114,9 +114,9 @@ M0 脚手架与独立环境（父依赖：无）
 | 验收人及日期 | 用户，2026-10-04 |
 | 人工结论 | **通过** |
 | 问题及修复 | 问题 1：验收说明步骤 1 使用相对路径，用户在 `C:\Windows\system32` 下首次执行失败（pip 找不到 requirements 文件）；修复：命令全部改为绝对路径并加提示（仅文档修正，不涉及工程成果，复验范围=无） |
-| 通过后 commit | `9f3719f`（docs: freeze evidence-aware investigation design and plan baseline）+ `9ac5b0c`（feat: scaffold evidence-investigation package with independent CI job）；本记录见后续 docs commit |
-| 远端 CI | 未运行（用户未授权推送；推送后由 `investigation-tests` 与 `test` 两个 job 确认，需核对所测 commit） |
-| 阶段状态 | **待远端验证** |
+| 通过后 commit | `9f3719f`（docs: freeze evidence-aware investigation design and plan baseline）+ `9ac5b0c`（feat: scaffold evidence-investigation package with independent CI job）+ `0bde2a9`（验收记录）；推送时远端已有用户单独添加的 LICENSE 提交（`0d2c7e8`，v1.0.0 标签），经合并提交 `e6c4473` 集成，LICENSE 采用**远端已发布版本**（署名 `413`，替换本地未推送草稿版署名 `aascc413-coder`——如需改回请告知，一行即可） |
+| 远端 CI | **通过**：`investigation-tests` success（32s）+ `test` success（91s），所测 commit `e6c4473dcff4f30553dad68e5f3fab88955c60ed`（合并提交，含 `9f3719f`/`9ac5b0c`/`0bde2a9` 全部 M0 内容），[run 37136875969](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/37136875969) |
+| 阶段状态 | **已完成** |
 | 实验结论 | 不适用（本里程碑无实验） |
 
 用户决策记录：提交拆分为两个 commit（采纳建议方案）；推送未授权（待定）；`evals/reports/` 不入库（默认）。
