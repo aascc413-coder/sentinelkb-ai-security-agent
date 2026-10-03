@@ -1,10 +1,8 @@
-# 依赖锁定文件 — 由 investigation/.venv 的 pip freeze 生成，不要手工编辑。
-# Python 3.12.10 (Windows)，更新日期 2026-10-04（M1 新增 rfc3339-validator）；对应 evidence-investigation 0.1.0。
-# 重新生成方法见 README.md。CI（investigation-tests job）按本文件安装。
 anyio==4.15.1
 attrs==26.1.0
 certifi==2026.7.22
 colorama==0.4.6
+-e git+https://github.com/aascc413-coder/sentinelkb-ai-security-agent.git@2a31d90bbe1d1ec4754bbf7d115d474c04557630#egg=evidence_investigation&subdirectory=..\..\..\m1-helper-review\investigation
 h11==0.16.0
 httpcore==1.0.9
 httpx==0.28.1
@@ -13,6 +11,7 @@ iniconfig==2.3.0
 jsonschema==4.26.0
 jsonschema-specifications==2025.9.1
 packaging==26.3
+pip==26.2.1
 pluggy==1.6.0
 Pygments==2.21.0
 pytest==9.1.1

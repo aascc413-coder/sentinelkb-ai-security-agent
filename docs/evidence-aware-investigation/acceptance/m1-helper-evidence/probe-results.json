@@ -1,0 +1,430 @@
+{
+ "summary": {
+  "total": 59,
+  "passed": 58,
+  "failed": [
+   {
+    "probe": "P3 ToolCall 解码错配",
+    "expect": "reject",
+    "outcome": "accepted",
+    "pass": false,
+    "detail": ""
+   }
+  ]
+ },
+ "results": [
+  {
+   "probe": "P1.1 plain Import 形式",
+   "expect": "caught",
+   "outcome": "caught",
+   "pass": true,
+   "detail": "C:\\Users\\scc\\AppData\\Local\\Temp\\tmpm3zqtle_\\src\\evidence_investigation\\state\\bad.py: evidence_investigation.state.bad 导入环境侧契约 ['evidence_investigation.tools.con"
+  },
+  {
+   "probe": "P1.2 from 包根导入 tools 名",
+   "expect": "caught",
+   "outcome": "caught",
+   "pass": true,
+   "detail": "C:\\Users\\scc\\AppData\\Local\\Temp\\tmpw9251jwx\\src\\evidence_investigation\\state\\bad.py: evidence_investigation.state.bad 导入环境侧契约 ['evidence_investigation.tools']"
+  },
+  {
+   "probe": "P1.3 相对父级导入 tools 名",
+   "expect": "caught",
+   "outcome": "caught",
+   "pass": true,
+   "detail": "C:\\Users\\scc\\AppData\\Local\\Temp\\tmpsh51raan\\src\\evidence_investigation\\state\\bad.py: evidence_investigation.state.bad 导入环境侧契约 ['evidence_investigation.tools']"
+  },
+  {
+   "probe": "P1.4 from tools 导入子模块名",
+   "expect": "caught",
+   "outcome": "caught",
+   "pass": true,
+   "detail": "C:\\Users\\scc\\AppData\\Local\\Temp\\tmptns5jbql\\src\\evidence_investigation\\agents\\bad.py: evidence_investigation.agents.bad 导入环境侧契约 ['evidence_investigation.tools',"
+  },
+  {
+   "probe": "P1.5 括号多名导入",
+   "expect": "caught",
+   "outcome": "caught",
+   "pass": true,
+   "detail": "C:\\Users\\scc\\AppData\\Local\\Temp\\tmpjsvtekxj\\src\\evidence_investigation\\state\\bad.py: evidence_investigation.state.bad 导入环境侧契约 ['evidence_investigation.tools.con"
+  },
+  {
+   "probe": "P1.6 as 别名导入",
+   "expect": "caught",
+   "outcome": "caught",
+   "pass": true,
+   "detail": "C:\\Users\\scc\\AppData\\Local\\Temp\\tmptlog3mlo\\src\\evidence_investigation\\evaluation_side\\bad.py: evidence_investigation.evaluation_side.bad 导入环境侧契约 ['evidence_inv"
+  },
+  {
+   "probe": "P1.7 evaluation 导入环境契约",
+   "expect": "caught",
+   "outcome": "caught",
+   "pass": true,
+   "detail": "C:\\Users\\scc\\AppData\\Local\\Temp\\tmptybtwbgq\\evaluation\\bad.py: evidence_investigation.evaluation.bad 导入环境侧契约 ['evidence_investigation.tools.contracts', 'evidenc"
+  },
+  {
+   "probe": "P1.8 合法：state 同区相对导入",
+   "expect": "clean",
+   "outcome": "clean",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P1.9 合法：evaluation 导 state",
+   "expect": "clean",
+   "outcome": "clean",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P1.10 合法：state 导第三方",
+   "expect": "clean",
+   "outcome": "clean",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P1.11 合法：from . import tools 于 state 内",
+   "expect": "clean",
+   "outcome": "clean",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P1.12 单一违规无重复报告",
+   "expect": "1",
+   "outcome": "1",
+   "pass": true,
+   "detail": "[\"C:\\\\Users\\\\scc\\\\AppData\\\\Local\\\\Temp\\\\tmpr68_yfxw\\\\src\\\\evidence_investigation\\\\state\\\\bad.py: evidence_investigation.state.bad 导入环境侧契约 ['evidence_investigati"
+  },
+  {
+   "probe": "P2.1 adapter p_attack=nan",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": "decode_type_mismatch"
+  },
+  {
+   "probe": "P2.2 adapter p_attack=inf",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": "schema_violation"
+  },
+  {
+   "probe": "P2.3 adapter claims 内 NaN",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": "decode_type_mismatch"
+  },
+  {
+   "probe": "P2.4 正控：p_attack=1 整数接受",
+   "expect": "accept",
+   "outcome": "accepted",
+   "pass": true,
+   "detail": "p_attack=1.0"
+  },
+  {
+   "probe": "P2.5 模型声明校准状态被覆写",
+   "expect": "uncalibrated",
+   "outcome": "uncalibrated",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P2.6 validation p_attack=nan",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": "invalid_probability"
+  },
+  {
+   "probe": "P3 正控 action siem",
+   "expect": "accept",
+   "outcome": "accepted",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P3 正控 action threat_intel",
+   "expect": "accept",
+   "outcome": "accepted",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P3 正控 action asset",
+   "expect": "accept",
+   "outcome": "accepted",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P3 正控 action history",
+   "expect": "accept",
+   "outcome": "accepted",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P3 正控 action attack",
+   "expect": "accept",
+   "outcome": "accepted",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P3 错配 siem+threat_intel 参数",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P3 错配 siem+asset 参数",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P3 错配 siem+history 参数",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P3 错配 siem+attack 参数",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P3 错配 threat_intel+siem 参数",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P3 错配 threat_intel+asset 参数",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P3 错配 threat_intel+history 参数",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P3 错配 threat_intel+attack 参数",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P3 错配 asset+siem 参数",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P3 错配 asset+threat_intel 参数",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P3 错配 asset+history 参数",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P3 错配 asset+attack 参数",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P3 错配 history+siem 参数",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P3 错配 history+threat_intel 参数",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P3 错配 history+asset 参数",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P3 错配 history+attack 参数",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P3 错配 attack+siem 参数",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P3 错配 attack+threat_intel 参数",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P3 错配 attack+asset 参数",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P3 错配 attack+history 参数",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P3 ToolCall 解码错配",
+   "expect": "reject",
+   "outcome": "accepted",
+   "pass": false,
+   "detail": ""
+  },
+  {
+   "probe": "P4.1 final_evidence_ids 悬空",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": "dangling_reference"
+  },
+  {
+   "probe": "P4.2 claim 引用悬空",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": "dangling_reference"
+  },
+  {
+   "probe": "P4.3 claim evidence_ids 空串",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": "schema_violation"
+  },
+  {
+   "probe": "P4.4 protocol_error+TP",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": "invalid_final_combination"
+  },
+  {
+   "probe": "P4.5 p_attack=-0.1",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": "schema_violation"
+  },
+  {
+   "probe": "P4.6 p_attack=1.01",
+   "expect": "reject",
+   "outcome": "rejected",
+   "pass": true,
+   "detail": "schema_violation"
+  },
+  {
+   "probe": "P4.7 正控：p_attack=None + TP 允许",
+   "expect": "accept",
+   "outcome": "accepted",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P5.1 六层嵌套",
+   "expect": "accept",
+   "outcome": "accepted",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P5.2 Unicode 键",
+   "expect": "accept",
+   "outcome": "accepted",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P5.3 空容器",
+   "expect": "accept",
+   "outcome": "accepted",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P5.4 顶层列表",
+   "expect": "accept",
+   "outcome": "accepted",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P5.5 Alert 深层 raw 往返",
+   "expect": "accept",
+   "outcome": "accepted",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P6.1 包根不预载 tools 属性",
+   "expect": "clean",
+   "outcome": "clean",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P6.2 三区布局关键文件",
+   "expect": "clean",
+   "outcome": "clean",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "probe": "P6.3 公共动作不含专有字段定义",
+   "expect": "clean",
+   "outcome": "clean",
+   "pass": true,
+   "detail": ""
+  }
+ ]
+}

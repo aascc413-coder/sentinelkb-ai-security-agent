@@ -1,0 +1,161 @@
+--- a/investigation/tests/test_import_boundaries.py
++++ b/investigation/tests/test_import_boundaries.py
+@@ -39,13 +39,18 @@
+             targets.update(alias.name for alias in node.names)
+         elif isinstance(node, ast.ImportFrom):
+             if node.level == 0:
+-                if node.module:
+-                    targets.add(node.module)
++                base = node.module or ""
+             else:
+                 base = package
+-                for _ in range(node.level - 1):  # level=1 指当前包，level=2 起逐级上移
++                for _ in range(node.level - 1):
+                     base = base.rpartition(".")[0]
+-                targets.add(f"{base}.{node.module}" if node.module else base)
++                if node.module:
++                    base = f"{base}.{node.module}"
++            if base:
++                targets.add(base)
++                # from package import submodule also imports the named child.
++                targets.update(f"{base}.{alias.name}" for alias in node.names
++                               if alias.name != "*")
+     return targets
+ 
+ 
+@@ -65,24 +70,30 @@
+              for p in sorted(eval_root.rglob("*.py"))]
+     for module_name, path in jobs:
+         zone = _zone(module_name)
+-        for target in _full_imports(path, module_name):
+-            if zone != "evaluation" and (
+-                target == "evaluation" or target.startswith("evaluation.")
+-            ):
+-                violations.append(f"{path}: {module_name} 导入评测侧 {target}")
+-            if zone != "tools" and (
+-                target in ENV_CONTRACT_TARGETS
+-                or target.startswith("evidence_investigation.tools.contracts")
+-            ):
+-                violations.append(f"{path}: {module_name} 导入环境侧契约 {target}")
+-            if zone == "evaluation" and not (
++        targets = _full_imports(path, module_name)
++        evaluation_targets = sorted(
++            target for target in targets
++            if target == "evaluation" or target.startswith("evaluation.")
++        )
++        if zone != "evaluation" and evaluation_targets:
++            violations.append(f"{path}: {module_name} 导入评测侧 {evaluation_targets}")
++        environment_targets = sorted(
++            target for target in targets
++            if target in ENV_CONTRACT_TARGETS
++            or target.startswith("evidence_investigation.tools.contracts")
++        )
++        if zone != "tools" and environment_targets:
++            violations.append(f"{path}: {module_name} 导入环境侧契约 {environment_targets}")
++        if zone == "evaluation":
++            external = sorted(target for target in targets if not (
+                 target.split(".")[0] in _STDLIB
+                 or target == "evidence_investigation"
+                 or target.startswith("evidence_investigation.")
+-                or target == "evaluation"  # 区内相对导入（如 evaluation/__init__ → .contracts）
++                or target == "evaluation"
+                 or target.startswith("evaluation.")
+-            ):
+-                violations.append(f"{path}: {module_name} 导入边界外模块 {target}")
++            ))
++            if external:
++                violations.append(f"{path}: {module_name} 导入边界外模块 {external}")
+     return violations
+ 
+ 
+--- a/investigation/src/evidence_investigation/state/adapters.py
++++ b/investigation/src/evidence_investigation/state/adapters.py
+@@ -13,10 +13,11 @@
+ 
+ from __future__ import annotations
+ 
++from dataclasses import replace
+ from typing import Any
+ 
++from .codec import decode
+ from .contracts import Claim, FinalAssessment
+-from .errors import ProtocolViolation
+ from .schema_loader import FINAL_ASSESSMENT, validate_model_output
+ 
+ #: 程序强制字段的值（模型声明被忽略）
+@@ -26,23 +27,8 @@
+ def final_assessment_from_output(payload: dict[str, Any]) -> FinalAssessment:
+     """Schema 校验模型输出后构造运行时 FinalAssessment，并强制程序侧字段。"""
+     validate_model_output(payload, FINAL_ASSESSMENT)
+-    try:
+-        return FinalAssessment(
+-            verdict=payload["verdict"],
+-            disposition=payload["disposition"],
+-            stop_reason=payload["stop_reason"],
+-            p_attack=payload.get("p_attack"),
+-            claims=tuple(codec_claim(c) for c in payload.get("claims", ())),
+-            final_evidence_ids=tuple(payload.get("final_evidence_ids", ())),
+-            unresolved_questions=tuple(payload.get("unresolved_questions", ())),
+-            risk_flags=tuple(payload.get("risk_flags", ())),
+-            abstain_reason=payload.get("abstain_reason"),
+-            confidence_status=DEFAULT_CONFIDENCE_STATUS,
+-        )
+-    except KeyError as exc:
+-        raise ProtocolViolation(
+-            "missing_field", f"模型输出缺少必填字段 {exc.args[0]}"
+-        ) from exc
++    assessment = decode(FinalAssessment, payload)
++    return replace(assessment, confidence_status=DEFAULT_CONFIDENCE_STATUS)
+ 
+ 
+ def codec_claim(raw: dict[str, Any]) -> Claim:
+--- /dev/null
++++ b/investigation/tests/test_m1_review_regressions.py
+@@ -0,0 +1,47 @@
++"""Checks for the rewritten guard and new model-output entry point."""
++import importlib.util
++from pathlib import Path
++
++import pytest
++
++from evidence_investigation.state.adapters import final_assessment_from_output
++from evidence_investigation.state.errors import ProtocolViolation
++
++GUARD_PATH = Path(__file__).with_name("test_import_boundaries.py")
++
++
++def guard_module():
++    spec = importlib.util.spec_from_file_location("m1_retest_guard", GUARD_PATH)
++    guard = importlib.util.module_from_spec(spec)
++    spec.loader.exec_module(guard)
++    return guard
++
++
++@pytest.mark.parametrize("zone,statement", [
++    ("state", "from evidence_investigation import tools\n"),
++    ("state", "from .. import tools\n"),
++    ("agents", "from evidence_investigation import tools as environment\n"),
++    ("evaluation", "from evidence_investigation import tools\n"),
++])
++def test_guard_detects_imported_module_alias(tmp_path, zone, statement):
++    src = tmp_path / "src/evidence_investigation"
++    evaluation = tmp_path / "evaluation"
++    folder = evaluation if zone == "evaluation" else src / zone
++    folder.mkdir(parents=True)
++    (folder / "bad.py").write_text(statement, encoding="utf8")
++    assert guard_module().find_violations(src, evaluation), "environment package import escaped the guard"
++
++
++def test_guard_accepts_runtime_sibling_import(tmp_path):
++    src = tmp_path / "src/evidence_investigation"
++    folder = src / "state"
++    folder.mkdir(parents=True)
++    (folder / "good.py").write_text("from . import contracts\n", encoding="utf8")
++    assert guard_module().find_violations(src, tmp_path / "evaluation") == []
++
++
++def test_adapter_rejects_nonfinite_probability():
++    payload = {"verdict": "Abstain", "disposition": "human_review", "stop_reason": "tool_budget",
++               "claims": [], "final_evidence_ids": [], "p_attack": float("nan")}
++    with pytest.raises(ProtocolViolation):
++        final_assessment_from_output(payload)

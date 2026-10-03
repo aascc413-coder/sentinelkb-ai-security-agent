@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sentinelkb.local/investigation/state/schemas/action.schema.json",
+  "title": "公共动作联合类型（R5：四方法共用；ReAct 与基线不填 Proposed 专有字段）",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["action", "tool", "arguments"],
+      "properties": {
+        "action": { "const": "tool" },
+        "tool": { "$ref": "https://sentinelkb.local/investigation/state/schemas/common.schema.json#/$defs/tool_name" },
+        "arguments": {}
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "tool": { "const": "siem" },
+            "arguments": { "$ref": "https://sentinelkb.local/investigation/state/schemas/common.schema.json#/$defs/siem_arguments" }
+          }
+        },
+        {
+          "properties": {
+            "tool": { "const": "threat_intel" },
+            "arguments": { "$ref": "https://sentinelkb.local/investigation/state/schemas/common.schema.json#/$defs/ti_arguments" }
+          }
+        },
+        {
+          "properties": {
+            "tool": { "const": "asset" },
+            "arguments": { "$ref": "https://sentinelkb.local/investigation/state/schemas/common.schema.json#/$defs/asset_arguments" }
+          }
+        },
+        {
+          "properties": {
+            "tool": { "const": "history" },
+            "arguments": { "$ref": "https://sentinelkb.local/investigation/state/schemas/common.schema.json#/$defs/history_arguments" }
+          }
+        },
+        {
+          "properties": {
+            "tool": { "const": "attack" },
+            "arguments": { "$ref": "https://sentinelkb.local/investigation/state/schemas/common.schema.json#/$defs/attack_arguments" }
+          }
+        }
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["action", "final"],
+      "properties": {
+        "action": { "const": "finish" },
+        "final": { "$ref": "https://sentinelkb.local/investigation/state/schemas/final_assessment.schema.json" }
+      }
+    }
+  ]
+}

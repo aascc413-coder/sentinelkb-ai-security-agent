@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sentinelkb.local/investigation/state/schemas/hypothesis_proposal.schema.json",
+  "title": "Proposed 假设提案输出",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["hypotheses", "links"],
+  "properties": {
+    "hypotheses": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "hypothesis_id", "version", "explanation", "kind", "status",
+          "expected_observations", "falsifying_observations"
+        ],
+        "properties": {
+          "hypothesis_id": { "type": "string", "minLength": 1 },
+          "version": { "type": "integer", "minimum": 1 },
+          "explanation": { "type": "string", "minLength": 1 },
+          "kind": { "enum": ["malicious", "benign", "other"] },
+          "status": { "enum": ["open", "supported", "weakened", "rejected"] },
+          "expected_observations": { "type": "array", "items": { "type": "string" } },
+          "falsifying_observations": { "type": "array", "items": { "type": "string" } },
+          "supporting_evidence": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+          "disconfirming_evidence": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+          "supersedes": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["evidence_id", "hypothesis_id", "stance", "interpretation"],
+        "properties": {
+          "evidence_id": { "type": "string", "minLength": 1 },
+          "hypothesis_id": { "type": "string", "minLength": 1 },
+          "stance": { "enum": ["support", "contradict", "neutral"] },
+          "interpretation": { "type": "string" },
+          "related_evidence_ids": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+        }
+      }
+    }
+  }
+}

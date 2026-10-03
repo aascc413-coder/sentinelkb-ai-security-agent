@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sentinelkb.local/investigation/state/schemas/common.schema.json",
+  "title": "模型输出公共定义（闭合字段）",
+  "$defs": {
+    "json_value": {},
+    "iso_datetime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "verdict": {
+      "enum": ["TP", "FP", "Suspicious", "Abstain"]
+    },
+    "tool_name": {
+      "enum": ["siem", "threat_intel", "asset", "history", "attack"]
+    },
+    "stop_reason": {
+      "enum": [
+        "sufficient", "no_useful_action", "no_available_tool", "tool_budget",
+        "token_budget", "step_budget", "deadline", "conflicting_evidence",
+        "protocol_error", "model_error"
+      ]
+    },
+    "time_window": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end"],
+      "properties": {
+        "start": { "$ref": "#/$defs/iso_datetime" },
+        "end": { "$ref": "#/$defs/iso_datetime" }
+      }
+    },
+    "siem_arguments": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["view", "window"],
+      "properties": {
+        "view": { "enum": ["host_events", "user_events", "process_tree", "network_events"] },
+        "window": { "$ref": "#/$defs/time_window" },
+        "host": { "type": ["string", "null"] },
+        "user": { "type": ["string", "null"] },
+        "process_id": { "type": ["string", "null"] },
+        "limit": { "type": "integer", "minimum": 1, "maximum": 50 }
+      }
+    },
+    "ti_arguments": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["indicator_type", "value", "as_of"],
+      "properties": {
+        "indicator_type": { "enum": ["ip", "domain", "hash"] },
+        "value": { "type": "string", "minLength": 1 },
+        "as_of": { "$ref": "#/$defs/iso_datetime" }
+      }
+    },
+    "asset_arguments": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["host", "as_of"],
+      "properties": {
+        "host": { "type": "string", "minLength": 1 },
+        "as_of": { "$ref": "#/$defs/iso_datetime" }
+      }
+    },
+    "history_arguments": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entity_type", "entity", "window"],
+      "properties": {
+        "entity_type": { "enum": ["host", "user", "command"] },
+        "entity": { "type": "string", "minLength": 1 },
+        "window": { "$ref": "#/$defs/time_window" },
+        "host": { "type": ["string", "null"] },
+        "user": { "type": ["string", "null"] },
+        "command_line": { "type": ["string", "null"] },
+        "limit": { "type": "integer", "minimum": 1, "maximum": 50 }
+      }
+    },
+    "attack_arguments": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["snapshot_version"],
+      "properties": {
+        "snapshot_version": { "type": "string", "minLength": 1 },
+        "behavior_terms": { "type": "array", "items": { "type": "string" } },
+        "technique_ids": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "tool_arguments": {
+      "oneOf": [
+        { "$ref": "#/$defs/siem_arguments" },
+        { "$ref": "#/$defs/ti_arguments" },
+        { "$ref": "#/$defs/asset_arguments" },
+        { "$ref": "#/$defs/history_arguments" },
+        { "$ref": "#/$defs/attack_arguments" }
+      ]
+    },
+    "tool_call": {
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["tool", "arguments"],
+          "properties": {
+            "tool": { "const": "siem" },
+            "arguments": { "$ref": "#/$defs/siem_arguments" }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["tool", "arguments"],
+          "properties": {
+            "tool": { "const": "threat_intel" },
+            "arguments": { "$ref": "#/$defs/ti_arguments" }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["tool", "arguments"],
+          "properties": {
+            "tool": { "const": "asset" },
+            "arguments": { "$ref": "#/$defs/asset_arguments" }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["tool", "arguments"],
+          "properties": {
+            "tool": { "const": "history" },
+            "arguments": { "$ref": "#/$defs/history_arguments" }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["tool", "arguments"],
+          "properties": {
+            "tool": { "const": "attack" },
+            "arguments": { "$ref": "#/$defs/attack_arguments" }
+          }
+        }
+      ]
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claim_id", "subject", "predicate", "value", "evidence_ids", "text", "kind"],
+      "properties": {
+        "claim_id": { "type": "string", "minLength": 1 },
+        "subject": { "type": "string" },
+        "predicate": { "type": "string" },
+        "value": { "$ref": "#/$defs/json_value" },
+        "evidence_ids": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "text": { "type": "string" },
+        "kind": { "enum": ["observation", "inference", "limitation"] }
+      }
+    }
+  }
+}

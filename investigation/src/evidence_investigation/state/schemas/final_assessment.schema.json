@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sentinelkb.local/investigation/state/schemas/final_assessment.schema.json",
+  "title": "最终评估输出（四方法统一的结论 Schema）",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["verdict", "disposition", "stop_reason", "claims", "final_evidence_ids"],
+  "properties": {
+    "verdict": { "$ref": "https://sentinelkb.local/investigation/state/schemas/common.schema.json#/$defs/verdict" },
+    "disposition": { "enum": ["close_recommended", "escalate", "human_review"] },
+    "stop_reason": { "$ref": "https://sentinelkb.local/investigation/state/schemas/common.schema.json#/$defs/stop_reason" },
+    "p_attack": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "claims": {
+      "type": "array",
+      "items": { "$ref": "https://sentinelkb.local/investigation/state/schemas/common.schema.json#/$defs/claim" }
+    },
+    "final_evidence_ids": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "unresolved_questions": { "type": "array", "items": { "type": "string" } },
+    "risk_flags": { "type": "array", "items": { "type": "string" } },
+    "abstain_reason": { "type": ["string", "null"] },
+    "confidence_status": {
+      "enum": ["uncalibrated", "dev_calibrated", "unavailable"],
+      "description": "程序字段：模型输出允许携带但适配时被强制覆写为 uncalibrated"
+    }
+  }
+}

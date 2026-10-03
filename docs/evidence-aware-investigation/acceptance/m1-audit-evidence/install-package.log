@@ -1,0 +1,20 @@
+Obtaining file:///D:/project/Agent/m1-contract-audit/investigation
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: evidence-investigation
+  Building editable for evidence-investigation (pyproject.toml): started
+  Building editable for evidence-investigation (pyproject.toml): finished with status 'done'
+  Created wheel for evidence-investigation: filename=evidence_investigation-0.1.0-0.editable-py3-none-any.whl size=2830 sha256=dd26bf3f664b1a7b0876c8d7f2365fb2bb4f93d51f786e306f1bf09956fa4045
+  Stored in directory: C:\Users\scc\AppData\Local\Temp\pip-ephem-wheel-cache-u_952atw\wheels\d6\e6\55\ac38dbab05fc254e4cd4280e9e3a57ef05952aaf584295278e
+Successfully built evidence-investigation
+Installing collected packages: evidence-investigation
+Successfully installed evidence-investigation-0.1.0
+
+[notice] A new release of pip is available: 25.0.1 -> 26.2.1
+[notice] To update, run: D:\project\Agent\m1-contract-audit\.audit-venv\Scripts\python.exe -m pip install --upgrade pip

@@ -1,0 +1,162 @@
+{
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "packages": [
+    {
+      "name": "anyio",
+      "expected": "4.15.1",
+      "actual": "4.15.1"
+    },
+    {
+      "name": "attrs",
+      "expected": "26.1.0",
+      "actual": "26.1.0"
+    },
+    {
+      "name": "certifi",
+      "expected": "2026.7.22",
+      "actual": "2026.7.22"
+    },
+    {
+      "name": "colorama",
+      "expected": "0.4.6",
+      "actual": "0.4.6"
+    },
+    {
+      "name": "h11",
+      "expected": "0.16.0",
+      "actual": "0.16.0"
+    },
+    {
+      "name": "httpcore",
+      "expected": "1.0.9",
+      "actual": "1.0.9"
+    },
+    {
+      "name": "httpx",
+      "expected": "0.28.1",
+      "actual": "0.28.1"
+    },
+    {
+      "name": "idna",
+      "expected": "3.20",
+      "actual": "3.20"
+    },
+    {
+      "name": "iniconfig",
+      "expected": "2.3.0",
+      "actual": "2.3.0"
+    },
+    {
+      "name": "jsonschema",
+      "expected": "4.26.0",
+      "actual": "4.26.0"
+    },
+    {
+      "name": "jsonschema-specifications",
+      "expected": "2025.9.1",
+      "actual": "2025.9.1"
+    },
+    {
+      "name": "packaging",
+      "expected": "26.3",
+      "actual": "26.3"
+    },
+    {
+      "name": "pluggy",
+      "expected": "1.6.0",
+      "actual": "1.6.0"
+    },
+    {
+      "name": "Pygments",
+      "expected": "2.21.0",
+      "actual": "2.21.0"
+    },
+    {
+      "name": "pytest",
+      "expected": "9.1.1",
+      "actual": "9.1.1"
+    },
+    {
+      "name": "pytest-asyncio",
+      "expected": "1.4.0",
+      "actual": "1.4.0"
+    },
+    {
+      "name": "referencing",
+      "expected": "0.37.0",
+      "actual": "0.37.0"
+    },
+    {
+      "name": "rfc3339-validator",
+      "expected": "0.1.4",
+      "actual": "0.1.4"
+    },
+    {
+      "name": "rpds-py",
+      "expected": "2026.6.3",
+      "actual": "2026.6.3"
+    },
+    {
+      "name": "six",
+      "expected": "1.17.0",
+      "actual": "1.17.0"
+    },
+    {
+      "name": "typing_extensions",
+      "expected": "4.16.0",
+      "actual": "4.16.0"
+    }
+  ],
+  "locked_versions_match": true,
+  "product_packages": {
+    "fastapi": null,
+    "langchain": null,
+    "chromadb": null,
+    "neo4j": null,
+    "uvicorn": null,
+    "pydantic": null
+  },
+  "test_results": {
+    "existing-tests": {
+      "total": 83,
+      "failed": 0,
+      "groups": {
+        "tests.test_adapters": 5,
+        "tests.test_codec": 20,
+        "tests.test_import_boundaries": 10,
+        "tests.test_model_schemas": 16,
+        "tests.test_package": 2,
+        "tests.test_validation": 30
+      }
+    },
+    "independent-tests": {
+      "total": 20,
+      "failed": 0,
+      "groups": {
+        "audit-artifacts.test_m1_independent": 20
+      }
+    },
+    "retest-edges": {
+      "total": 6,
+      "failed": 5,
+      "groups": {
+        "audit-artifacts.test_m1_retest_edges": 6
+      }
+    },
+    "patched-tests": {
+      "total": 109,
+      "failed": 0,
+      "groups": {
+        "tests.test_adapters": 5,
+        "tests.test_codec": 20,
+        "tests.test_import_boundaries": 10,
+        "tests.test_m1_review_regressions": 6,
+        "tests.test_model_schemas": 16,
+        "tests.test_package": 2,
+        "tests.test_validation": 30,
+        "": 20
+      }
+    }
+  },
+  "patch_sha256": "9613ab68ac9e46ecbf73574267707ec5ffdee97d17d76c8e042125a7d690c07b"
+}

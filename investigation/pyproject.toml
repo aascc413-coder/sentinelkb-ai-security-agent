@@ -12,6 +12,7 @@ license = "MIT"
 dependencies = [
     "jsonschema>=4.21",
     "httpx>=0.27",
+    "rfc3339-validator>=0.1.4",
 ]
 
 [project.optional-dependencies]
@@ -22,6 +23,9 @@ dev = [
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+"evidence_investigation.state" = ["schemas/*.schema.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

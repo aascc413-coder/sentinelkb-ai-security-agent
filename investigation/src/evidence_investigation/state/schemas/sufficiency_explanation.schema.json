@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sentinelkb.local/investigation/state/schemas/sufficiency_explanation.schema.json",
+  "title": "Proposed 充分性解释输出（结构化，门槛判定由运行时确定性检查）",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["rubric_version", "criteria"],
+  "properties": {
+    "rubric_version": { "type": "string", "minLength": 1 },
+    "criteria": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["criterion_id", "outcome", "evidence_ids", "reason"],
+        "properties": {
+          "criterion_id": { "type": "string", "minLength": 1 },
+          "outcome": { "enum": ["met", "unmet", "unknown"] },
+          "evidence_ids": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+          "reason": { "type": "string" }
+        }
+      }
+    },
+    "unresolved_alternatives": { "type": "array", "items": { "type": "string" } }
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "captured_at": "2026-10-03T16:52:18.903792+00:00",
+  "base_commit": "2a31d90bbe1d1ec4754bbf7d115d474c04557630",
+  "kind": "uncommitted M1 source snapshot",
+  "files": [
+    {
+      "path": "docs/evidence-aware-investigation/interface-changelog.md",
+      "sha256": "a01be65cf3ddee78f9d256af1f452b947b3a23947c819ca1334d9cf7eb7a7fbc"
+    },
+    {
+      "path": "investigation/conftest.py",
+      "sha256": "179296da5c771b0ff9177fffcd3f38a6c5fabe5839d6946ff0ee10adb2620a6d"
+    },
+    {
+      "path": "investigation/evaluation/__init__.py",
+      "sha256": "4ae6472550547e19bffe6fe9e5ec74ae09fdee9890636f317c07f447824fed70"
+    },
+    {
+      "path": "investigation/evaluation/contracts.py",
+      "sha256": "399400d9d9d1cc7906fe889710630ff381627003eeb8935235290635abba0322"
+    },
+    {
+      "path": "investigation/pyproject.toml",
+      "sha256": "ed1c63bf4041dda74ab69e191bcda3429d0a8d32306c561ffde7eedb2ee0a612"
+    },
+    {
+      "path": "investigation/requirements-lock.txt",
+      "sha256": "6163760cfff7ff66d4e663da6281f9a45ec6272b09f1deecefb29563b07ee77c"
+    },
+    {
+      "path": "investigation/scripts/demo_validate.py",
+      "sha256": "8d9a2b07ef2924044028c9b6fc6e5226cfeef6cbab415ef45bfccd84ddc8c6a7"
+    },
+    {
+      "path": "investigation/src/evidence_investigation/state/__init__.py",
+      "sha256": "75b700865e46a88e97f6f1159d9967e92884b903fe47d274ff73471183512b2e"
+    },
+    {
+      "path": "investigation/src/evidence_investigation/state/codec.py",
+      "sha256": "57d0bbff73ccd21543a96bdca4861efe95d68f20cc2d764d86c814679b2adb32"
+    },
+    {
+      "path": "investigation/src/evidence_investigation/state/contracts.py",
+      "sha256": "4426e6fdb3ddcc3c920fd7c9992cc4b14b5aaee11f994728ea6da568c8caede9"
+    },
+    {
+      "path": "investigation/src/evidence_investigation/state/errors.py",
+      "sha256": "63bb6fa47932e5dcc9fae6239f86895cda4b3201efb006031397da72ba6fd0bb"
+    },
+    {
+      "path": "investigation/src/evidence_investigation/state/schema_loader.py",
+      "sha256": "297c0aa65d4fc91beb72e61f9dffaa1fb8514a891fface78ae24a02db2833fbc"
+    },
+    {
+      "path": "investigation/src/evidence_investigation/state/schemas/action.schema.json",
+      "sha256": "282ca980f5254f88ddad86c5a8a127db1ea4c3e635612e8814f658c13085e5f3"
+    },
+    {
+      "path": "investigation/src/evidence_investigation/state/schemas/common.schema.json",
+      "sha256": "29f6968b8c39c4876865cd107d55ef363d5e420c7fb979dd3f87669feff0a9a7"
+    },
+    {
+      "path": "investigation/src/evidence_investigation/state/schemas/final_assessment.schema.json",
+      "sha256": "35659717fe0a5613daec813bd50be033572876de8cbdf66b3289436314dfeaec"
+    },
+    {
+      "path": "investigation/src/evidence_investigation/state/schemas/hypothesis_proposal.schema.json",
+      "sha256": "9b5a359ff47e388d381a465b5dab2d0d64a056e4432f725d3ce8976d09ded20b"
+    },
+    {
+      "path": "investigation/src/evidence_investigation/state/schemas/plan.schema.json",
+      "sha256": "9ae141f8514968c6a94804b03a68bcee1ba79f714480cbdc68701248da028b0f"
+    },
+    {
+      "path": "investigation/src/evidence_investigation/state/schemas/sufficiency_explanation.schema.json",
+      "sha256": "208da63ce392105bd5360917fab8217371c890eb483c1410e4e556913d248920"
+    },
+    {
+      "path": "investigation/src/evidence_investigation/state/validation.py",
+      "sha256": "22981fb60f669cea12e3ed6f28cc91fd69e8e11e07f1ff11898f481a29824dec"
+    },
+    {
+      "path": "investigation/src/evidence_investigation/tools/__init__.py",
+      "sha256": "3236108a418176bef8631795fe3d1ef33d70d47a41a74dde840a2784232f6d44"
+    },
+    {
+      "path": "investigation/src/evidence_investigation/tools/contracts.py",
+      "sha256": "cb0e6d711f6fd1af01c1ef9ba7d176b895e5c44463ff4569bfcfb15eb11bcf41"
+    },
+    {
+      "path": "investigation/tests/test_codec.py",
+      "sha256": "fbdc7a3c98c679a9e2d695bb046735e12f82299e7e8e4f5967a847a8e3283443"
+    },
+    {
+      "path": "investigation/tests/test_import_boundaries.py",
+      "sha256": "eb98e9da36d9998ba30296a439ac089e031972eb8967822eb1a95da04517bf69"
+    },
+    {
+      "path": "investigation/tests/test_model_schemas.py",
+      "sha256": "86d59057c3ca076198568a132fa1cba0467483fe844127b60a8db96acf07bddc"
+    },
+    {
+      "path": "investigation/tests/test_package.py",
+      "sha256": "cba496095ed990787593233691ece1265f26577480f3d4a742c1283d6751ee17"
+    },
+    {
+      "path": "investigation/tests/test_validation.py",
+      "sha256": "64ce581ad16484ef2ee5fe11de8bf836157c7844caa38898bae1b9c8873b8ce9"
+    }
+  ]
+}

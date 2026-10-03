@@ -1,0 +1,312 @@
+{
+  "existing-tests": {
+    "total": 54,
+    "passed": 54,
+    "failed": 0,
+    "tests": [
+      {
+        "name": "test_round_trip[Alert-obj0]",
+        "status": "passed"
+      },
+      {
+        "name": "test_round_trip[Evidence-obj1]",
+        "status": "passed"
+      },
+      {
+        "name": "test_round_trip[ToolResult-obj2]",
+        "status": "passed"
+      },
+      {
+        "name": "test_round_trip[FinalAssessment-obj3]",
+        "status": "passed"
+      },
+      {
+        "name": "test_encode_datetime_is_iso_string",
+        "status": "passed"
+      },
+      {
+        "name": "test_decode_naive_datetime_still_parses",
+        "status": "passed"
+      },
+      {
+        "name": "test_decode_unknown_field_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "test_decode_missing_required_field_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "test_decode_bad_datetime_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "test_decode_bool_as_int_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "test_decode_union_picks_matching_branch",
+        "status": "passed"
+      },
+      {
+        "name": "test_src_never_imports_evaluation",
+        "status": "passed"
+      },
+      {
+        "name": "test_state_never_imports_tools",
+        "status": "passed"
+      },
+      {
+        "name": "test_tools_only_reference_state",
+        "status": "passed"
+      },
+      {
+        "name": "test_evaluation_only_imports_stdlib_and_state",
+        "status": "passed"
+      },
+      {
+        "name": "test_boundary_holds_for_known_oracle_contract",
+        "status": "passed"
+      },
+      {
+        "name": "test_tool_action_valid",
+        "status": "passed"
+      },
+      {
+        "name": "test_finish_action_valid",
+        "status": "passed"
+      },
+      {
+        "name": "test_action_rejects_proposed_internal_fields",
+        "status": "passed"
+      },
+      {
+        "name": "test_action_rejects_unknown_action_kind",
+        "status": "passed"
+      },
+      {
+        "name": "test_final_assessment_valid",
+        "status": "passed"
+      },
+      {
+        "name": "test_final_p_attack_out_of_range_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "test_final_bad_verdict_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "test_hypothesis_proposal_valid",
+        "status": "passed"
+      },
+      {
+        "name": "test_hypothesis_kind_restricted",
+        "status": "passed"
+      },
+      {
+        "name": "test_plan_candidate_bounds",
+        "status": "passed"
+      },
+      {
+        "name": "test_sufficiency_explanation_valid",
+        "status": "passed"
+      },
+      {
+        "name": "test_tool_arguments_closed_fields",
+        "status": "passed"
+      },
+      {
+        "name": "test_datetime_format_enforced",
+        "status": "passed"
+      },
+      {
+        "name": "test_unknown_schema_name_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "test_schema_contents_returns_action_union",
+        "status": "passed"
+      },
+      {
+        "name": "test_package_imports",
+        "status": "passed"
+      },
+      {
+        "name": "test_declared_dependencies_available",
+        "status": "passed"
+      },
+      {
+        "name": "test_naive_datetime_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "test_non_utc_offset_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "test_utc_accepted",
+        "status": "passed"
+      },
+      {
+        "name": "test_window_start_not_before_end_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "test_alert_occurred_after_as_of_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "test_probability_out_of_range_rejected[-0.1]",
+        "status": "passed"
+      },
+      {
+        "name": "test_probability_out_of_range_rejected[1.01]",
+        "status": "passed"
+      },
+      {
+        "name": "test_probability_out_of_range_rejected[2]",
+        "status": "passed"
+      },
+      {
+        "name": "test_probability_none_allowed",
+        "status": "passed"
+      },
+      {
+        "name": "test_negative_cost_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "test_dangling_reference_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "test_duplicate_id_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "test_final_evidence_must_be_subset",
+        "status": "passed"
+      },
+      {
+        "name": "test_tool_source_without_call_id_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "test_alert_source_without_call_id_accepted",
+        "status": "passed"
+      },
+      {
+        "name": "test_siem_query_invalid_limit_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "test_ti_query_empty_value_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "test_siem_query_valid_accepted",
+        "status": "passed"
+      },
+      {
+        "name": "test_final_with_dangling_claim_reference_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "test_protocol_error_with_tp_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "test_final_valid_accepted",
+        "status": "passed"
+      }
+    ]
+  },
+  "independent-tests": {
+    "total": 20,
+    "passed": 2,
+    "failed": 18,
+    "tests": [
+      {
+        "name": "test_nested_json_values_roundtrip[value0]",
+        "status": "failed"
+      },
+      {
+        "name": "test_nested_json_values_roundtrip[value1]",
+        "status": "failed"
+      },
+      {
+        "name": "test_nested_json_values_roundtrip[value2]",
+        "status": "failed"
+      },
+      {
+        "name": "test_nested_alert_roundtrip",
+        "status": "failed"
+      },
+      {
+        "name": "test_json_integer_is_valid_float_number",
+        "status": "failed"
+      },
+      {
+        "name": "test_typed_dictionary_rejects_unknown_tool_key",
+        "status": "failed"
+      },
+      {
+        "name": "test_nonfinite_cost_rejected[nan]",
+        "status": "failed"
+      },
+      {
+        "name": "test_nonfinite_cost_rejected[inf]",
+        "status": "failed"
+      },
+      {
+        "name": "test_invalid_query_limit_rejected[51]",
+        "status": "failed"
+      },
+      {
+        "name": "test_invalid_query_limit_rejected[1.5]",
+        "status": "failed"
+      },
+      {
+        "name": "test_siem_query_needs_entity_scope",
+        "status": "failed"
+      },
+      {
+        "name": "test_tool_schema_correlates_name_and_arguments",
+        "status": "failed"
+      },
+      {
+        "name": "test_schema_accepted_final_is_decodable",
+        "status": "failed"
+      },
+      {
+        "name": "test_runtime_final_roundtrip_passes_final_schema",
+        "status": "failed"
+      },
+      {
+        "name": "test_state_guard_detects_environment_import[from evidence_investigation.tools.contracts import EnvironmentFixture\\n]",
+        "status": "failed"
+      },
+      {
+        "name": "test_state_guard_detects_environment_import[from ..tools.contracts import EnvironmentFixture\\n]",
+        "status": "failed"
+      },
+      {
+        "name": "test_agents_guard_detects_environment_contract_import",
+        "status": "failed"
+      },
+      {
+        "name": "test_evaluation_guard_detects_environment_import",
+        "status": "failed"
+      },
+      {
+        "name": "test_positive_control_unknown_reference_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "test_positive_control_private_field_rejected",
+        "status": "passed"
+      }
+    ]
+  }
+}

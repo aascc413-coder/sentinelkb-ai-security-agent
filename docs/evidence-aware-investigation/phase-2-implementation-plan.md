@@ -88,6 +88,7 @@ M0 脚手架（设计稿冻结入库 + 包骨架 + 独立 CI job + 依赖锁定�
 - **公共 Evidence Registry（`runtime/registry.py`，四方法共用，R2）**：来源登记、确定性字段提取、ID 分配、fact_key 去重、原文引用（RawReference+hash）、call_id 关联。基线与 Proposed 获得等价的事实与引用能力，基线运行不依赖 `agents/`；注册器不访问 oracle；模型生成文本（摘要、风险分、自由"事实"）不得登记为事实。工具返回的 coverage/error 保存为原始响应 envelope，可引用"某数据源不可用"这一操作事实。
 - `budget.py`：统一预算控制器——tool_attempts 计所有尝试（含错误/重试/缓存/非法请求），tokens 用"输入估算法+预留最大输出+终结评估预留"，monotonic deadline，step 计数；预算耗尽且无有效结论 → **确定性 Abstain**，禁止免费 LLM 补总结。调用前记录输入预估、输出额度与终结评估预留，调用后记录实际 usage 并与预估**对账**（V4-3B）：usage 缺失明确标记、不填零、不混作精确计量；发现超支即停止后续调用并记录偏差，不声称估算方式保证绝不超限；无法可靠计量的运行不参与严格的等 token 预算结论。
 - `dispatcher.py`：校验 tool/参数类型匹配、注入 ToolContext（run_id/call_id/as_of/剩余超时）、强制"调用实体必须来自 alert 或 Registry 已获记录"（校验台账即公共 Registry）、瞬态错误重试一次（计费）、永久不可用不再查询、终止后迟到响应丢弃但费用照记、冗余签名台账。
+- **M1 辅助复核承接（H1/H3）**：用完整 tool→参数类型映射表检查 Python ToolCall（含 Proposed 的 candidate.call），不依赖模型 JSON Schema 已验证这一假设；最终 evidence_id 列表的去重 / 重复拒绝另作公共检查，fact_key 去重不等于输出引用列表唯一。
 - `trace.py`：每 run 写 `runs/<run_id>/manifest.json + events.jsonl + final.json`；事件含 sequence/UTC/elapsed/step/state_version 前后/usage 快照；覆盖设计稿 12 节全部事件类型。
 - `model.py`：`ModelAdapter` 协议 + `OpenAICompatAdapter`（httpx，JSON 输出解析、非法输出最多修复一次且计费、usage 捕获含 reasoning）+ `FakeScriptedModel`（按阶段脚本化响应，供全部离线测试与 M8a）。每次模型调用同时保存**原始输出、校验错误、修复后输出与最终接受结果**（V4-3A）——四者属运行日志，不得登记为真实 Evidence。
 - **验收（P2.3/R2）**：相同告警或工具响应经公共注册器得到等价事实与引用；所有调用计费可审计；超时/重复/迟到结果正确处理；trace 足以离线重放；初始证据已充分且其他预算允许时，不因 tool_calls=0 而禁止有依据的结论（含对应测试，A4）。注入一次虚假引用后，trace 能同时看到模型原始错误、拦截原因与最终接受结果，而非仅一个看似安全的最终 Abstain（V4-3A）；账本能区分预估 token、实测 usage 与未知值（V4-3B）。
@@ -223,7 +224,7 @@ v4 复评（V4-1–V4-3）纳入位置：V4-1→M3 验收（明确覆盖范围+�
 | 里程碑 | 阶段状态 | 通过后 commit | 远端 CI |
 |---|---|---|---|
 | M0 脚手架与独立环境 | 已完成 | `9f3719f` + `9ac5b0c`（记录 `0bde2a9`，合并 `e6c4473`） | 通过（`e6c4473`，[run 37136875969](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/37136875969)） |
-| M1 契约分区与公共动作 Schema | | | |
+| M1 契约分区与公共动作 Schema | 待远端验证（v3 本地与辅助复核通过，用户要求继续） | 待本地提交后记录 | 未运行 |
 | M2 数据集层与充分性判定表 | | | |
 | M3 工具服务层 | | | |
 | M4 运行时层与公共 Registry | | | |

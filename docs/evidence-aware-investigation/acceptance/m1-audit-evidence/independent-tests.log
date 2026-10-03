@@ -1,0 +1,130 @@
+FFFFFFFFFFFFFFFFFF..                                                     [100%]
+================================== FAILURES ===================================
+__________________ test_nested_json_values_roundtrip[value0] __________________
+audit-artifacts\test_m1_independent.py:22: in test_nested_json_values_roundtrip
+    assert codec.decode(JsonValue, codec.encode(value)) == value
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+investigation\src\evidence_investigation\state\codec.py:61: in decode
+    raise ProtocolViolation(
+E   evidence_investigation.state.errors.ProtocolViolation: [decode_type_mismatch] 值 {'process': {'pid': 123}} 不匹配联合类型 str | int | float | bool | None | list['JsonValue'] | dict[str, 'JsonValue']
+__________________ test_nested_json_values_roundtrip[value1] __________________
+audit-artifacts\test_m1_independent.py:22: in test_nested_json_values_roundtrip
+    assert codec.decode(JsonValue, codec.encode(value)) == value
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+investigation\src\evidence_investigation\state\codec.py:61: in decode
+    raise ProtocolViolation(
+E   evidence_investigation.state.errors.ProtocolViolation: [decode_type_mismatch] 值 ['e-1', {'n': 2}] 不匹配联合类型 str | int | float | bool | None | list['JsonValue'] | dict[str, 'JsonValue']
+__________________ test_nested_json_values_roundtrip[value2] __________________
+audit-artifacts\test_m1_independent.py:22: in test_nested_json_values_roundtrip
+    assert codec.decode(JsonValue, codec.encode(value)) == value
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+investigation\src\evidence_investigation\state\codec.py:61: in decode
+    raise ProtocolViolation(
+E   evidence_investigation.state.errors.ProtocolViolation: [decode_type_mismatch] 值 {'a': [True, None]} 不匹配联合类型 str | int | float | bool | None | list['JsonValue'] | dict[str, 'JsonValue']
+_________________________ test_nested_alert_roundtrip _________________________
+audit-artifacts\test_m1_independent.py:29: in test_nested_alert_roundtrip
+    assert codec.decode(Alert, codec.encode(alert)) == alert
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+investigation\src\evidence_investigation\state\codec.py:110: in decode
+    kwargs = {name: decode(hints[name], data[name]) for name in data}
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+investigation\src\evidence_investigation\state\codec.py:140: in decode
+    return {str(k): decode(value_tp, v) for k, v in data.items()}
+                    ^^^^^^^^^^^^^^^^^^^
+investigation\src\evidence_investigation\state\codec.py:61: in decode
+    raise ProtocolViolation(
+E   evidence_investigation.state.errors.ProtocolViolation: [decode_type_mismatch] 值 {'process': {'pid': 123}} 不匹配联合类型 str | int | float | bool | None | list[str | int | float | bool | None | list[ForwardRef('JsonValue')] | dict[str, ForwardRef('JsonValue')]] | dict[str, str | int | float | bool | None | list[ForwardRef('JsonValue')] | dict[str, ForwardRef('JsonValue')]]
+___________________ test_json_integer_is_valid_float_number ___________________
+audit-artifacts\test_m1_independent.py:33: in test_json_integer_is_valid_float_number
+    assert codec.decode(float, 1) == 1.0
+           ^^^^^^^^^^^^^^^^^^^^^^
+investigation\src\evidence_investigation\state\codec.py:93: in decode
+    raise ProtocolViolation(
+E   evidence_investigation.state.errors.ProtocolViolation: [decode_type_mismatch] 期望 float，收到 1
+_______________ test_typed_dictionary_rejects_unknown_tool_key ________________
+audit-artifacts\test_m1_independent.py:37: in test_typed_dictionary_rejects_unknown_tool_key
+    with pytest.raises(ProtocolViolation):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ProtocolViolation
+______________________ test_nonfinite_cost_rejected[nan] ______________________
+audit-artifacts\test_m1_independent.py:43: in test_nonfinite_cost_rejected
+    with pytest.raises(ProtocolViolation):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ProtocolViolation
+______________________ test_nonfinite_cost_rejected[inf] ______________________
+audit-artifacts\test_m1_independent.py:43: in test_nonfinite_cost_rejected
+    with pytest.raises(ProtocolViolation):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ProtocolViolation
+____________________ test_invalid_query_limit_rejected[51] ____________________
+audit-artifacts\test_m1_independent.py:50: in test_invalid_query_limit_rejected
+    with pytest.raises(ProtocolViolation):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ProtocolViolation
+___________________ test_invalid_query_limit_rejected[1.5] ____________________
+audit-artifacts\test_m1_independent.py:50: in test_invalid_query_limit_rejected
+    with pytest.raises(ProtocolViolation):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ProtocolViolation
+_____________________ test_siem_query_needs_entity_scope ______________________
+audit-artifacts\test_m1_independent.py:55: in test_siem_query_needs_entity_scope
+    with pytest.raises(ProtocolViolation):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ProtocolViolation
+_______________ test_tool_schema_correlates_name_and_arguments ________________
+audit-artifacts\test_m1_independent.py:61: in test_tool_schema_correlates_name_and_arguments
+    with pytest.raises(ProtocolViolation):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ProtocolViolation
+___________________ test_schema_accepted_final_is_decodable ___________________
+audit-artifacts\test_m1_independent.py:69: in test_schema_accepted_final_is_decodable
+    codec.decode(FinalAssessment, final)
+investigation\src\evidence_investigation\state\codec.py:114: in decode
+    raise ProtocolViolation(
+E   evidence_investigation.state.errors.ProtocolViolation: [decode_missing_field] FinalAssessment 缺少必填字段 p_attack
+______________ test_runtime_final_roundtrip_passes_final_schema _______________
+audit-artifacts\test_m1_independent.py:75: in test_runtime_final_roundtrip_passes_final_schema
+    sl.validate_model_output(codec.encode(final), sl.FINAL_ASSESSMENT)
+investigation\src\evidence_investigation\state\schema_loader.py:76: in validate_model_output
+    raise ProtocolViolation(
+E   evidence_investigation.state.errors.ProtocolViolation: [schema_violation] final_assessment.schema.json 校验失败于 <root>: Additional properties are not allowed ('confidence_status' was unexpected)
+_ test_state_guard_detects_environment_import[from evidence_investigation.tools.contracts import EnvironmentFixture\n] _
+audit-artifacts\test_m1_independent.py:95: in test_state_guard_detects_environment_import
+    with pytest.raises(AssertionError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE AssertionError
+_ test_state_guard_detects_environment_import[from ..tools.contracts import EnvironmentFixture\n] _
+audit-artifacts\test_m1_independent.py:95: in test_state_guard_detects_environment_import
+    with pytest.raises(AssertionError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE AssertionError
+____________ test_agents_guard_detects_environment_contract_import ____________
+audit-artifacts\test_m1_independent.py:105: in test_agents_guard_detects_environment_contract_import
+    with pytest.raises(AssertionError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE AssertionError
+______________ test_evaluation_guard_detects_environment_import _______________
+audit-artifacts\test_m1_independent.py:113: in test_evaluation_guard_detects_environment_import
+    with pytest.raises(AssertionError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE AssertionError
+=========================== short test summary info ===========================
+FAILED audit-artifacts/test_m1_independent.py::test_nested_json_values_roundtrip[value0]
+FAILED audit-artifacts/test_m1_independent.py::test_nested_json_values_roundtrip[value1]
+FAILED audit-artifacts/test_m1_independent.py::test_nested_json_values_roundtrip[value2]
+FAILED audit-artifacts/test_m1_independent.py::test_nested_alert_roundtrip - ...
+FAILED audit-artifacts/test_m1_independent.py::test_json_integer_is_valid_float_number
+FAILED audit-artifacts/test_m1_independent.py::test_typed_dictionary_rejects_unknown_tool_key
+FAILED audit-artifacts/test_m1_independent.py::test_nonfinite_cost_rejected[nan]
+FAILED audit-artifacts/test_m1_independent.py::test_nonfinite_cost_rejected[inf]
+FAILED audit-artifacts/test_m1_independent.py::test_invalid_query_limit_rejected[51]
+FAILED audit-artifacts/test_m1_independent.py::test_invalid_query_limit_rejected[1.5]
+FAILED audit-artifacts/test_m1_independent.py::test_siem_query_needs_entity_scope
+FAILED audit-artifacts/test_m1_independent.py::test_tool_schema_correlates_name_and_arguments
+FAILED audit-artifacts/test_m1_independent.py::test_schema_accepted_final_is_decodable
+FAILED audit-artifacts/test_m1_independent.py::test_runtime_final_roundtrip_passes_final_schema
+FAILED audit-artifacts/test_m1_independent.py::test_state_guard_detects_environment_import[from evidence_investigation.tools.contracts import EnvironmentFixture\n]
+FAILED audit-artifacts/test_m1_independent.py::test_state_guard_detects_environment_import[from ..tools.contracts import EnvironmentFixture\n]
+FAILED audit-artifacts/test_m1_independent.py::test_agents_guard_detects_environment_contract_import
+FAILED audit-artifacts/test_m1_independent.py::test_evaluation_guard_detects_environment_import
+18 failed, 2 passed in 0.29s

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sentinelkb.local/investigation/state/schemas/plan.schema.json",
+  "title": "调查计划输出（候选动作与选择）",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["action", "selected_action_id", "candidates", "largest_uncertainty", "rationale"],
+  "properties": {
+    "action": { "enum": ["query", "finalize"] },
+    "selected_action_id": { "type": ["string", "null"] },
+    "candidates": {
+      "type": "array",
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "action_id", "call", "target_gap_ids", "outcomes",
+          "discrimination", "critical_gap", "counterevidence", "availability",
+          "normalized_cost", "redundancy", "rationale"
+        ],
+        "properties": {
+          "action_id": { "type": "string", "minLength": 1 },
+          "call": { "$ref": "https://sentinelkb.local/investigation/state/schemas/common.schema.json#/$defs/tool_call" },
+          "target_gap_ids": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+          "outcomes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["possible_observation", "supports", "contradicts", "impact_on_decision"],
+              "properties": {
+                "possible_observation": { "type": "string", "minLength": 1 },
+                "supports": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+                "contradicts": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+                "impact_on_decision": { "type": "string" }
+              }
+            }
+          },
+          "discrimination": { "type": "integer", "minimum": 0, "maximum": 2 },
+          "critical_gap": { "type": "integer", "minimum": 0, "maximum": 2 },
+          "counterevidence": { "type": "integer", "minimum": 0, "maximum": 2 },
+          "availability": { "type": "integer", "minimum": 0, "maximum": 2 },
+          "normalized_cost": { "type": "number", "minimum": 0 },
+          "redundancy": { "type": "number", "minimum": 0 },
+          "rationale": { "type": "string" }
+        }
+      }
+    },
+    "largest_uncertainty": { "type": "string" },
+    "rationale": { "type": "string" }
+  }
+}

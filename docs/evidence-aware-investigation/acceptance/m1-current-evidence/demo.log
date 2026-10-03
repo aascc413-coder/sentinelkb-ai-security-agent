@@ -1,0 +1,16 @@
+REJECTED  1. naive 时间（无时区）
+          code=not_utc  告警时间 必须为 UTC（带时区且偏移为 0），收到 datetime.datetime(2026, 9, 1, 2, 14)
+REJECTED  2. 非 UTC 偏移（+08:00）
+          code=not_utc  告警时间 必须为 UTC（带时区且偏移为 0），收到 datetime.datetime(2026, 9, 1, 10, 14, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800)))
+REJECTED  3. 时间窗 start >= end
+          code=invalid_window  window 要求 start < end，收到 2026-09-01 02:14:00+00:00 >= 2026-09-01 02:14:00+00:00
+REJECTED  4. 最终证据引用未获得的 e-999
+          code=dangling_reference  最终证据 引用了不存在的 ID：e-999
+REJECTED  5. p_attack = 1.5 超出 [0,1]
+          code=invalid_probability  p_attack 必须在 [0,1] 或为 None，收到 1.5
+REJECTED  6. 告警 occurred_at 晚于 as_of
+          code=occurred_after_as_of  告警发生时间 2026-09-01 02:30:00+00:00 晚于 as_of 2026-09-01 02:14:00+00:00
+REJECTED  7. claim 引用不存在的证据
+          code=dangling_reference  claim 证据引用 引用了不存在的 ID：e-404
+
+演示完成：7 项非法输入全部被确定性拒绝。
