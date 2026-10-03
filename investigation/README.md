@@ -6,7 +6,7 @@ SentinelKB 的独立实验包：实现"带调查预算和拒判机制"的安全�
 设计、契约与实施计划见 [`docs/evidence-aware-investigation/`](../docs/evidence-aware-investigation/)：
 
 - [Phase 1 设计](../docs/evidence-aware-investigation/phase-1-design.md)
-- [实施计划（v5）](../docs/evidence-aware-investigation/phase-2-implementation-plan.md)
+- [实施计划（v6）](../docs/evidence-aware-investigation/phase-2-implementation-plan.md)
 
 ## 边界
 

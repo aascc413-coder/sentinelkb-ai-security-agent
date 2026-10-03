@@ -6,7 +6,12 @@
   "local_self_check": "passed: 89 official + 20 independent",
   "helper_review": "passed; m1-helper-review.md",
   "user_instruction": "另外一个AI已经完成工作，你根据结果继续推进",
-  "push_authorization": "pending explicit response",
+  "push_authorization": "2026-10-04: user authorizes development commits and pushes; autonomous technical acceptance + CI progression",
   "remote_ci": "not run for M1 yet",
-  "stage": "awaiting remote verification"
+  "stage": "awaiting remote verification",
+  "reserved_actions": [
+    "publication",
+    "paid resources",
+    "real security response"
+  ]
 }
