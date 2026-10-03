@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" page="1" pageWidth="1200" pageHeight="1000">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+    <mxCell id="title" value="Evidence-Aware Investigation | Phase 1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;fillColor=#ffffff;strokeColor=#637a91;" vertex="1" parent="1">
+      <mxGeometry as="geometry" x="40" y="20" width="1060" height="50" />
+    </mxCell>
+    <mxCell id="harness" value="统一实验控制&lt;br&gt;同模型 / 同预算 / 同工具" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;fillColor=#e8f0fe;strokeColor=#637a91;" vertex="1" parent="1">
+      <mxGeometry as="geometry" x="400" y="100" width="320" height="60" />
+    </mxCell>
+    <mxCell id="agent" value="Agent 区域：仅告警与已取得观察；展开 Proposed" style="swimlane;startSize=36;whiteSpace=wrap;html=1;fontSize=14;fillColor=#f2f6fc;strokeColor=#637a91;" vertex="1" parent="1">
+      <mxGeometry as="geometry" x="40" y="210" width="710" height="520" />
+    </mxCell>
+    <mxCell id="a" value="告警规范化&lt;br&gt;登记来源" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;fillColor=#e8f0fe;strokeColor=#637a91;" vertex="1" parent="agent">
+      <mxGeometry as="geometry" x="40" y="60" width="140" height="60" />
+    </mxCell>
+    <mxCell id="h" value="竞争假设&lt;br&gt;恶意 / 良性 / 其他" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;fillColor=#e8f0fe;strokeColor=#637a91;" vertex="1" parent="agent">
+      <mxGeometry as="geometry" x="220" y="60" width="140" height="60" />
+    </mxCell>
+    <mxCell id="e" value="Evidence State&lt;br&gt;事实 / 缺口 / 矛盾" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;fillColor=#e1f2e8;strokeColor=#637a91;" vertex="1" parent="agent">
+      <mxGeometry as="geometry" x="400" y="60" width="140" height="60" />
+    </mxCell>
+    <mxCell id="s" value="充分性检查&lt;br&gt;来源 / 判别 / 反证" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;fillColor=#e1f2e8;strokeColor=#637a91;" vertex="1" parent="agent">
+      <mxGeometry as="geometry" x="400" y="180" width="140" height="60" />
+    </mxCell>
+    <mxCell id="p" value="动态调查计划&lt;br&gt;证据目标 / 成本" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;fillColor=#e8f0fe;strokeColor=#637a91;" vertex="1" parent="agent">
+      <mxGeometry as="geometry" x="220" y="180" width="140" height="60" />
+    </mxCell>
+    <mxCell id="g" value="统一预算检查&lt;br&gt;受限工具执行" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;fillColor=#e8f0fe;strokeColor=#637a91;" vertex="1" parent="agent">
+      <mxGeometry as="geometry" x="40" y="180" width="140" height="60" />
+    </mxCell>
+    <mxCell id="f" value="最终决策&lt;br&gt;TP / FP / Suspicious / Abstain" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;fillColor=#e1f2e8;strokeColor=#637a91;" vertex="1" parent="agent">
+      <mxGeometry as="geometry" x="220" y="360" width="320" height="80" />
+    </mxCell>
+    <mxCell id="env" value="只读工具环境" style="swimlane;startSize=36;whiteSpace=wrap;html=1;fontSize=14;fillColor=#eef7f0;strokeColor=#637a91;" vertex="1" parent="1">
+      <mxGeometry as="geometry" x="800" y="210" width="300" height="280" />
+    </mxCell>
+    <mxCell id="q" value="5 类 Mock Tools&lt;br&gt;SIEM / TI / Asset&lt;br&gt;History / ATT&amp;CK" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;fillColor=#e1f2e8;strokeColor=#637a91;" vertex="1" parent="env">
+      <mxGeometry as="geometry" x="40" y="60" width="220" height="80" />
+    </mxCell>
+    <mxCell id="r" value="仅返回匹配记录&lt;br&gt;覆盖 / 来源 / 费用" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;fillColor=#e1f2e8;strokeColor=#637a91;" vertex="1" parent="env">
+      <mxGeometry as="geometry" x="40" y="180" width="220" height="60" />
+    </mxCell>
+    <mxCell id="oracle" value="隐藏世界真值与评分标注&lt;br&gt;不得传入 Agent" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;fillColor=#fbe8e6;strokeColor=#637a91;" vertex="1" parent="1">
+      <mxGeometry as="geometry" x="820" y="560" width="260" height="80" />
+    </mxCell>
+    <mxCell id="trace" value="所有方法的 Trace&lt;br&gt;原始结果 / 状态 / 成本" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;fillColor=#fff3d9;strokeColor=#637a91;" vertex="1" parent="1">
+      <mxGeometry as="geometry" x="220" y="790" width="260" height="80" />
+    </mxCell>
+    <mxCell id="eval" value="离线评测&lt;br&gt;错误关闭 + 覆盖 + 证据 + 成本" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;fillColor=#fbe8e6;strokeColor=#637a91;" vertex="1" parent="1">
+      <mxGeometry as="geometry" x="740" y="790" width="340" height="80" />
+    </mxCell>
+    <mxCell id="ah" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#ffffff;" edge="1" source="a" target="h" parent="agent">
+      <mxGeometry as="geometry" relative="1" />
+    </mxCell>
+    <mxCell id="he" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#ffffff;" edge="1" source="h" target="e" parent="agent">
+      <mxGeometry as="geometry" relative="1" />
+    </mxCell>
+    <mxCell id="es" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#ffffff;" edge="1" source="e" target="s" parent="agent">
+      <mxGeometry as="geometry" relative="1" />
+    </mxCell>
+    <mxCell id="sp" value="不足，可继续" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#ffffff;" edge="1" source="s" target="p" parent="agent">
+      <mxGeometry as="geometry" relative="1" />
+    </mxCell>
+    <mxCell id="pg" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#ffffff;" edge="1" source="p" target="g" parent="agent">
+      <mxGeometry as="geometry" relative="1" />
+    </mxCell>
+    <mxCell id="sf" value="充分 / 无可行调查" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#ffffff;" edge="1" source="s" target="f" parent="agent">
+      <mxGeometry as="geometry" relative="1" />
+    </mxCell>
+    <mxCell id="gf" value="预算耗尽" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#ffffff;" edge="1" source="g" target="f" parent="agent">
+      <mxGeometry as="geometry" relative="1" />
+    </mxCell>
+    <mxCell id="ha" value="四种方法选一" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#ffffff;" edge="1" source="harness" target="a" parent="1">
+      <mxGeometry as="geometry" relative="1" />
+    </mxCell>
+    <mxCell id="gq" value="合法调用" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#ffffff;" edge="1" source="g" target="q" parent="1">
+      <mxGeometry as="geometry" relative="1" />
+    </mxCell>
+    <mxCell id="qr" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#ffffff;" edge="1" source="q" target="r" parent="env">
+      <mxGeometry as="geometry" relative="1" />
+    </mxCell>
+    <mxCell id="re" value="登记真实观察" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#ffffff;" edge="1" source="r" target="e" parent="1">
+      <mxGeometry as="geometry" relative="1" />
+    </mxCell>
+    <mxCell id="ft" value="完成记录" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#ffffff;" edge="1" source="f" target="trace" parent="1">
+      <mxGeometry as="geometry" relative="1" />
+    </mxCell>
+    <mxCell id="gt" value="追加事件" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#ffffff;dashed=1;" edge="1" source="g" target="trace" parent="1">
+      <mxGeometry as="geometry" relative="1" />
+    </mxCell>
+    <mxCell id="te" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#ffffff;" edge="1" source="trace" target="eval" parent="1">
+      <mxGeometry as="geometry" relative="1" />
+    </mxCell>
+    <mxCell id="oe" value="独立评分" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#ffffff;" edge="1" source="oracle" target="eval" parent="1">
+      <mxGeometry as="geometry" relative="1" />
+    </mxCell>
+  </root>
+</mxGraphModel>
