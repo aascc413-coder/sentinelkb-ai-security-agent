@@ -1,0 +1,12 @@
+{
+  "milestone": "M1",
+  "source_version": "v3",
+  "code_commit": "d95592608f1131d693ece1007c211662862ba037",
+  "recorded_at": "2026-10-03T17:44:54.225521+00:00",
+  "local_self_check": "passed: 89 official + 20 independent",
+  "helper_review": "passed; m1-helper-review.md",
+  "user_instruction": "另外一个AI已经完成工作，你根据结果继续推进",
+  "push_authorization": "pending explicit response",
+  "remote_ci": "not run for M1 yet",
+  "stage": "awaiting remote verification"
+}
