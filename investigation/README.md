@@ -12,7 +12,7 @@ SentinelKB 的独立实验包：实现"带调查预算和拒判机制"的安全�
 
 - 与产品代码 `code/python/` **零依赖**：不导入 LangGraph、Neo4j、ChromaDB 或任何产品模块。
 - 运行依赖为 `jsonschema`、`httpx`、`rfc3339-validator`，版本以 `requirements-lock.txt` 锁定。
-- 评测代码在包外 `evaluation/`（Phase 2.4 起创建），物理上不被本包导入（逻辑隔离）。
+- 评测代码在包外 `evaluation/`，已含契约与 oracle loader；指标/evaluator 待 M5，实现包不导入它（逻辑隔离）。
 - CI 使用独立 job（`investigation-tests`），干净环境只安装本包自身依赖。
 
 ## 本地开发

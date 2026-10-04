@@ -229,8 +229,8 @@ v4 复评（V4-1–V4-3）纳入位置：V4-1→M3 验收（明确覆盖范围+�
 |---|---|---|---|
 | M0 脚手架与独立环境 | 已完成 | `9f3719f` + `9ac5b0c`（记录 `0bde2a9`，合并 `e6c4473`） | 通过（`e6c4473`，[run 37136875969](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/37136875969)） |
 | M1 契约分区与公共动作 Schema | 已完成（自检、辅助独立复核、双 CI 通过） | `d955926`（实现），`880b837`（CI head） | 通过（`880b837`，[run 37142463749](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/37142463749)） |
-| M2 数据集层与充分性判定表 | 五案数据、加载器、冻结判定表已实现；自检与独立复核收尾；见 [实现验收](acceptance/m2-m3-acceptance.md) | 待提交 | 待远端验证 |
-| M3 工具服务层 | 五案回放与 27 组双胞胎查询已实现；待最终独立复验和同提交 CI；先确认 M2 门槛再确认 M3 | 待提交（草稿 PR #1） | 待远端验证；历史通用组件 `72e808f` 已通过 |
+| M2 数据集层与充分性判定表 | 已完成（自检、独立复核及同源码双 job CI）；见 [实现验收](acceptance/m2-m3-acceptance.md) | `751c77d`（源码），后续记录保留该 SHA | 通过（[run 37209746221](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/37209746221)） |
+| M3 工具服务层 | 已完成；M2 门槛通过后确认五案回放、27 组双胞胎查询与独立复验；M4 父依赖已满足 | `751c77d`（五案集成） | 同上，两 job 均通过；PR run 37209748506 也通过 |
 | M4 运行时层与公共 Registry | 预算组件自检、独立复核及双 CI 通过；Registry / Dispatcher / Trace / 模型适配待实现 | 同上（仅预算组件） | 同上，不代表完整 M4 |
 | M5 评测核心 | | | |
 | M6 基线层 | | | |

@@ -1,7 +1,7 @@
 # M2 数据层与 M3 五案工具集成验收
 
-日期：2026-10-04。当前状态：本地自检与独立复核通过，待远端验证；提交后核对同一 SHA 的
-`test` 和 `investigation-tests`，通过前不标完整里程碑完成。授权依据为用户
+日期：2026-10-04。当前状态：**M2、M3 已完成**。本地自检、独立复核及同一源码
+提交上的 `test` 和 `investigation-tests` 均通过。授权依据为用户
 2026-10-04 的持续开发授权；没有付费模型调用、发布或真实安全处置。
 
 ## 交付能力
@@ -76,9 +76,15 @@ Python 3.12，原锁定依赖没有新增。完整实验包自检 **447 passed**
 双胞胎差异报告归档；源码/数据/规则快照同时记录工作区 SHA256 和 Git blob
 哈希，换行差异单列。不把工作区字节冒充提交字节。
 
-完整 CI 必须先确认 M2 门槛满足，再确认 M3 同一被测实现的联调门槛，之后
-推进依赖它们的 M4。实际所测完整 commit、两个 job 和链接由通过后的状态
-记录补充；文档后续更新仍指向真实所测源码。
+实际源码提交：`751c77da0fdb5feb2a259c856e0107f3a0caf30f`。已先确认 M2 的
+数据/判定表门槛，再确认同一提交上 M3 的五案联调门槛。推送与 PR 两个运行
+均完成，两个 job 的实际 head SHA 均精确一致：
+
+- [push CI 37209746221](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/37209746221)
+- [PR CI 37209748506](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/37209748506)
+
+完整机器记录见 [ci.json](m2-m3-evidence/ci.json)。本段是通过后的状态记录，
+source-index 与独立源码快照仍对应实际被测实现，不将后续文档 commit 冒充它。
 
 ## 后续依赖与实验结论
 
