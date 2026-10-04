@@ -1,0 +1,120 @@
+........................................................................ [ 73%]
+.................F......F.                                               [100%]
+================================== FAILURES ===================================
+_ test_valid_partial_ti_type_constraint_nonmatch_does_not_parse_request_value_as_other_type _
+
+query = TIQuery(indicator_type='ip', value='h-9', as_of=datetime.datetime(2026, 9, 1, 2, 20, tzinfo=datetime.timezone.utc))
+
+    def canonical_query(query: ToolArguments) -> ToolArguments:
+        """Return a validated query with only documented semantic normalization."""
+        tool = next((name for name, tp in _QUERY_TYPES.items() if type(query) is tp), None)
+        if tool is None:
+            raise ProtocolViolation("unknown_query", "Unsupported query class")
+        validate_call(tool, query)
+        if isinstance(query, AttackQuery):
+            return replace(
+                query, behavior_terms=tuple(sorted(set(query.behavior_terms))),
+                technique_ids=tuple(sorted(set(query.technique_ids))),
+            )
+        if not isinstance(query, TIQuery):
+            return query
+        value = query.value
+        if query.indicator_type == "ip":
+            try:
+                if "%" in value:
+                    raise ValueError("Scoped IP addresses are not supported")
+>               value = str(ipaddress.ip_address(value))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+investigation\src\evidence_investigation\tools\signatures.py:74: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = 'h-9'
+
+    def ip_address(address):
+        """Take an IP string/int and return an object of the correct type.
+    
+        Args:
+            address: A string or integer, the IP address.  Either IPv4 or
+              IPv6 addresses may be supplied; integers less than 2**32 will
+              be considered to be IPv4 by default.
+    
+        Returns:
+            An IPv4Address or IPv6Address object.
+    
+        Raises:
+            ValueError: if the *address* passed isn't either a v4 or a v6
+              address
+    
+        """
+        try:
+            return IPv4Address(address)
+        except (AddressValueError, NetmaskValueError):
+            pass
+    
+        try:
+            return IPv6Address(address)
+        except (AddressValueError, NetmaskValueError):
+            pass
+    
+>       raise ValueError(f'{address!r} does not appear to be an IPv4 or IPv6 address')
+E       ValueError: 'h-9' does not appear to be an IPv4 or IPv6 address
+
+C:\Users\scc\AppData\Local\Programs\Python\Python312\Lib\ipaddress.py:54: ValueError
+
+The above exception was the direct cause of the following exception:
+
+    def test_valid_partial_ti_type_constraint_nonmatch_does_not_parse_request_value_as_other_type():
+>       assert not matches_constraints(TIQuery("hash", "h-9", AS_OF), {"indicator_type": "ip"})
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+new_probes.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+investigation\src\evidence_investigation\tools\selection.py:98: in matches_constraints
+    candidate = canonical_query(decode(type(query), {**payload, **ordinary}))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+query = TIQuery(indicator_type='ip', value='h-9', as_of=datetime.datetime(2026, 9, 1, 2, 20, tzinfo=datetime.timezone.utc))
+
+    def canonical_query(query: ToolArguments) -> ToolArguments:
+        """Return a validated query with only documented semantic normalization."""
+        tool = next((name for name, tp in _QUERY_TYPES.items() if type(query) is tp), None)
+        if tool is None:
+            raise ProtocolViolation("unknown_query", "Unsupported query class")
+        validate_call(tool, query)
+        if isinstance(query, AttackQuery):
+            return replace(
+                query, behavior_terms=tuple(sorted(set(query.behavior_terms))),
+                technique_ids=tuple(sorted(set(query.technique_ids))),
+            )
+        if not isinstance(query, TIQuery):
+            return query
+        value = query.value
+        if query.indicator_type == "ip":
+            try:
+                if "%" in value:
+                    raise ValueError("Scoped IP addresses are not supported")
+                value = str(ipaddress.ip_address(value))
+            except ValueError as exc:
+>               raise ProtocolViolation("invalid_indicator", "Invalid IP indicator") from exc
+E               evidence_investigation.state.errors.ProtocolViolation: [invalid_indicator] Invalid IP indicator
+
+investigation\src\evidence_investigation\tools\signatures.py:76: ProtocolViolation
+_ test_request_optional_process_constraint_cannot_expand_claimed_complete_scope _
+
+    @pytest.mark.asyncio
+    async def test_request_optional_process_constraint_cannot_expand_claimed_complete_scope():
+        alert, server = world(1)
+        result = await call(server, alert, "siem", SIEMQuery("process_tree", win(alert), alert.host, alert.user, "different-process"))
+>       assert result.status == "partial" and result.records == ()
+E       AssertionError: assert ('empty' == 'partial'
+E         
+E         - partial
+E         + empty)
+
+new_probes.py:53: AssertionError
+=========================== short test summary info ===========================
+FAILED investigation::test_valid_partial_ti_type_constraint_nonmatch_does_not_parse_request_value_as_other_type
+FAILED investigation::test_request_optional_process_constraint_cannot_expand_claimed_complete_scope
+2 failed, 96 passed in 3.23s

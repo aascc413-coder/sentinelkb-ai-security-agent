@@ -1,0 +1,27 @@
+{
+  "alert": {
+    "alert_id": "b6f06caafe15a6deb2fddca78c3d46bf",
+    "alert_type": "powershell_execution",
+    "occurred_at": "2026-09-01T02:14:00+00:00",
+    "as_of": "2026-09-01T02:20:00+00:00",
+    "host": "WS-088",
+    "user": "operator-b",
+    "process_id": "p-404",
+    "command_line": null,
+    "raw": {
+      "rule_name": "Suspicious PowerShell execution",
+      "process_name": "powershell.exe",
+      "detector_claim": "possible encoded execution",
+      "command_body_retained": false,
+      "host": "WS-088",
+      "user": "operator-b",
+      "process_id": "p-404",
+      "occurred_at": "2026-09-01T02:14:00+00:00"
+    },
+    "raw_reference": {
+      "record_id": "a4dfe9b3718e7ba802796abf473bbbd6",
+      "json_pointer": "",
+      "content_sha256": "b2832334119f07fa15e13117149bd187545f6ae26555c1f6d0d1ba63fe85130f"
+    }
+  }
+}

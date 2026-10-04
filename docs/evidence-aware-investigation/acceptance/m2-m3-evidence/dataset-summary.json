@@ -1,0 +1,157 @@
+{
+  "dataset_version": "synthetic-v1",
+  "purpose": "engineering seed; not a statistical benchmark",
+  "public_cases": 5,
+  "physical_environments": 4,
+  "oracle_cases": 5,
+  "rubric_version": "powershell-v1",
+  "rubric_canonical_sha256": "5f45cdd8de85bdf93c72f20ddd657a21606accb8f9a4adc011b951a66a3dce39",
+  "cases": [
+    {
+      "case_id": "C1",
+      "records_by_tool": {
+        "siem": 7,
+        "threat_intel": 1,
+        "asset": 1,
+        "history": 4,
+        "attack": 1
+      },
+      "rules": 9,
+      "ground_truth": "malicious",
+      "acceptable_verdicts": [
+        "TP"
+      ],
+      "observable_critical_denominator": 3,
+      "sufficient_sets": {
+        "TP": [
+          [
+            "E1",
+            "E2",
+            "E4"
+          ]
+        ],
+        "FP": []
+      }
+    },
+    {
+      "case_id": "C2",
+      "records_by_tool": {
+        "siem": 6,
+        "threat_intel": 1,
+        "asset": 1,
+        "history": 2,
+        "attack": 1
+      },
+      "rules": 9,
+      "ground_truth": "benign",
+      "acceptable_verdicts": [
+        "FP"
+      ],
+      "observable_critical_denominator": 3,
+      "sufficient_sets": {
+        "TP": [],
+        "FP": [
+          [
+            "E1",
+            "E2",
+            "E3"
+          ]
+        ]
+      }
+    },
+    {
+      "case_id": "C3",
+      "records_by_tool": {
+        "siem": 6,
+        "threat_intel": 2,
+        "asset": 1,
+        "history": 0,
+        "attack": 1
+      },
+      "rules": 10,
+      "ground_truth": "malicious",
+      "acceptable_verdicts": [
+        "Suspicious",
+        "Abstain"
+      ],
+      "observable_critical_denominator": 3,
+      "sufficient_sets": {
+        "TP": [],
+        "FP": []
+      }
+    },
+    {
+      "case_id": "C4",
+      "records_by_tool": {
+        "siem": 3,
+        "threat_intel": 0,
+        "asset": 1,
+        "history": 0,
+        "attack": 1
+      },
+      "rules": 8,
+      "ground_truth": "malicious",
+      "acceptable_verdicts": [
+        "Abstain"
+      ],
+      "observable_critical_denominator": 0,
+      "sufficient_sets": {
+        "TP": [],
+        "FP": []
+      }
+    },
+    {
+      "case_id": "C5",
+      "records_by_tool": {
+        "siem": 3,
+        "threat_intel": 0,
+        "asset": 1,
+        "history": 0,
+        "attack": 1
+      },
+      "rules": 8,
+      "ground_truth": "benign",
+      "acceptable_verdicts": [
+        "Abstain"
+      ],
+      "observable_critical_denominator": 0,
+      "sufficient_sets": {
+        "TP": [],
+        "FP": []
+      }
+    }
+  ],
+  "paired_static_comparison": {
+    "equal": true,
+    "differences": [],
+    "normalized_paths": [
+      {
+        "path": "/left/public/alert/alert_id",
+        "reason": "Opaque envelope ID bijection; repeated identifiers retain their relationship."
+      },
+      {
+        "path": "/left/public/alert/raw_reference/record_id",
+        "reason": "Opaque envelope ID bijection; repeated identifiers retain their relationship."
+      },
+      {
+        "path": "/left/environment/environment_id",
+        "reason": "Opaque envelope ID bijection; repeated identifiers retain their relationship."
+      },
+      {
+        "path": "/right/public/alert/alert_id",
+        "reason": "Opaque envelope ID bijection; repeated identifiers retain their relationship."
+      },
+      {
+        "path": "/right/public/alert/raw_reference/record_id",
+        "reason": "Opaque envelope ID bijection; repeated identifiers retain their relationship."
+      },
+      {
+        "path": "/right/environment/environment_id",
+        "reason": "Opaque envelope ID bijection; repeated identifiers retain their relationship."
+      }
+    ],
+    "normalization_version": "visible-metadata-v1",
+    "normalization_sha256": "94be157765ec02755ac8517cd51cd54ae19afccde4b9ed2faa5a85d0588ca39a"
+  },
+  "boundary": "Static and fixture validation only; no model, runtime sufficiency evaluator or algorithm comparison."
+}

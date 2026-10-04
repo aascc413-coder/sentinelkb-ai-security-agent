@@ -1,0 +1,230 @@
+{
+  "case_id": "C1",
+  "family_id": "powershell-seed-v1",
+  "split": "dev",
+  "ground_truth": "malicious",
+  "complete_world_evidence": {
+    "E0": {
+      "source": "alert",
+      "record_ids": [
+        "9471721d7cd9c647653939e275e6c8a6"
+      ],
+      "observation": "PowerShell detector fired; detector claim is not verified behavior"
+    },
+    "E1": {
+      "source": "siem",
+      "record_ids": [
+        "6bf7d7b7e95b6c58a23a0d86bf38ab56",
+        "b63a9e6c05a60245c8c09e2c3dc324ec",
+        "081ab10a1ae96ce4c5892a7c39027d37",
+        "0d8be6b322ba25e48191b0b7a66d0126"
+      ],
+      "observation": {
+        "view": "process_tree",
+        "host": "WS-041",
+        "user": "analyst-a",
+        "process_id": "p-101",
+        "process_guid": "7734128f343086a3427617427a1cd142",
+        "event_id": "a83577c18260240bb97d801b7643d388",
+        "occurred_at": "2026-09-01T02:14:00+00:00",
+        "observed_at": "2026-09-01T02:19:00+00:00",
+        "parent_process": "WINWORD.EXE",
+        "child_process": [],
+        "script_observations": [
+          {
+            "operation": "read",
+            "object": "credential-store",
+            "authorized": false
+          },
+          {
+            "operation": "send",
+            "object": "credential-bytes",
+            "destination": "203.0.113.66"
+          }
+        ]
+      }
+    },
+    "E2": {
+      "source": "siem",
+      "record_ids": [
+        "95dc21cb87b622a987ee8ef1ad33ca4c",
+        "05068c411defe80785a3dd042f4c0493",
+        "6d5965f59054d98fb69a4b91eb6f928e"
+      ],
+      "observation": {
+        "view": "network_events",
+        "host": "WS-041",
+        "user": "analyst-a",
+        "process_id": "p-101",
+        "process_guid": "7734128f343086a3427617427a1cd142",
+        "event_id": "355150667f6e40ab4914e7a808409aab",
+        "occurred_at": "2026-09-01T02:14:00+00:00",
+        "observed_at": "2026-09-01T02:19:00+00:00",
+        "destination_ip": "203.0.113.66",
+        "destination_port": 443,
+        "sensor_observations": [
+          "credential-store read associated with this process instance",
+          "credential-byte outbound transmission"
+        ]
+      }
+    },
+    "E3": {
+      "source": "threat_intel",
+      "record_ids": [
+        "2f2f2ba128103d7b71422cb80626854d"
+      ],
+      "observation": {
+        "indicator_type": "ip",
+        "value": "203.0.113.66",
+        "published_at": "2026-09-01T02:19:00+00:00",
+        "reputation": "malicious",
+        "provider": "local-mock",
+        "not_a_real_ioc_assessment": true
+      }
+    },
+    "E4": {
+      "source": "tool",
+      "record_ids": [
+        "30fc38b29534aef2f8a558d216ad0ce0",
+        "34bdf42a63af41907251f5cf6bd5e040",
+        "91ed46f2c4b52dac343a9c00c4c9d904"
+      ],
+      "observation": {
+        "host": "WS-041",
+        "published_at": "2026-09-01T02:19:00+00:00",
+        "purpose": "workstation",
+        "system_type": "Windows",
+        "critical_asset": false,
+        "department": "synthetic-operations",
+        "approval_register_complete": true,
+        "approval_register_window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "approved_jobs": []
+      },
+      "source_tools": [
+        "asset",
+        "history"
+      ]
+    },
+    "E6": {
+      "source": "history",
+      "record_ids": [
+        "053f5409089458eba48fcd63f76b9f76",
+        "a7c2ea404287c124330f0ae40958b062"
+      ],
+      "observation": {
+        "entity_type": "host",
+        "entity": "WS-041",
+        "host": "WS-041",
+        "user": "analyst-a",
+        "occurred_at": "2026-08-31T12:00:00+00:00",
+        "observed_at": "2026-09-01T02:19:00+00:00",
+        "action": "interactive_logon",
+        "outcome": "success"
+      }
+    },
+    "E5": {
+      "source": "attack",
+      "record_ids": [
+        "231b1c99f432c3d2aa55c22e4f21dfec"
+      ],
+      "observation": {
+        "snapshot_version": "attack-local-v1",
+        "published_at": "2026-08-01T00:00:00+00:00",
+        "technique_id": "T1059.001",
+        "behavior_terms": [
+          "PowerShell"
+        ],
+        "description": "PowerShell execution can occur in authorized and unauthorized activity; mapping is not an attack verdict."
+      }
+    }
+  },
+  "observable_fact_keys": [
+    "E0",
+    "E1",
+    "E2",
+    "E3",
+    "E4",
+    "E6",
+    "E5"
+  ],
+  "critical_fact_keys": [
+    "E1",
+    "E2",
+    "E4"
+  ],
+  "distractor_fact_keys": [
+    "E5",
+    "E6"
+  ],
+  "sufficient_sets": {
+    "TP": [
+      [
+        "E1",
+        "E2",
+        "E4"
+      ]
+    ],
+    "FP": []
+  },
+  "acceptable_verdicts": [
+    "TP"
+  ],
+  "resolvable_with_full_observable_evidence": true,
+  "expected_actions": [
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E1"
+      ],
+      "acceptable_tools": [
+        "siem"
+      ],
+      "argument_constraints": {
+        "view": "process_tree",
+        "host": "WS-041",
+        "process_id": "p-101"
+      },
+      "evidence_goal": "Check actual process behavior or related network behavior and coverage"
+    },
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E2"
+      ],
+      "acceptable_tools": [
+        "siem"
+      ],
+      "argument_constraints": {
+        "view": "network_events",
+        "host": "WS-041",
+        "process_id": "p-101"
+      },
+      "evidence_goal": "Check actual process behavior or related network behavior and coverage"
+    },
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E4"
+      ],
+      "acceptable_tools": [
+        "asset",
+        "history"
+      ],
+      "argument_constraints": {
+        "host": "WS-041"
+      },
+      "evidence_goal": "Check matched authorization; an approval window alone is insufficient"
+    }
+  ],
+  "rubric_version": "powershell-v1",
+  "annotation_rationale": "Independent synthetic annotation from minimal-cases.md; only observed, grounded evidence supports decisions. Hidden world truth is not an agent hint."
+}

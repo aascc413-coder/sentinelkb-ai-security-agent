@@ -89,6 +89,29 @@ cannot hide behind an earlier mismatch.
     if unknown:
         raise ProtocolViolation("unknown_constraint", f"Unknown query constraints: {sorted(unknown)}")
     payload = encode(query)
+    # Dependent fields (TI indicator_type/value) must be interpreted together.
+    # Applying a hash rule's value to an IP request temporarily creates an
+    # invalid IP, even though the complete rule is a valid non-match.
+    ordinary = {k: v for k, v in constraints.items()
+                if k not in {"window", "as_of"} and
+                not (isinstance(query, AttackQuery) and k in {"behavior_terms", "technique_ids"})}
+    candidate = decode(type(query), {**payload, **ordinary})
+    incompatible_partial_value = False
+    if isinstance(query, TIQuery) and "indicator_type" in ordinary and "value" not in ordinary:
+        # A type-only predicate does not reclassify the request's indicator.
+        pass
+    else:
+        try:
+            candidate = canonical_query(candidate)
+        except ProtocolViolation as exc:
+            if (isinstance(query, TIQuery) and "value" in ordinary and
+                    "indicator_type" not in ordinary and exc.code == "invalid_indicator"):
+                # Value-only rules can match another indicator kind; this kind
+                # is a definite non-match, not an invalid caller query.
+                incompatible_partial_value = True
+            else:
+                raise
+    candidate_payload = encode(candidate)
     comparisons: list[bool] = []
     for key, expected in constraints.items():
         if key == "window":
@@ -106,10 +129,8 @@ cannot hide behind an earlier mismatch.
         elif isinstance(query, AttackQuery) and key in ("behavior_terms", "technique_ids"):
             comparisons.append(frozenset(getattr(query, key)) == _terms(expected, key))
         else:
-            candidate = decode(type(query), {**payload, key: expected})
-            candidate = canonical_query(candidate)
-            comparisons.append(_json_equal(payload[key], encode(candidate)[key]))
-    return all(comparisons)
+            comparisons.append(_json_equal(payload[key], candidate_payload[key]))
+    return not incompatible_partial_value and all(comparisons)
 
 
 def filter_records(
