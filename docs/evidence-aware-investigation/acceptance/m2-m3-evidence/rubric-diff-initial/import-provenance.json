@@ -1,0 +1,17 @@
+[
+  {
+    "module": "evidence_investigation.state.rubric",
+    "path": "D:\\project\\Agent\\m2-rubric-diff-independent-review\\snapshot\\investigation\\src\\evidence_investigation\\state\\rubric.py",
+    "sha256": "98ef4196e4dc9307b66d8b0e55bbd79642ab71bfb27f5f144ab58a442a733ead"
+  },
+  {
+    "module": "evidence_investigation.state.normalization",
+    "path": "D:\\project\\Agent\\m2-rubric-diff-independent-review\\snapshot\\investigation\\src\\evidence_investigation\\state\\normalization.py",
+    "sha256": "1f033af2d912bc0f22127bffe9fdcd84df3ba995cbea8d161888a87740137c52"
+  },
+  {
+    "module": "evidence_investigation.tools.diff_report",
+    "path": "D:\\project\\Agent\\m2-rubric-diff-independent-review\\snapshot\\investigation\\src\\evidence_investigation\\tools\\diff_report.py",
+    "sha256": "99f72f64d96c051dc76fa53ee6e60c36098da74b018df88aafa53ead1ce9d89c"
+  }
+]

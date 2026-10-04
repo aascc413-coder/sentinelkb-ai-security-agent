@@ -1,0 +1,540 @@
+{
+  "environment_id": "6771d07726e23ce750c9d5edf6033893",
+  "as_of": "2026-09-01T02:20:00+00:00",
+  "records_by_tool": {
+    "siem": [
+      {
+        "record_id": "b2e2469adf2e6a7bcaa1c832cab8a4da",
+        "payload": {
+          "view": "process_tree",
+          "host": "OPS-023",
+          "user": "svc-maint",
+          "process_id": "p-303",
+          "process_guid": "eb41aff44f241f65a1869850ccdf1fba",
+          "event_id": "c3b004135fb556d8e51f036a29bb6456",
+          "occurred_at": "2026-09-01T02:14:00+00:00",
+          "observed_at": "2026-09-01T02:19:00+00:00",
+          "parent_process": "management-task.exe",
+          "job_id": "J-9",
+          "script_hash": "h-9",
+          "parameters": [
+            "export",
+            "external"
+          ],
+          "script_body": null
+        },
+        "content_sha256": "543375bdf41b944cecd0ba43fcb0712c5fc1026c4b7dbb44bf276978ca7238ea",
+        "source_system": "edr",
+        "independence_group": "edr-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement, not model-generated",
+          "policy_version": "source-policy-v1"
+        }
+      },
+      {
+        "record_id": "a57159a7f0065ca3c802fcdd0dc49b7d",
+        "payload": {
+          "view": "host_events",
+          "host": "OPS-023",
+          "user": "svc-maint",
+          "process_id": "p-303",
+          "process_guid": "eb41aff44f241f65a1869850ccdf1fba",
+          "event_id": "c3b004135fb556d8e51f036a29bb6456",
+          "occurred_at": "2026-09-01T02:14:00+00:00",
+          "observed_at": "2026-09-01T02:19:00+00:00",
+          "parent_process": "management-task.exe",
+          "job_id": "J-9",
+          "script_hash": "h-9",
+          "parameters": [
+            "export",
+            "external"
+          ],
+          "script_body": null
+        },
+        "content_sha256": "ce197bee6223a3798f2575ff2ee80db8ac2ff6e0685f486174fc9d834383981f",
+        "source_system": "edr",
+        "independence_group": "edr-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement, not model-generated",
+          "policy_version": "source-policy-v1"
+        }
+      },
+      {
+        "record_id": "1732279bcc01f325b94633c6865ad23b",
+        "payload": {
+          "view": "user_events",
+          "host": "OPS-023",
+          "user": "svc-maint",
+          "process_id": "p-303",
+          "process_guid": "eb41aff44f241f65a1869850ccdf1fba",
+          "event_id": "c3b004135fb556d8e51f036a29bb6456",
+          "occurred_at": "2026-09-01T02:14:00+00:00",
+          "observed_at": "2026-09-01T02:19:00+00:00",
+          "parent_process": "management-task.exe",
+          "job_id": "J-9",
+          "script_hash": "h-9",
+          "parameters": [
+            "export",
+            "external"
+          ],
+          "script_body": null
+        },
+        "content_sha256": "679539ce2e6385895515c4fdbe9b613f2456849030e4f77462aa06a769e55e9a",
+        "source_system": "edr",
+        "independence_group": "edr-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement, not model-generated",
+          "policy_version": "source-policy-v1"
+        }
+      },
+      {
+        "record_id": "3cb36b5b5dce63d8787eed3cd079b3a7",
+        "payload": {
+          "view": "network_events",
+          "host": "OPS-023",
+          "user": "svc-maint",
+          "process_id": "p-303",
+          "process_guid": "eb41aff44f241f65a1869850ccdf1fba",
+          "event_id": "f0e9c9d1d5806174bc76e043354005e7",
+          "occurred_at": "2026-09-01T02:14:00+00:00",
+          "observed_at": "2026-09-01T02:19:00+00:00",
+          "destination_ip": "198.51.100.27",
+          "destination_port": 443,
+          "new_destination": true,
+          "payload_captured": false
+        },
+        "content_sha256": "f04b88744246ba144b219def70831908960e66a87600e41aa6ac0866648e15dc",
+        "source_system": "network-sensor",
+        "independence_group": "network-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement, not model-generated",
+          "policy_version": "source-policy-v1"
+        }
+      },
+      {
+        "record_id": "8ccbfacdfe9f330e544dcfc38cb74130",
+        "payload": {
+          "view": "host_events",
+          "host": "OPS-023",
+          "user": "svc-maint",
+          "process_id": "p-303",
+          "process_guid": "eb41aff44f241f65a1869850ccdf1fba",
+          "event_id": "f0e9c9d1d5806174bc76e043354005e7",
+          "occurred_at": "2026-09-01T02:14:00+00:00",
+          "observed_at": "2026-09-01T02:19:00+00:00",
+          "destination_ip": "198.51.100.27",
+          "destination_port": 443,
+          "new_destination": true,
+          "payload_captured": false
+        },
+        "content_sha256": "d4d580b71600d4fd111c33a9d68f2e1311fe4d31b05c07e73cca9fe27653e9aa",
+        "source_system": "network-sensor",
+        "independence_group": "network-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement, not model-generated",
+          "policy_version": "source-policy-v1"
+        }
+      },
+      {
+        "record_id": "7ef48754c6c6274c5b7286db40fed9ba",
+        "payload": {
+          "view": "user_events",
+          "host": "OPS-023",
+          "user": "svc-maint",
+          "process_id": "p-303",
+          "process_guid": "eb41aff44f241f65a1869850ccdf1fba",
+          "event_id": "f0e9c9d1d5806174bc76e043354005e7",
+          "occurred_at": "2026-09-01T02:14:00+00:00",
+          "observed_at": "2026-09-01T02:19:00+00:00",
+          "destination_ip": "198.51.100.27",
+          "destination_port": 443,
+          "new_destination": true,
+          "payload_captured": false
+        },
+        "content_sha256": "cd49468fd491f9931115cb3b8d5c292a8aa05767312bf88aab74335f6b1a3d83",
+        "source_system": "network-sensor",
+        "independence_group": "network-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement, not model-generated",
+          "policy_version": "source-policy-v1"
+        }
+      }
+    ],
+    "threat_intel": [
+      {
+        "record_id": "85c5a97d22d9b3def7d9480253bec8dc",
+        "payload": {
+          "indicator_type": "ip",
+          "value": "198.51.100.27",
+          "published_at": "2026-09-01T02:19:00+00:00",
+          "reputation": "unknown",
+          "provider": "local-mock",
+          "not_a_real_ioc_assessment": true
+        },
+        "content_sha256": "96c2f6b1c23ebf79bc2200438111c582c10cb031051e8d3094d72eabf2f191c6",
+        "source_system": "mock-ti",
+        "independence_group": "ti-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement, not model-generated",
+          "policy_version": "source-policy-v1"
+        }
+      },
+      {
+        "record_id": "0c1932eed5d8cfdf3e70891b04a8cc60",
+        "payload": {
+          "indicator_type": "hash",
+          "value": "h-9",
+          "published_at": "2026-09-01T02:19:00+00:00",
+          "reputation": "unknown",
+          "provider": "local-mock",
+          "not_a_real_ioc_assessment": true
+        },
+        "content_sha256": "3c24a57d6ea7547064fe72030e3962c1d43d214abc88f6a9423b11ffbc5b5f6e",
+        "source_system": "mock-ti",
+        "independence_group": "ti-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement, not model-generated",
+          "policy_version": "source-policy-v1"
+        }
+      }
+    ],
+    "asset": [
+      {
+        "record_id": "a9304d07b0b460b36b8daf58a492e308",
+        "payload": {
+          "host": "OPS-023",
+          "published_at": "2026-09-01T02:19:00+00:00",
+          "purpose": "operations",
+          "system_type": "Windows",
+          "critical_asset": false,
+          "department": "synthetic-operations",
+          "approval_register_complete": true,
+          "approval_register_window": {
+            "start": "2026-09-01T02:10:00+00:00",
+            "end": "2026-09-01T02:20:00+00:00"
+          },
+          "approved_jobs": [
+            {
+              "host": "OPS-023",
+              "user": "svc-maint",
+              "job_id": "J-7",
+              "script_hash": "h-7",
+              "parameters": [
+                "backup"
+              ],
+              "window": {
+                "start": "2026-09-01T02:00:00+00:00",
+                "end": "2026-09-01T03:00:00+00:00"
+              }
+            }
+          ]
+        },
+        "content_sha256": "ad50defbb5a98638e9020e4a208071f7eaa283e7f45294debee6c530da6e7638",
+        "source_system": "change-register",
+        "independence_group": "change-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement, not model-generated",
+          "policy_version": "source-policy-v1"
+        }
+      }
+    ],
+    "history": [],
+    "attack": [
+      {
+        "record_id": "7b31ddd1121f97a91b239277c95ec469",
+        "payload": {
+          "snapshot_version": "attack-local-v1",
+          "published_at": "2026-08-01T00:00:00+00:00",
+          "technique_id": "T1059.001",
+          "behavior_terms": [
+            "PowerShell"
+          ],
+          "description": "PowerShell execution can occur in authorized and unauthorized activity; mapping is not an attack verdict."
+        },
+        "content_sha256": "c64b27e2c71828c213097d3ffbc1ffde8198f824cabcee5dbcaaddd79dc8cd19",
+        "source_system": "local-attack-knowledge",
+        "independence_group": "knowledge-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement, not model-generated",
+          "policy_version": "source-policy-v1"
+        }
+      }
+    ]
+  },
+  "query_rules": [
+    {
+      "tool": "asset",
+      "argument_constraints": {
+        "host": "OPS-023"
+      },
+      "record_ids": [
+        "a9304d07b0b460b36b8daf58a492e308"
+      ],
+      "status": "ok",
+      "coverage": {
+        "scope": {
+          "host": "OPS-023",
+          "as_of": "2026-09-01T02:20:00+00:00"
+        },
+        "window": null,
+        "completeness": "complete",
+        "truncated": false,
+        "missing_sources": []
+      },
+      "retryable": false,
+      "error_code": null
+    },
+    {
+      "tool": "siem",
+      "argument_constraints": {
+        "view": "process_tree",
+        "host": "OPS-023"
+      },
+      "record_ids": [
+        "b2e2469adf2e6a7bcaa1c832cab8a4da"
+      ],
+      "status": "partial",
+      "coverage": {
+        "scope": {
+          "view": "process_tree",
+          "host": "OPS-023",
+          "user": null,
+          "process_id": null
+        },
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "completeness": "partial",
+        "truncated": false,
+        "missing_sources": [
+          "script_body"
+        ]
+      },
+      "retryable": false,
+      "error_code": null
+    },
+    {
+      "tool": "siem",
+      "argument_constraints": {
+        "view": "host_events",
+        "host": "OPS-023"
+      },
+      "record_ids": [
+        "a57159a7f0065ca3c802fcdd0dc49b7d",
+        "8ccbfacdfe9f330e544dcfc38cb74130"
+      ],
+      "status": "partial",
+      "coverage": {
+        "scope": {
+          "view": "host_events",
+          "host": "OPS-023",
+          "user": "svc-maint",
+          "process_id": null
+        },
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "completeness": "partial",
+        "truncated": false,
+        "missing_sources": [
+          "script_body"
+        ]
+      },
+      "retryable": false,
+      "error_code": null
+    },
+    {
+      "tool": "siem",
+      "argument_constraints": {
+        "view": "user_events",
+        "user": "svc-maint"
+      },
+      "record_ids": [
+        "1732279bcc01f325b94633c6865ad23b",
+        "7ef48754c6c6274c5b7286db40fed9ba"
+      ],
+      "status": "partial",
+      "coverage": {
+        "scope": {
+          "view": "user_events",
+          "host": "OPS-023",
+          "user": "svc-maint",
+          "process_id": null
+        },
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "completeness": "partial",
+        "truncated": false,
+        "missing_sources": [
+          "script_body"
+        ]
+      },
+      "retryable": false,
+      "error_code": null
+    },
+    {
+      "tool": "siem",
+      "argument_constraints": {
+        "view": "network_events",
+        "host": "OPS-023"
+      },
+      "record_ids": [
+        "3cb36b5b5dce63d8787eed3cd079b3a7"
+      ],
+      "status": "ok",
+      "coverage": {
+        "scope": {
+          "view": "network_events",
+          "host": "OPS-023",
+          "user": null,
+          "process_id": null
+        },
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "completeness": "complete",
+        "truncated": false,
+        "missing_sources": []
+      },
+      "retryable": false,
+      "error_code": null
+    },
+    {
+      "tool": "threat_intel",
+      "argument_constraints": {
+        "indicator_type": "ip",
+        "value": "198.51.100.27"
+      },
+      "record_ids": [
+        "85c5a97d22d9b3def7d9480253bec8dc"
+      ],
+      "status": "ok",
+      "coverage": {
+        "scope": {
+          "indicator_type": "ip",
+          "value": "198.51.100.27",
+          "as_of": "2026-09-01T02:20:00+00:00"
+        },
+        "window": null,
+        "completeness": "complete",
+        "truncated": false,
+        "missing_sources": []
+      },
+      "retryable": false,
+      "error_code": null
+    },
+    {
+      "tool": "threat_intel",
+      "argument_constraints": {
+        "indicator_type": "hash",
+        "value": "h-9"
+      },
+      "record_ids": [
+        "0c1932eed5d8cfdf3e70891b04a8cc60"
+      ],
+      "status": "ok",
+      "coverage": {
+        "scope": {
+          "indicator_type": "hash",
+          "value": "h-9",
+          "as_of": "2026-09-01T02:20:00+00:00"
+        },
+        "window": null,
+        "completeness": "complete",
+        "truncated": false,
+        "missing_sources": []
+      },
+      "retryable": false,
+      "error_code": null
+    },
+    {
+      "tool": "history",
+      "argument_constraints": {
+        "entity_type": "host",
+        "entity": "OPS-023"
+      },
+      "record_ids": [],
+      "status": "unavailable",
+      "coverage": {
+        "scope": {
+          "entity_type": "host",
+          "entity": "OPS-023"
+        },
+        "window": {
+          "start": "2026-08-31T02:20:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "completeness": "partial",
+        "truncated": false,
+        "missing_sources": [
+          "history_retention_unavailable"
+        ]
+      },
+      "retryable": false,
+      "error_code": "history_retention_unavailable"
+    },
+    {
+      "tool": "history",
+      "argument_constraints": {
+        "entity_type": "user",
+        "entity": "svc-maint"
+      },
+      "record_ids": [],
+      "status": "unavailable",
+      "coverage": {
+        "scope": {
+          "entity_type": "user",
+          "entity": "svc-maint"
+        },
+        "window": {
+          "start": "2026-08-31T02:20:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "completeness": "partial",
+        "truncated": false,
+        "missing_sources": [
+          "history_retention_unavailable"
+        ]
+      },
+      "retryable": false,
+      "error_code": "history_retention_unavailable"
+    },
+    {
+      "tool": "attack",
+      "argument_constraints": {
+        "snapshot_version": "attack-local-v1"
+      },
+      "record_ids": [
+        "7b31ddd1121f97a91b239277c95ec469"
+      ],
+      "status": "ok",
+      "coverage": {
+        "scope": {
+          "snapshot_version": "attack-local-v1"
+        },
+        "window": null,
+        "completeness": "complete",
+        "truncated": false,
+        "missing_sources": []
+      },
+      "retryable": false,
+      "error_code": null
+    }
+  ],
+  "fixture_version": "synthetic-v1"
+}

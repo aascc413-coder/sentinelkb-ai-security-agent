@@ -1,0 +1,164 @@
+{
+  "case_id": "C4",
+  "family_id": "powershell-indistinguishable-pair-v1",
+  "split": "dev",
+  "ground_truth": "malicious",
+  "complete_world_evidence": {
+    "E0": {
+      "source": "alert",
+      "record_ids": [
+        "a4dfe9b3718e7ba802796abf473bbbd6"
+      ],
+      "observation": "PowerShell detector fired; detector claim is not verified behavior"
+    },
+    "E1": {
+      "source": "siem",
+      "record_ids": [
+        "0c703cc66d2bb2c5869baafddbe2832a",
+        "71521e74fc0e2b1df8314a6a409ecf86",
+        "0e709baf3c416330ecdd52bd14e3f92d"
+      ],
+      "observation": {
+        "view": "process_tree",
+        "host": "WS-088",
+        "user": "operator-b",
+        "process_id": "p-404",
+        "process_guid": "65695b0e7c0b77b0a89891cf19139ccf",
+        "event_id": "086e89e14051505e440d7e0aaeed3fca",
+        "occurred_at": "2026-09-01T02:14:00+00:00",
+        "observed_at": "2026-09-01T02:19:00+00:00",
+        "parent_process": null,
+        "child_process": null,
+        "command_line": null
+      }
+    },
+    "E2": {
+      "source": "siem",
+      "record_ids": [],
+      "operational_status": "unavailable",
+      "reason": "network_source_unavailable"
+    },
+    "E3": {
+      "source": "asset",
+      "record_ids": [
+        "d284f4a033a8b8f5d8be2e48bbf268cc"
+      ],
+      "observation": {
+        "host": "WS-088",
+        "published_at": "2026-09-01T02:19:00+00:00",
+        "purpose": "workstation",
+        "system_type": "Windows",
+        "critical_asset": false,
+        "department": "synthetic-operations",
+        "approval_register_complete": false,
+        "approval_register_window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "approved_jobs": []
+      }
+    },
+    "E4": {
+      "source": "history",
+      "record_ids": [],
+      "operational_status": "unavailable",
+      "reason": "history_source_unavailable"
+    },
+    "E5": {
+      "source": "attack",
+      "record_ids": [
+        "3f033939cc8abd1427f73c42209cfc54"
+      ],
+      "observation": {
+        "snapshot_version": "attack-local-v1",
+        "published_at": "2026-08-01T00:00:00+00:00",
+        "technique_id": "T1059.001",
+        "behavior_terms": [
+          "PowerShell"
+        ],
+        "description": "PowerShell execution can occur in authorized and unauthorized activity; mapping is not an attack verdict."
+      }
+    },
+    "E6": {
+      "source": "oracle_only",
+      "record_ids": [],
+      "script_body": "Synthetic hidden malicious script",
+      "authorization_matched": false
+    }
+  },
+  "observable_fact_keys": [
+    "E0",
+    "E1",
+    "E2",
+    "E3",
+    "E4",
+    "E5"
+  ],
+  "critical_fact_keys": [
+    "E6"
+  ],
+  "distractor_fact_keys": [
+    "E5"
+  ],
+  "sufficient_sets": {
+    "TP": [],
+    "FP": []
+  },
+  "acceptable_verdicts": [
+    "Abstain"
+  ],
+  "resolvable_with_full_observable_evidence": false,
+  "expected_actions": [
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E1"
+      ],
+      "acceptable_tools": [
+        "siem"
+      ],
+      "argument_constraints": {
+        "view": "process_tree",
+        "host": "WS-088",
+        "process_id": "p-404"
+      },
+      "evidence_goal": "Check actual process behavior or related network behavior and coverage"
+    },
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E2"
+      ],
+      "acceptable_tools": [
+        "siem"
+      ],
+      "argument_constraints": {
+        "view": "network_events",
+        "host": "WS-088",
+        "process_id": "p-404"
+      },
+      "evidence_goal": "Check actual process behavior or related network behavior and coverage"
+    },
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E3"
+      ],
+      "acceptable_tools": [
+        "asset"
+      ],
+      "argument_constraints": {
+        "host": "WS-088"
+      },
+      "evidence_goal": "Check matched authorization; an approval window alone is insufficient"
+    }
+  ],
+  "rubric_version": "powershell-v1",
+  "annotation_rationale": "Independent synthetic annotation from minimal-cases.md; only observed, grounded evidence supports decisions. Hidden world truth is not an agent hint."
+}

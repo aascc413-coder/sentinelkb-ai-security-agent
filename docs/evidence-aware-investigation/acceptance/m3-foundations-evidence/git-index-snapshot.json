@@ -1,0 +1,132 @@
+{
+  "base_commit": "63fa8089845a05ad7e45d785b0adf081fa2dd52e",
+  "files": [
+    {
+      "path": ".github/workflows/python-tests.yml",
+      "reviewed_raw_sha256": "3f02078656b8ea2d5fd342a6d2399bf0cbc135b17fd003c42609b57138c061eb",
+      "git_blob_sha256": "7b9766ab9d73dea6ec06245b6199691050015acee11865c330753ca867f486cd",
+      "git_blob_oid": "21fd867615cb888620c9a93e6f23582562a68294",
+      "exact_bytes_match": false
+    },
+    {
+      "path": "docs/evidence-aware-investigation/acceptance/m2-helper-preparation.md",
+      "reviewed_raw_sha256": "78f2449e6fd07856d27e85bdf44b51c79fac1a2d09cfffd6bffafafdbfa6c942",
+      "git_blob_sha256": "78f2449e6fd07856d27e85bdf44b51c79fac1a2d09cfffd6bffafafdbfa6c942",
+      "git_blob_oid": "e1ab9f3c0cf9597a2ca28fe2430f1ff637004e3e",
+      "exact_bytes_match": true
+    },
+    {
+      "path": "docs/evidence-aware-investigation/acceptance/m3-foundations-acceptance.md",
+      "reviewed_raw_sha256": "c9bd22ab754ddc667256ba949b2f87d8d26c681a37fcd200f920afd90f0e5129",
+      "git_blob_sha256": "c9bd22ab754ddc667256ba949b2f87d8d26c681a37fcd200f920afd90f0e5129",
+      "git_blob_oid": "113b5c6209d6683851a6d392194a8cb2cb5611be",
+      "exact_bytes_match": true
+    },
+    {
+      "path": "docs/evidence-aware-investigation/phase-2-implementation-plan.md",
+      "reviewed_raw_sha256": "8e27f576c5bf3f62cc4181799b6b46341fc1bf656c38ba08d84865f0a6b5fb95",
+      "git_blob_sha256": "31985890915866149e8e8dcbed14350f62022afc3fa32e0b157e284c30646da3",
+      "git_blob_oid": "c1d7a6b7ad40ef33a7a896b79d873563b420cbee",
+      "exact_bytes_match": false
+    },
+    {
+      "path": "investigation/README.md",
+      "reviewed_raw_sha256": "7becd08317b3bd937c42e733579c03e1f2d7699e46458158fe48bdeed1baab6a",
+      "git_blob_sha256": "633e25b9797273b7f8258f32447cbc838063f895cd6b46db171aac8b1697a641",
+      "git_blob_oid": "d54b202ca3ccba109a8a48461370b396ce74158d",
+      "exact_bytes_match": false
+    },
+    {
+      "path": "investigation/scripts/demo_tools.py",
+      "reviewed_raw_sha256": "080ff30b8fe12f0c78670da097e1d70f6456d78fd31ab76e82f45683396d28a5",
+      "git_blob_sha256": "080ff30b8fe12f0c78670da097e1d70f6456d78fd31ab76e82f45683396d28a5",
+      "git_blob_oid": "277be4c0674dfec521bfbaa0a4adfd18e4c294a9",
+      "exact_bytes_match": true
+    },
+    {
+      "path": "investigation/src/evidence_investigation/runtime/__init__.py",
+      "reviewed_raw_sha256": "aa62f2c64a306fd6d67527bdb3706a442facf1083622eb20ade11a1bb030470a",
+      "git_blob_sha256": "aa62f2c64a306fd6d67527bdb3706a442facf1083622eb20ade11a1bb030470a",
+      "git_blob_oid": "9e1e8e260c6dc54375603ac1e54a0fb197f03110",
+      "exact_bytes_match": true
+    },
+    {
+      "path": "investigation/src/evidence_investigation/runtime/budget.py",
+      "reviewed_raw_sha256": "65ad475884e60c1419754832fd0e2400db8c1ff2dee61218113a1297f4965c3e",
+      "git_blob_sha256": "65ad475884e60c1419754832fd0e2400db8c1ff2dee61218113a1297f4965c3e",
+      "git_blob_oid": "52c1086f24fea19d70a504ca071cb5040353e988",
+      "exact_bytes_match": true
+    },
+    {
+      "path": "investigation/src/evidence_investigation/tools/__init__.py",
+      "reviewed_raw_sha256": "2288e587478d589fab08ed94939fe3b985fe5abef9d3ae3c59f4b39f4c7a4944",
+      "git_blob_sha256": "3236108a418176bef8631795fe3d1ef33d70d47a41a74dde840a2784232f6d44",
+      "git_blob_oid": "e59d2ea2475cc3e70ef233f37061132858c36780",
+      "exact_bytes_match": false
+    },
+    {
+      "path": "investigation/src/evidence_investigation/tools/contracts.py",
+      "reviewed_raw_sha256": "1f24adbae51dad8ff784ed40f21f34aeb0a472bfb72bcd523666981ee53d8b71",
+      "git_blob_sha256": "cb0e6d711f6fd1af01c1ef9ba7d176b895e5c44463ff4569bfcfb15eb11bcf41",
+      "git_blob_oid": "b4f3bdc02a2ea249cf3a6100b90b8ba331822197",
+      "exact_bytes_match": false
+    },
+    {
+      "path": "investigation/src/evidence_investigation/tools/selection.py",
+      "reviewed_raw_sha256": "016651842cc44ac8fd3b933180aed69d2732b41502f5b5a57766d343ad62b8e1",
+      "git_blob_sha256": "016651842cc44ac8fd3b933180aed69d2732b41502f5b5a57766d343ad62b8e1",
+      "git_blob_oid": "3249a761e808156f1fe7ff227c8d11912a968eb3",
+      "exact_bytes_match": true
+    },
+    {
+      "path": "investigation/src/evidence_investigation/tools/server.py",
+      "reviewed_raw_sha256": "19af72dee7792475888f6b187d1b08b85accabb568f3d0e05c86ebf143064034",
+      "git_blob_sha256": "19af72dee7792475888f6b187d1b08b85accabb568f3d0e05c86ebf143064034",
+      "git_blob_oid": "4256cfc72e59fccb7030f08a5a45ac56354cfd96",
+      "exact_bytes_match": true
+    },
+    {
+      "path": "investigation/src/evidence_investigation/tools/signatures.py",
+      "reviewed_raw_sha256": "059e0c1acd560e429b91b156cbf5ba1ddbfa41a434a42a25d9ddd1d2b3d64332",
+      "git_blob_sha256": "059e0c1acd560e429b91b156cbf5ba1ddbfa41a434a42a25d9ddd1d2b3d64332",
+      "git_blob_oid": "bd8585e4740591f1229096c2aeaa374219066bab",
+      "exact_bytes_match": true
+    },
+    {
+      "path": "investigation/tests/test_budget.py",
+      "reviewed_raw_sha256": "51383c837373db22171752c5bb1e4a46d3397f10304d026b2886bca25e9e56c5",
+      "git_blob_sha256": "51383c837373db22171752c5bb1e4a46d3397f10304d026b2886bca25e9e56c5",
+      "git_blob_oid": "84d7f629053a1f06fc9fc2de837793f74e1c27e7",
+      "exact_bytes_match": true
+    },
+    {
+      "path": "investigation/tests/test_foundations_integration.py",
+      "reviewed_raw_sha256": "aa0906cad5037a2fbfe94ece5b451f659768c1e902c5c35ff5e85455d72b7014",
+      "git_blob_sha256": "aa0906cad5037a2fbfe94ece5b451f659768c1e902c5c35ff5e85455d72b7014",
+      "git_blob_oid": "54b07b28499bae8d3b45a3f1db937adb237dc466",
+      "exact_bytes_match": true
+    },
+    {
+      "path": "investigation/tests/test_tool_selection.py",
+      "reviewed_raw_sha256": "f966d91f833aaa5d214218ba95f461e9dfe620098806cef6bae74343478dbc6a",
+      "git_blob_sha256": "f966d91f833aaa5d214218ba95f461e9dfe620098806cef6bae74343478dbc6a",
+      "git_blob_oid": "eb4893692ce894da03faba6b8c24fea294c9c190",
+      "exact_bytes_match": true
+    },
+    {
+      "path": "investigation/tests/test_tool_server.py",
+      "reviewed_raw_sha256": "55be88814fe1a0f50142ddb4e17e164cb717b4a589c8766c9daac12c254ba7b5",
+      "git_blob_sha256": "55be88814fe1a0f50142ddb4e17e164cb717b4a589c8766c9daac12c254ba7b5",
+      "git_blob_oid": "25e86dc5970462a485962b5905462a6fa7237e66",
+      "exact_bytes_match": true
+    },
+    {
+      "path": "investigation/tests/test_tool_signatures.py",
+      "reviewed_raw_sha256": "1b1d6f4bd47dac3c22bb1eb99ebc73dedeb9bd0d6cb2dee3bf8a63e6c2c6e625",
+      "git_blob_sha256": "1b1d6f4bd47dac3c22bb1eb99ebc73dedeb9bd0d6cb2dee3bf8a63e6c2c6e625",
+      "git_blob_oid": "bc44a025577846ef8fb83962f6880d87bdc17273",
+      "exact_bytes_match": true
+    }
+  ],
+  "comparison": "only LF/CRLF line ending differences permitted; business content identical"
+}

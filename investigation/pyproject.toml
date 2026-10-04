@@ -26,6 +26,7 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 "evidence_investigation.state" = ["schemas/*.schema.json"]
+"evidence_investigation.tools" = ["schemas/*.schema.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

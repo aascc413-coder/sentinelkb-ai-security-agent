@@ -1,0 +1,38 @@
+........................................................................ [ 74%]
+..............F......FF..                                                [100%]
+================================== FAILURES ===================================
+________ test_static_invalid_json_keys_cannot_be_silently_stringified _________
+
+    def test_static_invalid_json_keys_cannot_be_silently_stringified():
+        p,e=static_pair();e['records_by_tool']['siem'][0]['payload']={1:'value'}
+>       with pytest.raises(ProtocolViolation): compare_static(p,e,p,e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ProtocolViolation
+
+..\..\probes.py:104: Failed
+___ test_tool_diff_call_identity_business_reference_relationship_not_hidden ___
+
+    def test_tool_diff_call_identity_business_reference_relationship_not_hidden():
+        left=response({'call_reference':'call-a'})
+        right=replace(left,call_id='call-b')
+>       assert not compare_responses(left,right)['equal'], 'Left reference matches envelope, right reference does not'
+E       AssertionError: Left reference matches envelope, right reference does not
+E       assert not True
+
+..\..\probes.py:128: AssertionError
+_____________ test_tool_diff_dict_key_order_remains_model_visible _____________
+
+    def test_tool_diff_dict_key_order_remains_model_visible():
+        left=response({'first':1,'second':2})
+        right=response({'second':2,'first':1})
+        assert left.records[0].content_sha256 == right.records[0].content_sha256
+>       assert not compare_responses(left,right)['equal'], 'JSON object serialization order changed'
+E       AssertionError: JSON object serialization order changed
+E       assert not True
+
+..\..\probes.py:135: AssertionError
+=========================== short test summary info ===========================
+FAILED ::test_static_invalid_json_keys_cannot_be_silently_stringified - Faile...
+FAILED ::test_tool_diff_call_identity_business_reference_relationship_not_hidden
+FAILED ::test_tool_diff_dict_key_order_remains_model_visible - AssertionError...
+3 failed, 94 passed in 0.45s

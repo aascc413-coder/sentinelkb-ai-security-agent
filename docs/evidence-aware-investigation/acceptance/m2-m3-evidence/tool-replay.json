@@ -1,0 +1,3512 @@
+{
+  "kind": "M3 tool integration, no model or verdict benchmark",
+  "dataset_version": "synthetic-v1",
+  "cases": {
+    "C1": {
+      "calls": [
+        {
+          "tool": "siem",
+          "arguments": {
+            "view": "process_tree",
+            "window": {
+              "start": "2026-09-01T02:10:00+00:00",
+              "end": "2026-09-01T02:20:00+00:00"
+            },
+            "host": "WS-041",
+            "user": "analyst-a",
+            "process_id": "p-101",
+            "limit": 50
+          },
+          "result": {
+            "call_id": "replay-call-0",
+            "tool": "siem",
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "record-168386aa7752624f2aba8f9f3ea65ba4060d63e476ff304970b429b5aea2572c",
+                "payload": {
+                  "view": "process_tree",
+                  "host": "WS-041",
+                  "user": "analyst-a",
+                  "process_id": "p-101",
+                  "process_guid": "7734128f343086a3427617427a1cd142",
+                  "event_id": "a83577c18260240bb97d801b7643d388",
+                  "occurred_at": "2026-09-01T02:14:00+00:00",
+                  "observed_at": "2026-09-01T02:19:00+00:00",
+                  "parent_process": "WINWORD.EXE",
+                  "child_process": [],
+                  "script_observations": [
+                    {
+                      "operation": "read",
+                      "object": "credential-store",
+                      "authorized": false
+                    },
+                    {
+                      "operation": "send",
+                      "object": "credential-bytes",
+                      "destination": "203.0.113.66"
+                    }
+                  ]
+                },
+                "content_sha256": "10766760326e7562ad79ffa9b85b3b13ce63d78b5ee918cff773e96012a332e7",
+                "source_system": "edr",
+                "independence_group": "group-0e87190a9a052de017c760fb945019e732b7ab11da228a6f03af2eb40c6e3b5f",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              },
+              {
+                "record_id": "record-a8b6a9573ef08d85a72001d9606685218b38bb1c34244d28ce27e82196c91e2e",
+                "payload": {
+                  "view": "process_tree",
+                  "host": "WS-041",
+                  "user": "analyst-a",
+                  "process_id": "p-101",
+                  "process_guid": "7734128f343086a3427617427a1cd142",
+                  "event_id": "a83577c18260240bb97d801b7643d388",
+                  "occurred_at": "2026-09-01T02:14:00+00:00",
+                  "observed_at": "2026-09-01T02:19:00+00:00",
+                  "parent_process": "WINWORD.EXE",
+                  "child_process": [],
+                  "script_observations": [
+                    {
+                      "operation": "read",
+                      "object": "credential-store",
+                      "authorized": false
+                    },
+                    {
+                      "operation": "send",
+                      "object": "credential-bytes",
+                      "destination": "203.0.113.66"
+                    }
+                  ]
+                },
+                "content_sha256": "10766760326e7562ad79ffa9b85b3b13ce63d78b5ee918cff773e96012a332e7",
+                "source_system": "siem-edr-mirror",
+                "independence_group": "group-0e87190a9a052de017c760fb945019e732b7ab11da228a6f03af2eb40c6e3b5f",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "view": "process_tree",
+                "host": "WS-041",
+                "user": "analyst-a",
+                "process_id": "p-101",
+                "source_scope": {
+                  "view": "process_tree",
+                  "host": "WS-041",
+                  "user": null,
+                  "process_id": null
+                }
+              },
+              "window": {
+                "start": "2026-09-01T02:10:00+00:00",
+                "end": "2026-09-01T02:20:00+00:00"
+              },
+              "completeness": "complete",
+              "truncated": false,
+              "missing_sources": []
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 2.0,
+            "simulated_latency_ms": 200,
+            "actual_duration_ms": 16
+          }
+        },
+        {
+          "tool": "siem",
+          "arguments": {
+            "view": "network_events",
+            "window": {
+              "start": "2026-09-01T02:10:00+00:00",
+              "end": "2026-09-01T02:20:00+00:00"
+            },
+            "host": "WS-041",
+            "user": "analyst-a",
+            "process_id": "p-101",
+            "limit": 50
+          },
+          "result": {
+            "call_id": "replay-call-1",
+            "tool": "siem",
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "record-d1e09edd578b85cd45dc6eea9863cafe2b8cc3b1a965181450b6507bba6056c1",
+                "payload": {
+                  "view": "network_events",
+                  "host": "WS-041",
+                  "user": "analyst-a",
+                  "process_id": "p-101",
+                  "process_guid": "7734128f343086a3427617427a1cd142",
+                  "event_id": "355150667f6e40ab4914e7a808409aab",
+                  "occurred_at": "2026-09-01T02:14:00+00:00",
+                  "observed_at": "2026-09-01T02:19:00+00:00",
+                  "destination_ip": "203.0.113.66",
+                  "destination_port": 443,
+                  "sensor_observations": [
+                    "credential-store read associated with this process instance",
+                    "credential-byte outbound transmission"
+                  ]
+                },
+                "content_sha256": "2e0b48655c60530e390f1cfcb3fe5e30d228599dbbdf68296b3209c784194e2d",
+                "source_system": "network-sensor",
+                "independence_group": "group-90ade525c9d65f781d6cf5111ee78a2db4dffcc9eaf97553286986c75fe9b257",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "view": "network_events",
+                "host": "WS-041",
+                "user": "analyst-a",
+                "process_id": "p-101",
+                "source_scope": {
+                  "view": "network_events",
+                  "host": "WS-041",
+                  "user": null,
+                  "process_id": null
+                }
+              },
+              "window": {
+                "start": "2026-09-01T02:10:00+00:00",
+                "end": "2026-09-01T02:20:00+00:00"
+              },
+              "completeness": "complete",
+              "truncated": false,
+              "missing_sources": []
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 2.0,
+            "simulated_latency_ms": 200,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "asset",
+          "arguments": {
+            "host": "WS-041",
+            "as_of": "2026-09-01T02:20:00+00:00"
+          },
+          "result": {
+            "call_id": "replay-call-2",
+            "tool": "asset",
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "record-b6a44740d1c89ba24224b0dd9482ca0e0c9fcf500936853056c16deb7a5d612a",
+                "payload": {
+                  "host": "WS-041",
+                  "published_at": "2026-09-01T02:19:00+00:00",
+                  "purpose": "workstation",
+                  "system_type": "Windows",
+                  "critical_asset": false,
+                  "department": "synthetic-operations",
+                  "approval_register_complete": true,
+                  "approval_register_window": {
+                    "start": "2026-09-01T02:10:00+00:00",
+                    "end": "2026-09-01T02:20:00+00:00"
+                  },
+                  "approved_jobs": []
+                },
+                "content_sha256": "8c444858767f907c14a76a6514346e603406772a2e19ff1f85485097aed73098",
+                "source_system": "change-register",
+                "independence_group": "group-ea2f8012e80f4ec120a86c2b1566d5adbb5c4eee66801307aac32d8a1b95b7ee",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "host": "WS-041",
+                "as_of": "2026-09-01T02:20:00+00:00",
+                "source_scope": {
+                  "host": "WS-041",
+                  "as_of": "2026-09-01T02:20:00+00:00"
+                }
+              },
+              "window": null,
+              "completeness": "complete",
+              "truncated": false,
+              "missing_sources": []
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 1.0,
+            "simulated_latency_ms": 50,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "history",
+          "arguments": {
+            "entity_type": "user",
+            "entity": "analyst-a",
+            "window": {
+              "start": "2026-08-31T02:20:00+00:00",
+              "end": "2026-09-01T02:20:00+00:00"
+            },
+            "host": "WS-041",
+            "user": "analyst-a",
+            "command_line": null,
+            "limit": 50
+          },
+          "result": {
+            "call_id": "replay-call-3",
+            "tool": "history",
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "record-f32b843e0a5f620dd3a0f200c994388faf3918703200190c8168e942d34555d4",
+                "payload": {
+                  "entity_type": "user",
+                  "entity": "analyst-a",
+                  "host": "WS-041",
+                  "user": "analyst-a",
+                  "occurred_at": "2026-09-01T02:14:00+00:00",
+                  "observed_at": "2026-09-01T02:19:00+00:00",
+                  "approved_jobs": [],
+                  "approval_register_complete": true,
+                  "source_group": "change-01",
+                  "register_window": {
+                    "start": "2026-09-01T02:10:00+00:00",
+                    "end": "2026-09-01T02:20:00+00:00"
+                  }
+                },
+                "content_sha256": "9411b60da324dc7817016eddd5a42f86b108d381f61b2702fc430f62f69ce716",
+                "source_system": "history-store",
+                "independence_group": "group-ea2f8012e80f4ec120a86c2b1566d5adbb5c4eee66801307aac32d8a1b95b7ee",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              },
+              {
+                "record_id": "record-a821318748605f6981d50d236aa4422589c9902e467bc97a3bda9cde49495e10",
+                "payload": {
+                  "entity_type": "user",
+                  "entity": "analyst-a",
+                  "host": "WS-041",
+                  "user": "analyst-a",
+                  "occurred_at": "2026-08-31T12:00:00+00:00",
+                  "observed_at": "2026-09-01T02:19:00+00:00",
+                  "action": "interactive_logon",
+                  "outcome": "success"
+                },
+                "content_sha256": "70418c134ee126f7977c11fd65be450d9cefb767e16930b62f8342c3722e95b6",
+                "source_system": "auth-log",
+                "independence_group": "group-4aa23338a1b455faaa6c2352c4b33500617b3a7b626b9bb719522357a1769369",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "entity_type": "user",
+                "entity": "analyst-a",
+                "host": "WS-041",
+                "user": "analyst-a",
+                "command_line": null,
+                "source_scope": {
+                  "entity_type": "user",
+                  "entity": "analyst-a",
+                  "host": "WS-041",
+                  "user": "analyst-a",
+                  "command_line": null
+                }
+              },
+              "window": {
+                "start": "2026-08-31T02:20:00+00:00",
+                "end": "2026-09-01T02:20:00+00:00"
+              },
+              "completeness": "complete",
+              "truncated": false,
+              "missing_sources": []
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 2.0,
+            "simulated_latency_ms": 150,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "threat_intel",
+          "arguments": {
+            "indicator_type": "ip",
+            "value": "203.0.113.66",
+            "as_of": "2026-09-01T02:20:00+00:00"
+          },
+          "result": {
+            "call_id": "replay-call-4",
+            "tool": "threat_intel",
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "record-ed40e3ee0fcfc579b39d17ee7e8cca8a3250a5d5d8445883eb0ef600cfe7e92d",
+                "payload": {
+                  "indicator_type": "ip",
+                  "value": "203.0.113.66",
+                  "published_at": "2026-09-01T02:19:00+00:00",
+                  "reputation": "malicious",
+                  "provider": "local-mock",
+                  "not_a_real_ioc_assessment": true
+                },
+                "content_sha256": "b75f5bd53d7eba8a3fefa8a691edb9eda3318c8b777fc497e46d19ff21fc1662",
+                "source_system": "mock-ti",
+                "independence_group": "group-1488fec8d689b605cbbda69781a88e8ddf6c9fd2bf61f7b7a5f0dd1b080a9f68",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "indicator_type": "ip",
+                "value": "203.0.113.66",
+                "as_of": "2026-09-01T02:20:00+00:00",
+                "source_scope": {
+                  "indicator_type": "ip",
+                  "value": "203.0.113.66",
+                  "as_of": "2026-09-01T02:20:00+00:00"
+                }
+              },
+              "window": null,
+              "completeness": "complete",
+              "truncated": false,
+              "missing_sources": []
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 3.0,
+            "simulated_latency_ms": 300,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "attack",
+          "arguments": {
+            "snapshot_version": "attack-local-v1",
+            "behavior_terms": [],
+            "technique_ids": [
+              "T1059.001"
+            ]
+          },
+          "result": {
+            "call_id": "replay-call-5",
+            "tool": "attack",
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "record-8fc7828c6809a03557eea67a848ddb3c4f0e86d0740b7bb55a6a3011a0e25af2",
+                "payload": {
+                  "snapshot_version": "attack-local-v1",
+                  "published_at": "2026-08-01T00:00:00+00:00",
+                  "technique_id": "T1059.001",
+                  "behavior_terms": [
+                    "PowerShell"
+                  ],
+                  "description": "PowerShell execution can occur in authorized and unauthorized activity; mapping is not an attack verdict."
+                },
+                "content_sha256": "c64b27e2c71828c213097d3ffbc1ffde8198f824cabcee5dbcaaddd79dc8cd19",
+                "source_system": "local-attack-knowledge",
+                "independence_group": "group-c8560172b9f48d1010ba40d39fb2e1d706fddcaf70cfa71522ef8faffbac1c5a",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "snapshot_version": "attack-local-v1",
+                "behavior_terms": [],
+                "technique_ids": [
+                  "T1059.001"
+                ],
+                "source_scope": {
+                  "snapshot_version": "attack-local-v1"
+                }
+              },
+              "window": null,
+              "completeness": "complete",
+              "truncated": false,
+              "missing_sources": []
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 1.0,
+            "simulated_latency_ms": 20,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "siem",
+          "arguments": {
+            "view": "process_tree",
+            "window": {
+              "start": "2026-09-01T02:10:00+00:00",
+              "end": "2026-09-01T02:20:00+00:00"
+            },
+            "host": "WS-041",
+            "user": "analyst-a",
+            "process_id": "p-101",
+            "limit": 50
+          },
+          "result": {
+            "call_id": "replay-call-6",
+            "tool": "siem",
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "record-168386aa7752624f2aba8f9f3ea65ba4060d63e476ff304970b429b5aea2572c",
+                "payload": {
+                  "view": "process_tree",
+                  "host": "WS-041",
+                  "user": "analyst-a",
+                  "process_id": "p-101",
+                  "process_guid": "7734128f343086a3427617427a1cd142",
+                  "event_id": "a83577c18260240bb97d801b7643d388",
+                  "occurred_at": "2026-09-01T02:14:00+00:00",
+                  "observed_at": "2026-09-01T02:19:00+00:00",
+                  "parent_process": "WINWORD.EXE",
+                  "child_process": [],
+                  "script_observations": [
+                    {
+                      "operation": "read",
+                      "object": "credential-store",
+                      "authorized": false
+                    },
+                    {
+                      "operation": "send",
+                      "object": "credential-bytes",
+                      "destination": "203.0.113.66"
+                    }
+                  ]
+                },
+                "content_sha256": "10766760326e7562ad79ffa9b85b3b13ce63d78b5ee918cff773e96012a332e7",
+                "source_system": "edr",
+                "independence_group": "group-0e87190a9a052de017c760fb945019e732b7ab11da228a6f03af2eb40c6e3b5f",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              },
+              {
+                "record_id": "record-a8b6a9573ef08d85a72001d9606685218b38bb1c34244d28ce27e82196c91e2e",
+                "payload": {
+                  "view": "process_tree",
+                  "host": "WS-041",
+                  "user": "analyst-a",
+                  "process_id": "p-101",
+                  "process_guid": "7734128f343086a3427617427a1cd142",
+                  "event_id": "a83577c18260240bb97d801b7643d388",
+                  "occurred_at": "2026-09-01T02:14:00+00:00",
+                  "observed_at": "2026-09-01T02:19:00+00:00",
+                  "parent_process": "WINWORD.EXE",
+                  "child_process": [],
+                  "script_observations": [
+                    {
+                      "operation": "read",
+                      "object": "credential-store",
+                      "authorized": false
+                    },
+                    {
+                      "operation": "send",
+                      "object": "credential-bytes",
+                      "destination": "203.0.113.66"
+                    }
+                  ]
+                },
+                "content_sha256": "10766760326e7562ad79ffa9b85b3b13ce63d78b5ee918cff773e96012a332e7",
+                "source_system": "siem-edr-mirror",
+                "independence_group": "group-0e87190a9a052de017c760fb945019e732b7ab11da228a6f03af2eb40c6e3b5f",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "view": "process_tree",
+                "host": "WS-041",
+                "user": "analyst-a",
+                "process_id": "p-101",
+                "source_scope": {
+                  "view": "process_tree",
+                  "host": "WS-041",
+                  "user": null,
+                  "process_id": null
+                }
+              },
+              "window": {
+                "start": "2026-09-01T02:10:00+00:00",
+                "end": "2026-09-01T02:20:00+00:00"
+              },
+              "completeness": "complete",
+              "truncated": false,
+              "missing_sources": []
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 0.0,
+            "simulated_latency_ms": 0,
+            "actual_duration_ms": 0
+          }
+        }
+      ],
+      "stats": {
+        "attempts": 7,
+        "backend_calls": 6,
+        "cache_hits": 1
+      }
+    },
+    "C2": {
+      "calls": [
+        {
+          "tool": "siem",
+          "arguments": {
+            "view": "process_tree",
+            "window": {
+              "start": "2026-09-01T02:10:00+00:00",
+              "end": "2026-09-01T02:20:00+00:00"
+            },
+            "host": "OPS-017",
+            "user": "svc-backup",
+            "process_id": "p-202",
+            "limit": 50
+          },
+          "result": {
+            "call_id": "replay-call-0",
+            "tool": "siem",
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "record-1d77425e9e90434aa6228b6fd0594077bee446089ed509393921fd239dbd3eb2",
+                "payload": {
+                  "view": "process_tree",
+                  "host": "OPS-017",
+                  "user": "svc-backup",
+                  "process_id": "p-202",
+                  "process_guid": "b5cc3e88ec3aa8fe12b666536caedd12",
+                  "event_id": "9e3aec2ecc0e3bf28e57411d0cba7497",
+                  "occurred_at": "2026-09-01T02:14:00+00:00",
+                  "observed_at": "2026-09-01T02:19:00+00:00",
+                  "parent_process": "management-task.exe",
+                  "child_process": [],
+                  "job_id": "BACKUP-42",
+                  "script_hash": "h-approved",
+                  "parameters": [
+                    "backup",
+                    "validate"
+                  ],
+                  "script_observations": [
+                    "read approved backup source",
+                    "validate backup checksum",
+                    "write approved backup destination"
+                  ]
+                },
+                "content_sha256": "9218f85f9fc076007f22418b4de038b066e27e04d4a2f3bdbc70a158162b8150",
+                "source_system": "edr",
+                "independence_group": "group-0e87190a9a052de017c760fb945019e732b7ab11da228a6f03af2eb40c6e3b5f",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "view": "process_tree",
+                "host": "OPS-017",
+                "user": "svc-backup",
+                "process_id": "p-202",
+                "source_scope": {
+                  "view": "process_tree",
+                  "host": "OPS-017",
+                  "user": null,
+                  "process_id": null
+                }
+              },
+              "window": {
+                "start": "2026-09-01T02:10:00+00:00",
+                "end": "2026-09-01T02:20:00+00:00"
+              },
+              "completeness": "complete",
+              "truncated": false,
+              "missing_sources": []
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 2.0,
+            "simulated_latency_ms": 200,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "siem",
+          "arguments": {
+            "view": "network_events",
+            "window": {
+              "start": "2026-09-01T02:10:00+00:00",
+              "end": "2026-09-01T02:20:00+00:00"
+            },
+            "host": "OPS-017",
+            "user": "svc-backup",
+            "process_id": "p-202",
+            "limit": 50
+          },
+          "result": {
+            "call_id": "replay-call-1",
+            "tool": "siem",
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "record-8f69d4ab6082c7fdefc9639adc07c1a3a34c6f696b707a9118101d9738975454",
+                "payload": {
+                  "view": "network_events",
+                  "host": "OPS-017",
+                  "user": "svc-backup",
+                  "process_id": "p-202",
+                  "process_guid": "b5cc3e88ec3aa8fe12b666536caedd12",
+                  "event_id": "d2298e7b660d928380fc0c974eeda726",
+                  "occurred_at": "2026-09-01T02:14:00+00:00",
+                  "observed_at": "2026-09-01T02:19:00+00:00",
+                  "destination_ip": "10.20.0.8",
+                  "destination_port": 443,
+                  "job_id": "BACKUP-42",
+                  "observed_destinations": [
+                    "10.20.0.8"
+                  ],
+                  "all_connections_captured": true
+                },
+                "content_sha256": "08744cb816b545d2c92d920ab6e48f27671f8dbc12841bd884977be3438601bd",
+                "source_system": "network-sensor",
+                "independence_group": "group-90ade525c9d65f781d6cf5111ee78a2db4dffcc9eaf97553286986c75fe9b257",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "view": "network_events",
+                "host": "OPS-017",
+                "user": "svc-backup",
+                "process_id": "p-202",
+                "source_scope": {
+                  "view": "network_events",
+                  "host": "OPS-017",
+                  "user": null,
+                  "process_id": null
+                }
+              },
+              "window": {
+                "start": "2026-09-01T02:10:00+00:00",
+                "end": "2026-09-01T02:20:00+00:00"
+              },
+              "completeness": "complete",
+              "truncated": false,
+              "missing_sources": []
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 2.0,
+            "simulated_latency_ms": 200,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "asset",
+          "arguments": {
+            "host": "OPS-017",
+            "as_of": "2026-09-01T02:20:00+00:00"
+          },
+          "result": {
+            "call_id": "replay-call-2",
+            "tool": "asset",
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "record-64aa5e4723b2c4f01536e76c83c69758c5fc0fca5e7c5d0443918b10b1843eb0",
+                "payload": {
+                  "host": "OPS-017",
+                  "published_at": "2026-09-01T02:19:00+00:00",
+                  "purpose": "operations",
+                  "system_type": "Windows",
+                  "critical_asset": false,
+                  "department": "synthetic-operations",
+                  "approval_register_complete": true,
+                  "approval_register_window": {
+                    "start": "2026-09-01T02:10:00+00:00",
+                    "end": "2026-09-01T02:20:00+00:00"
+                  },
+                  "approved_jobs": [
+                    {
+                      "host": "OPS-017",
+                      "user": "svc-backup",
+                      "job_id": "BACKUP-42",
+                      "script_hash": "h-approved",
+                      "parameters": [
+                        "backup",
+                        "validate"
+                      ],
+                      "window": {
+                        "start": "2026-09-01T02:00:00+00:00",
+                        "end": "2026-09-01T03:00:00+00:00"
+                      },
+                      "allowed_destinations": [
+                        "10.20.0.8"
+                      ]
+                    }
+                  ]
+                },
+                "content_sha256": "3764e28c39ec225a9a011a03803739516fa471974b5cfde39cdff9bd08e6daea",
+                "source_system": "change-register",
+                "independence_group": "group-ea2f8012e80f4ec120a86c2b1566d5adbb5c4eee66801307aac32d8a1b95b7ee",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "host": "OPS-017",
+                "as_of": "2026-09-01T02:20:00+00:00",
+                "source_scope": {
+                  "host": "OPS-017",
+                  "as_of": "2026-09-01T02:20:00+00:00"
+                }
+              },
+              "window": null,
+              "completeness": "complete",
+              "truncated": false,
+              "missing_sources": []
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 1.0,
+            "simulated_latency_ms": 50,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "history",
+          "arguments": {
+            "entity_type": "user",
+            "entity": "svc-backup",
+            "window": {
+              "start": "2026-08-31T02:20:00+00:00",
+              "end": "2026-09-01T02:20:00+00:00"
+            },
+            "host": "OPS-017",
+            "user": "svc-backup",
+            "command_line": null,
+            "limit": 50
+          },
+          "result": {
+            "call_id": "replay-call-3",
+            "tool": "history",
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "record-7a4f8f7731358842fe3d0784419ed19e88dadb754febf233f1180f0b3d9cd664",
+                "payload": {
+                  "entity_type": "user",
+                  "entity": "svc-backup",
+                  "host": "OPS-017",
+                  "user": "svc-backup",
+                  "occurred_at": "2026-08-31T12:00:00+00:00",
+                  "observed_at": "2026-09-01T02:19:00+00:00",
+                  "job_id": "BACKUP-42",
+                  "script_hash": "h-approved",
+                  "parameters": [
+                    "backup",
+                    "validate"
+                  ],
+                  "periodic": true
+                },
+                "content_sha256": "b082b346654f80f55c02bdcdf8ef0772dd65823c5a2f5b9ba3d9a38ad7ea51b5",
+                "source_system": "history-store",
+                "independence_group": "group-6ff489e1ef476a2844fb333fcc0d23815f0a7717e32a8a68ccf2a06599f7d588",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "entity_type": "user",
+                "entity": "svc-backup",
+                "host": "OPS-017",
+                "user": "svc-backup",
+                "command_line": null,
+                "source_scope": {
+                  "entity_type": "user",
+                  "entity": "svc-backup",
+                  "host": "OPS-017",
+                  "user": "svc-backup",
+                  "command_line": null
+                }
+              },
+              "window": {
+                "start": "2026-08-31T02:20:00+00:00",
+                "end": "2026-09-01T02:20:00+00:00"
+              },
+              "completeness": "complete",
+              "truncated": false,
+              "missing_sources": []
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 2.0,
+            "simulated_latency_ms": 150,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "threat_intel",
+          "arguments": {
+            "indicator_type": "hash",
+            "value": "h-approved",
+            "as_of": "2026-09-01T02:20:00+00:00"
+          },
+          "result": {
+            "call_id": "replay-call-4",
+            "tool": "threat_intel",
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "record-70f69c2c1514cba96b230006fc4fca555fe21fb49a31253b3cbf81cbb7dc109a",
+                "payload": {
+                  "indicator_type": "hash",
+                  "value": "h-approved",
+                  "published_at": "2026-09-01T02:19:00+00:00",
+                  "reputation": "unknown",
+                  "provider": "local-mock",
+                  "not_a_real_ioc_assessment": true
+                },
+                "content_sha256": "1f8fc5d98bfc98c486f4d62783c2f99240cc3d18099441e5a763414e7d9c97a2",
+                "source_system": "mock-ti",
+                "independence_group": "group-1488fec8d689b605cbbda69781a88e8ddf6c9fd2bf61f7b7a5f0dd1b080a9f68",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "indicator_type": "hash",
+                "value": "h-approved",
+                "as_of": "2026-09-01T02:20:00+00:00",
+                "source_scope": {
+                  "indicator_type": "hash",
+                  "value": "h-approved",
+                  "as_of": "2026-09-01T02:20:00+00:00"
+                }
+              },
+              "window": null,
+              "completeness": "complete",
+              "truncated": false,
+              "missing_sources": []
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 3.0,
+            "simulated_latency_ms": 300,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "threat_intel",
+          "arguments": {
+            "indicator_type": "ip",
+            "value": "10.20.0.8",
+            "as_of": "2026-09-01T02:20:00+00:00"
+          },
+          "result": {
+            "call_id": "replay-call-5",
+            "tool": "threat_intel",
+            "status": "unavailable",
+            "records": [],
+            "coverage": {
+              "scope": {},
+              "window": null,
+              "completeness": "unknown",
+              "truncated": false,
+              "missing_sources": [
+                "threat_intel.source"
+              ]
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": "no_matching_rule",
+            "retryable": false,
+            "simulated_cost_units": 3.0,
+            "simulated_latency_ms": 300,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "attack",
+          "arguments": {
+            "snapshot_version": "attack-local-v1",
+            "behavior_terms": [],
+            "technique_ids": [
+              "T1059.001"
+            ]
+          },
+          "result": {
+            "call_id": "replay-call-6",
+            "tool": "attack",
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "record-affdc3d31d3c4cdcac1cb4515eb50d4fc899256ed96e25a357265cc198b9e1da",
+                "payload": {
+                  "snapshot_version": "attack-local-v1",
+                  "published_at": "2026-08-01T00:00:00+00:00",
+                  "technique_id": "T1059.001",
+                  "behavior_terms": [
+                    "PowerShell"
+                  ],
+                  "description": "PowerShell execution can occur in authorized and unauthorized activity; mapping is not an attack verdict."
+                },
+                "content_sha256": "c64b27e2c71828c213097d3ffbc1ffde8198f824cabcee5dbcaaddd79dc8cd19",
+                "source_system": "local-attack-knowledge",
+                "independence_group": "group-c8560172b9f48d1010ba40d39fb2e1d706fddcaf70cfa71522ef8faffbac1c5a",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "snapshot_version": "attack-local-v1",
+                "behavior_terms": [],
+                "technique_ids": [
+                  "T1059.001"
+                ],
+                "source_scope": {
+                  "snapshot_version": "attack-local-v1"
+                }
+              },
+              "window": null,
+              "completeness": "complete",
+              "truncated": false,
+              "missing_sources": []
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 1.0,
+            "simulated_latency_ms": 20,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "siem",
+          "arguments": {
+            "view": "process_tree",
+            "window": {
+              "start": "2026-09-01T02:10:00+00:00",
+              "end": "2026-09-01T02:20:00+00:00"
+            },
+            "host": "OPS-017",
+            "user": "svc-backup",
+            "process_id": "p-202",
+            "limit": 50
+          },
+          "result": {
+            "call_id": "replay-call-7",
+            "tool": "siem",
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "record-1d77425e9e90434aa6228b6fd0594077bee446089ed509393921fd239dbd3eb2",
+                "payload": {
+                  "view": "process_tree",
+                  "host": "OPS-017",
+                  "user": "svc-backup",
+                  "process_id": "p-202",
+                  "process_guid": "b5cc3e88ec3aa8fe12b666536caedd12",
+                  "event_id": "9e3aec2ecc0e3bf28e57411d0cba7497",
+                  "occurred_at": "2026-09-01T02:14:00+00:00",
+                  "observed_at": "2026-09-01T02:19:00+00:00",
+                  "parent_process": "management-task.exe",
+                  "child_process": [],
+                  "job_id": "BACKUP-42",
+                  "script_hash": "h-approved",
+                  "parameters": [
+                    "backup",
+                    "validate"
+                  ],
+                  "script_observations": [
+                    "read approved backup source",
+                    "validate backup checksum",
+                    "write approved backup destination"
+                  ]
+                },
+                "content_sha256": "9218f85f9fc076007f22418b4de038b066e27e04d4a2f3bdbc70a158162b8150",
+                "source_system": "edr",
+                "independence_group": "group-0e87190a9a052de017c760fb945019e732b7ab11da228a6f03af2eb40c6e3b5f",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "view": "process_tree",
+                "host": "OPS-017",
+                "user": "svc-backup",
+                "process_id": "p-202",
+                "source_scope": {
+                  "view": "process_tree",
+                  "host": "OPS-017",
+                  "user": null,
+                  "process_id": null
+                }
+              },
+              "window": {
+                "start": "2026-09-01T02:10:00+00:00",
+                "end": "2026-09-01T02:20:00+00:00"
+              },
+              "completeness": "complete",
+              "truncated": false,
+              "missing_sources": []
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 0.0,
+            "simulated_latency_ms": 0,
+            "actual_duration_ms": 0
+          }
+        }
+      ],
+      "stats": {
+        "attempts": 8,
+        "backend_calls": 7,
+        "cache_hits": 1
+      }
+    },
+    "C3": {
+      "calls": [
+        {
+          "tool": "siem",
+          "arguments": {
+            "view": "process_tree",
+            "window": {
+              "start": "2026-09-01T02:10:00+00:00",
+              "end": "2026-09-01T02:20:00+00:00"
+            },
+            "host": "OPS-023",
+            "user": "svc-maint",
+            "process_id": "p-303",
+            "limit": 50
+          },
+          "result": {
+            "call_id": "replay-call-0",
+            "tool": "siem",
+            "status": "partial",
+            "records": [
+              {
+                "record_id": "record-e51bf626b3cd3e2ef6c357f2ebd85a00a7fe84567890add8512c7122aa7cdb8a",
+                "payload": {
+                  "view": "process_tree",
+                  "host": "OPS-023",
+                  "user": "svc-maint",
+                  "process_id": "p-303",
+                  "process_guid": "eb41aff44f241f65a1869850ccdf1fba",
+                  "event_id": "c3b004135fb556d8e51f036a29bb6456",
+                  "occurred_at": "2026-09-01T02:14:00+00:00",
+                  "observed_at": "2026-09-01T02:19:00+00:00",
+                  "parent_process": "management-task.exe",
+                  "job_id": "J-9",
+                  "script_hash": "h-9",
+                  "parameters": [
+                    "export",
+                    "external"
+                  ],
+                  "script_body": null
+                },
+                "content_sha256": "543375bdf41b944cecd0ba43fcb0712c5fc1026c4b7dbb44bf276978ca7238ea",
+                "source_system": "edr",
+                "independence_group": "group-0e87190a9a052de017c760fb945019e732b7ab11da228a6f03af2eb40c6e3b5f",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "view": "process_tree",
+                "host": "OPS-023",
+                "user": "svc-maint",
+                "process_id": "p-303",
+                "source_scope": {
+                  "view": "process_tree",
+                  "host": "OPS-023",
+                  "user": null,
+                  "process_id": null
+                }
+              },
+              "window": {
+                "start": "2026-09-01T02:10:00+00:00",
+                "end": "2026-09-01T02:20:00+00:00"
+              },
+              "completeness": "partial",
+              "truncated": false,
+              "missing_sources": [
+                "script_body"
+              ]
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 2.0,
+            "simulated_latency_ms": 200,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "siem",
+          "arguments": {
+            "view": "network_events",
+            "window": {
+              "start": "2026-09-01T02:10:00+00:00",
+              "end": "2026-09-01T02:20:00+00:00"
+            },
+            "host": "OPS-023",
+            "user": "svc-maint",
+            "process_id": "p-303",
+            "limit": 50
+          },
+          "result": {
+            "call_id": "replay-call-1",
+            "tool": "siem",
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "record-07b0eaa7c76eac0f779753c235bc8eb323a815716aea4684b790d21d8a7af79c",
+                "payload": {
+                  "view": "network_events",
+                  "host": "OPS-023",
+                  "user": "svc-maint",
+                  "process_id": "p-303",
+                  "process_guid": "eb41aff44f241f65a1869850ccdf1fba",
+                  "event_id": "f0e9c9d1d5806174bc76e043354005e7",
+                  "occurred_at": "2026-09-01T02:14:00+00:00",
+                  "observed_at": "2026-09-01T02:19:00+00:00",
+                  "destination_ip": "198.51.100.27",
+                  "destination_port": 443,
+                  "new_destination": true,
+                  "payload_captured": false
+                },
+                "content_sha256": "f04b88744246ba144b219def70831908960e66a87600e41aa6ac0866648e15dc",
+                "source_system": "network-sensor",
+                "independence_group": "group-90ade525c9d65f781d6cf5111ee78a2db4dffcc9eaf97553286986c75fe9b257",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "view": "network_events",
+                "host": "OPS-023",
+                "user": "svc-maint",
+                "process_id": "p-303",
+                "source_scope": {
+                  "view": "network_events",
+                  "host": "OPS-023",
+                  "user": null,
+                  "process_id": null
+                }
+              },
+              "window": {
+                "start": "2026-09-01T02:10:00+00:00",
+                "end": "2026-09-01T02:20:00+00:00"
+              },
+              "completeness": "complete",
+              "truncated": false,
+              "missing_sources": []
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 2.0,
+            "simulated_latency_ms": 200,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "asset",
+          "arguments": {
+            "host": "OPS-023",
+            "as_of": "2026-09-01T02:20:00+00:00"
+          },
+          "result": {
+            "call_id": "replay-call-2",
+            "tool": "asset",
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "record-58ed05d6344f94f471db45c44d7d8c2f1fbc8e11a311a8a20bc30ef8be33af69",
+                "payload": {
+                  "host": "OPS-023",
+                  "published_at": "2026-09-01T02:19:00+00:00",
+                  "purpose": "operations",
+                  "system_type": "Windows",
+                  "critical_asset": false,
+                  "department": "synthetic-operations",
+                  "approval_register_complete": true,
+                  "approval_register_window": {
+                    "start": "2026-09-01T02:10:00+00:00",
+                    "end": "2026-09-01T02:20:00+00:00"
+                  },
+                  "approved_jobs": [
+                    {
+                      "host": "OPS-023",
+                      "user": "svc-maint",
+                      "job_id": "J-7",
+                      "script_hash": "h-7",
+                      "parameters": [
+                        "backup"
+                      ],
+                      "window": {
+                        "start": "2026-09-01T02:00:00+00:00",
+                        "end": "2026-09-01T03:00:00+00:00"
+                      }
+                    }
+                  ]
+                },
+                "content_sha256": "ad50defbb5a98638e9020e4a208071f7eaa283e7f45294debee6c530da6e7638",
+                "source_system": "change-register",
+                "independence_group": "group-ea2f8012e80f4ec120a86c2b1566d5adbb5c4eee66801307aac32d8a1b95b7ee",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "host": "OPS-023",
+                "as_of": "2026-09-01T02:20:00+00:00",
+                "source_scope": {
+                  "host": "OPS-023",
+                  "as_of": "2026-09-01T02:20:00+00:00"
+                }
+              },
+              "window": null,
+              "completeness": "complete",
+              "truncated": false,
+              "missing_sources": []
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 1.0,
+            "simulated_latency_ms": 50,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "history",
+          "arguments": {
+            "entity_type": "user",
+            "entity": "svc-maint",
+            "window": {
+              "start": "2026-08-31T02:20:00+00:00",
+              "end": "2026-09-01T02:20:00+00:00"
+            },
+            "host": "OPS-023",
+            "user": "svc-maint",
+            "command_line": null,
+            "limit": 50
+          },
+          "result": {
+            "call_id": "replay-call-3",
+            "tool": "history",
+            "status": "unavailable",
+            "records": [],
+            "coverage": {
+              "scope": {
+                "entity_type": "user",
+                "entity": "svc-maint"
+              },
+              "window": {
+                "start": "2026-08-31T02:20:00+00:00",
+                "end": "2026-09-01T02:20:00+00:00"
+              },
+              "completeness": "partial",
+              "truncated": false,
+              "missing_sources": [
+                "history_retention_unavailable"
+              ]
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": "history_retention_unavailable",
+            "retryable": false,
+            "simulated_cost_units": 2.0,
+            "simulated_latency_ms": 150,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "threat_intel",
+          "arguments": {
+            "indicator_type": "hash",
+            "value": "h-9",
+            "as_of": "2026-09-01T02:20:00+00:00"
+          },
+          "result": {
+            "call_id": "replay-call-4",
+            "tool": "threat_intel",
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "record-673297d94eb5edf31440dda4332621e9656f2128e7542741f0c294b279754390",
+                "payload": {
+                  "indicator_type": "hash",
+                  "value": "h-9",
+                  "published_at": "2026-09-01T02:19:00+00:00",
+                  "reputation": "unknown",
+                  "provider": "local-mock",
+                  "not_a_real_ioc_assessment": true
+                },
+                "content_sha256": "3c24a57d6ea7547064fe72030e3962c1d43d214abc88f6a9423b11ffbc5b5f6e",
+                "source_system": "mock-ti",
+                "independence_group": "group-1488fec8d689b605cbbda69781a88e8ddf6c9fd2bf61f7b7a5f0dd1b080a9f68",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "indicator_type": "hash",
+                "value": "h-9",
+                "as_of": "2026-09-01T02:20:00+00:00",
+                "source_scope": {
+                  "indicator_type": "hash",
+                  "value": "h-9",
+                  "as_of": "2026-09-01T02:20:00+00:00"
+                }
+              },
+              "window": null,
+              "completeness": "complete",
+              "truncated": false,
+              "missing_sources": []
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 3.0,
+            "simulated_latency_ms": 300,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "threat_intel",
+          "arguments": {
+            "indicator_type": "ip",
+            "value": "198.51.100.27",
+            "as_of": "2026-09-01T02:20:00+00:00"
+          },
+          "result": {
+            "call_id": "replay-call-5",
+            "tool": "threat_intel",
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "record-5f20d2b0ca797ae0f3c17511b848b1c6d553776d5fdc62c0f0be016311c45682",
+                "payload": {
+                  "indicator_type": "ip",
+                  "value": "198.51.100.27",
+                  "published_at": "2026-09-01T02:19:00+00:00",
+                  "reputation": "unknown",
+                  "provider": "local-mock",
+                  "not_a_real_ioc_assessment": true
+                },
+                "content_sha256": "96c2f6b1c23ebf79bc2200438111c582c10cb031051e8d3094d72eabf2f191c6",
+                "source_system": "mock-ti",
+                "independence_group": "group-1488fec8d689b605cbbda69781a88e8ddf6c9fd2bf61f7b7a5f0dd1b080a9f68",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "indicator_type": "ip",
+                "value": "198.51.100.27",
+                "as_of": "2026-09-01T02:20:00+00:00",
+                "source_scope": {
+                  "indicator_type": "ip",
+                  "value": "198.51.100.27",
+                  "as_of": "2026-09-01T02:20:00+00:00"
+                }
+              },
+              "window": null,
+              "completeness": "complete",
+              "truncated": false,
+              "missing_sources": []
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 3.0,
+            "simulated_latency_ms": 300,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "attack",
+          "arguments": {
+            "snapshot_version": "attack-local-v1",
+            "behavior_terms": [],
+            "technique_ids": [
+              "T1059.001"
+            ]
+          },
+          "result": {
+            "call_id": "replay-call-6",
+            "tool": "attack",
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "record-32d9a7276fba9fdcc59287af932c50bd6b8c1eb897de351ec4644e545df9aa3b",
+                "payload": {
+                  "snapshot_version": "attack-local-v1",
+                  "published_at": "2026-08-01T00:00:00+00:00",
+                  "technique_id": "T1059.001",
+                  "behavior_terms": [
+                    "PowerShell"
+                  ],
+                  "description": "PowerShell execution can occur in authorized and unauthorized activity; mapping is not an attack verdict."
+                },
+                "content_sha256": "c64b27e2c71828c213097d3ffbc1ffde8198f824cabcee5dbcaaddd79dc8cd19",
+                "source_system": "local-attack-knowledge",
+                "independence_group": "group-c8560172b9f48d1010ba40d39fb2e1d706fddcaf70cfa71522ef8faffbac1c5a",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "snapshot_version": "attack-local-v1",
+                "behavior_terms": [],
+                "technique_ids": [
+                  "T1059.001"
+                ],
+                "source_scope": {
+                  "snapshot_version": "attack-local-v1"
+                }
+              },
+              "window": null,
+              "completeness": "complete",
+              "truncated": false,
+              "missing_sources": []
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 1.0,
+            "simulated_latency_ms": 20,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "siem",
+          "arguments": {
+            "view": "process_tree",
+            "window": {
+              "start": "2026-09-01T02:10:00+00:00",
+              "end": "2026-09-01T02:20:00+00:00"
+            },
+            "host": "OPS-023",
+            "user": "svc-maint",
+            "process_id": "p-303",
+            "limit": 50
+          },
+          "result": {
+            "call_id": "replay-call-7",
+            "tool": "siem",
+            "status": "partial",
+            "records": [
+              {
+                "record_id": "record-e51bf626b3cd3e2ef6c357f2ebd85a00a7fe84567890add8512c7122aa7cdb8a",
+                "payload": {
+                  "view": "process_tree",
+                  "host": "OPS-023",
+                  "user": "svc-maint",
+                  "process_id": "p-303",
+                  "process_guid": "eb41aff44f241f65a1869850ccdf1fba",
+                  "event_id": "c3b004135fb556d8e51f036a29bb6456",
+                  "occurred_at": "2026-09-01T02:14:00+00:00",
+                  "observed_at": "2026-09-01T02:19:00+00:00",
+                  "parent_process": "management-task.exe",
+                  "job_id": "J-9",
+                  "script_hash": "h-9",
+                  "parameters": [
+                    "export",
+                    "external"
+                  ],
+                  "script_body": null
+                },
+                "content_sha256": "543375bdf41b944cecd0ba43fcb0712c5fc1026c4b7dbb44bf276978ca7238ea",
+                "source_system": "edr",
+                "independence_group": "group-0e87190a9a052de017c760fb945019e732b7ab11da228a6f03af2eb40c6e3b5f",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "view": "process_tree",
+                "host": "OPS-023",
+                "user": "svc-maint",
+                "process_id": "p-303",
+                "source_scope": {
+                  "view": "process_tree",
+                  "host": "OPS-023",
+                  "user": null,
+                  "process_id": null
+                }
+              },
+              "window": {
+                "start": "2026-09-01T02:10:00+00:00",
+                "end": "2026-09-01T02:20:00+00:00"
+              },
+              "completeness": "partial",
+              "truncated": false,
+              "missing_sources": [
+                "script_body"
+              ]
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 0.0,
+            "simulated_latency_ms": 0,
+            "actual_duration_ms": 0
+          }
+        }
+      ],
+      "stats": {
+        "attempts": 8,
+        "backend_calls": 7,
+        "cache_hits": 1
+      }
+    },
+    "C4": {
+      "calls": [
+        {
+          "tool": "siem",
+          "arguments": {
+            "view": "process_tree",
+            "window": {
+              "start": "2026-09-01T02:10:00+00:00",
+              "end": "2026-09-01T02:20:00+00:00"
+            },
+            "host": "WS-088",
+            "user": "operator-b",
+            "process_id": "p-404",
+            "limit": 50
+          },
+          "result": {
+            "call_id": "replay-call-0",
+            "tool": "siem",
+            "status": "partial",
+            "records": [
+              {
+                "record_id": "record-9ed10a6fe7a79c2e1f4546eb2bd2ecb0d9ebd9e4bd6e020cef315e991f0daa4e",
+                "payload": {
+                  "view": "process_tree",
+                  "host": "WS-088",
+                  "user": "operator-b",
+                  "process_id": "p-404",
+                  "process_guid": "65695b0e7c0b77b0a89891cf19139ccf",
+                  "event_id": "086e89e14051505e440d7e0aaeed3fca",
+                  "occurred_at": "2026-09-01T02:14:00+00:00",
+                  "observed_at": "2026-09-01T02:19:00+00:00",
+                  "parent_process": null,
+                  "child_process": null,
+                  "command_line": null
+                },
+                "content_sha256": "a85664377c5d641ff673b5bbd75fb965bc7dffbd4c3042e1545b139c74e31946",
+                "source_system": "edr",
+                "independence_group": "group-0e87190a9a052de017c760fb945019e732b7ab11da228a6f03af2eb40c6e3b5f",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "view": "process_tree",
+                "host": "WS-088",
+                "user": "operator-b",
+                "process_id": "p-404",
+                "source_scope": {
+                  "view": "process_tree",
+                  "host": "WS-088",
+                  "user": null,
+                  "process_id": null
+                }
+              },
+              "window": {
+                "start": "2026-09-01T02:10:00+00:00",
+                "end": "2026-09-01T02:20:00+00:00"
+              },
+              "completeness": "partial",
+              "truncated": false,
+              "missing_sources": [
+                "child_process",
+                "command_line",
+                "parent_process"
+              ]
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 2.0,
+            "simulated_latency_ms": 200,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "siem",
+          "arguments": {
+            "view": "network_events",
+            "window": {
+              "start": "2026-09-01T02:10:00+00:00",
+              "end": "2026-09-01T02:20:00+00:00"
+            },
+            "host": "WS-088",
+            "user": "operator-b",
+            "process_id": "p-404",
+            "limit": 50
+          },
+          "result": {
+            "call_id": "replay-call-1",
+            "tool": "siem",
+            "status": "unavailable",
+            "records": [],
+            "coverage": {
+              "scope": {
+                "view": "network_events",
+                "host": "WS-088"
+              },
+              "window": {
+                "start": "2026-09-01T02:10:00+00:00",
+                "end": "2026-09-01T02:20:00+00:00"
+              },
+              "completeness": "partial",
+              "truncated": false,
+              "missing_sources": [
+                "network_source_unavailable"
+              ]
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": "network_source_unavailable",
+            "retryable": false,
+            "simulated_cost_units": 2.0,
+            "simulated_latency_ms": 200,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "asset",
+          "arguments": {
+            "host": "WS-088",
+            "as_of": "2026-09-01T02:20:00+00:00"
+          },
+          "result": {
+            "call_id": "replay-call-2",
+            "tool": "asset",
+            "status": "partial",
+            "records": [
+              {
+                "record_id": "record-09f47d2dc72dd8f34043c0c46eaa0d12bc980b4179f50db44add202a8f09db05",
+                "payload": {
+                  "host": "WS-088",
+                  "published_at": "2026-09-01T02:19:00+00:00",
+                  "purpose": "workstation",
+                  "system_type": "Windows",
+                  "critical_asset": false,
+                  "department": "synthetic-operations",
+                  "approval_register_complete": false,
+                  "approval_register_window": {
+                    "start": "2026-09-01T02:10:00+00:00",
+                    "end": "2026-09-01T02:20:00+00:00"
+                  },
+                  "approved_jobs": []
+                },
+                "content_sha256": "7333ea4fe3a5d26f61fa898b3caad1e4ac016ed07df0efa642fa84999aeafa20",
+                "source_system": "change-register",
+                "independence_group": "group-ea2f8012e80f4ec120a86c2b1566d5adbb5c4eee66801307aac32d8a1b95b7ee",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "host": "WS-088",
+                "as_of": "2026-09-01T02:20:00+00:00",
+                "source_scope": {
+                  "host": "WS-088",
+                  "as_of": "2026-09-01T02:20:00+00:00"
+                }
+              },
+              "window": null,
+              "completeness": "partial",
+              "truncated": false,
+              "missing_sources": [
+                "approval_archive"
+              ]
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 1.0,
+            "simulated_latency_ms": 50,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "history",
+          "arguments": {
+            "entity_type": "user",
+            "entity": "operator-b",
+            "window": {
+              "start": "2026-08-31T02:20:00+00:00",
+              "end": "2026-09-01T02:20:00+00:00"
+            },
+            "host": "WS-088",
+            "user": "operator-b",
+            "command_line": null,
+            "limit": 50
+          },
+          "result": {
+            "call_id": "replay-call-3",
+            "tool": "history",
+            "status": "unavailable",
+            "records": [],
+            "coverage": {
+              "scope": {
+                "entity_type": "user",
+                "entity": "operator-b"
+              },
+              "window": {
+                "start": "2026-08-31T02:20:00+00:00",
+                "end": "2026-09-01T02:20:00+00:00"
+              },
+              "completeness": "partial",
+              "truncated": false,
+              "missing_sources": [
+                "history_source_unavailable"
+              ]
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": "history_source_unavailable",
+            "retryable": false,
+            "simulated_cost_units": 2.0,
+            "simulated_latency_ms": 150,
+            "actual_duration_ms": 16
+          }
+        },
+        {
+          "tool": "attack",
+          "arguments": {
+            "snapshot_version": "attack-local-v1",
+            "behavior_terms": [],
+            "technique_ids": [
+              "T1059.001"
+            ]
+          },
+          "result": {
+            "call_id": "replay-call-4",
+            "tool": "attack",
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "record-d5391d8cdff9606f68afc9718dd3403e59d07bec650a45c202fe6d8348fce6a9",
+                "payload": {
+                  "snapshot_version": "attack-local-v1",
+                  "published_at": "2026-08-01T00:00:00+00:00",
+                  "technique_id": "T1059.001",
+                  "behavior_terms": [
+                    "PowerShell"
+                  ],
+                  "description": "PowerShell execution can occur in authorized and unauthorized activity; mapping is not an attack verdict."
+                },
+                "content_sha256": "c64b27e2c71828c213097d3ffbc1ffde8198f824cabcee5dbcaaddd79dc8cd19",
+                "source_system": "local-attack-knowledge",
+                "independence_group": "group-c8560172b9f48d1010ba40d39fb2e1d706fddcaf70cfa71522ef8faffbac1c5a",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "snapshot_version": "attack-local-v1",
+                "behavior_terms": [],
+                "technique_ids": [
+                  "T1059.001"
+                ],
+                "source_scope": {
+                  "snapshot_version": "attack-local-v1"
+                }
+              },
+              "window": null,
+              "completeness": "complete",
+              "truncated": false,
+              "missing_sources": []
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 1.0,
+            "simulated_latency_ms": 20,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "siem",
+          "arguments": {
+            "view": "process_tree",
+            "window": {
+              "start": "2026-09-01T02:10:00+00:00",
+              "end": "2026-09-01T02:20:00+00:00"
+            },
+            "host": "WS-088",
+            "user": "operator-b",
+            "process_id": "p-404",
+            "limit": 50
+          },
+          "result": {
+            "call_id": "replay-call-5",
+            "tool": "siem",
+            "status": "partial",
+            "records": [
+              {
+                "record_id": "record-9ed10a6fe7a79c2e1f4546eb2bd2ecb0d9ebd9e4bd6e020cef315e991f0daa4e",
+                "payload": {
+                  "view": "process_tree",
+                  "host": "WS-088",
+                  "user": "operator-b",
+                  "process_id": "p-404",
+                  "process_guid": "65695b0e7c0b77b0a89891cf19139ccf",
+                  "event_id": "086e89e14051505e440d7e0aaeed3fca",
+                  "occurred_at": "2026-09-01T02:14:00+00:00",
+                  "observed_at": "2026-09-01T02:19:00+00:00",
+                  "parent_process": null,
+                  "child_process": null,
+                  "command_line": null
+                },
+                "content_sha256": "a85664377c5d641ff673b5bbd75fb965bc7dffbd4c3042e1545b139c74e31946",
+                "source_system": "edr",
+                "independence_group": "group-0e87190a9a052de017c760fb945019e732b7ab11da228a6f03af2eb40c6e3b5f",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "view": "process_tree",
+                "host": "WS-088",
+                "user": "operator-b",
+                "process_id": "p-404",
+                "source_scope": {
+                  "view": "process_tree",
+                  "host": "WS-088",
+                  "user": null,
+                  "process_id": null
+                }
+              },
+              "window": {
+                "start": "2026-09-01T02:10:00+00:00",
+                "end": "2026-09-01T02:20:00+00:00"
+              },
+              "completeness": "partial",
+              "truncated": false,
+              "missing_sources": [
+                "child_process",
+                "command_line",
+                "parent_process"
+              ]
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 0.0,
+            "simulated_latency_ms": 0,
+            "actual_duration_ms": 0
+          }
+        }
+      ],
+      "stats": {
+        "attempts": 6,
+        "backend_calls": 5,
+        "cache_hits": 1
+      }
+    },
+    "C5": {
+      "calls": [
+        {
+          "tool": "siem",
+          "arguments": {
+            "view": "process_tree",
+            "window": {
+              "start": "2026-09-01T02:10:00+00:00",
+              "end": "2026-09-01T02:20:00+00:00"
+            },
+            "host": "WS-088",
+            "user": "operator-b",
+            "process_id": "p-404",
+            "limit": 50
+          },
+          "result": {
+            "call_id": "replay-call-0",
+            "tool": "siem",
+            "status": "partial",
+            "records": [
+              {
+                "record_id": "record-9ed10a6fe7a79c2e1f4546eb2bd2ecb0d9ebd9e4bd6e020cef315e991f0daa4e",
+                "payload": {
+                  "view": "process_tree",
+                  "host": "WS-088",
+                  "user": "operator-b",
+                  "process_id": "p-404",
+                  "process_guid": "65695b0e7c0b77b0a89891cf19139ccf",
+                  "event_id": "086e89e14051505e440d7e0aaeed3fca",
+                  "occurred_at": "2026-09-01T02:14:00+00:00",
+                  "observed_at": "2026-09-01T02:19:00+00:00",
+                  "parent_process": null,
+                  "child_process": null,
+                  "command_line": null
+                },
+                "content_sha256": "a85664377c5d641ff673b5bbd75fb965bc7dffbd4c3042e1545b139c74e31946",
+                "source_system": "edr",
+                "independence_group": "group-0e87190a9a052de017c760fb945019e732b7ab11da228a6f03af2eb40c6e3b5f",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "view": "process_tree",
+                "host": "WS-088",
+                "user": "operator-b",
+                "process_id": "p-404",
+                "source_scope": {
+                  "view": "process_tree",
+                  "host": "WS-088",
+                  "user": null,
+                  "process_id": null
+                }
+              },
+              "window": {
+                "start": "2026-09-01T02:10:00+00:00",
+                "end": "2026-09-01T02:20:00+00:00"
+              },
+              "completeness": "partial",
+              "truncated": false,
+              "missing_sources": [
+                "child_process",
+                "command_line",
+                "parent_process"
+              ]
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 2.0,
+            "simulated_latency_ms": 200,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "siem",
+          "arguments": {
+            "view": "network_events",
+            "window": {
+              "start": "2026-09-01T02:10:00+00:00",
+              "end": "2026-09-01T02:20:00+00:00"
+            },
+            "host": "WS-088",
+            "user": "operator-b",
+            "process_id": "p-404",
+            "limit": 50
+          },
+          "result": {
+            "call_id": "replay-call-1",
+            "tool": "siem",
+            "status": "unavailable",
+            "records": [],
+            "coverage": {
+              "scope": {
+                "view": "network_events",
+                "host": "WS-088"
+              },
+              "window": {
+                "start": "2026-09-01T02:10:00+00:00",
+                "end": "2026-09-01T02:20:00+00:00"
+              },
+              "completeness": "partial",
+              "truncated": false,
+              "missing_sources": [
+                "network_source_unavailable"
+              ]
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": "network_source_unavailable",
+            "retryable": false,
+            "simulated_cost_units": 2.0,
+            "simulated_latency_ms": 200,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "asset",
+          "arguments": {
+            "host": "WS-088",
+            "as_of": "2026-09-01T02:20:00+00:00"
+          },
+          "result": {
+            "call_id": "replay-call-2",
+            "tool": "asset",
+            "status": "partial",
+            "records": [
+              {
+                "record_id": "record-09f47d2dc72dd8f34043c0c46eaa0d12bc980b4179f50db44add202a8f09db05",
+                "payload": {
+                  "host": "WS-088",
+                  "published_at": "2026-09-01T02:19:00+00:00",
+                  "purpose": "workstation",
+                  "system_type": "Windows",
+                  "critical_asset": false,
+                  "department": "synthetic-operations",
+                  "approval_register_complete": false,
+                  "approval_register_window": {
+                    "start": "2026-09-01T02:10:00+00:00",
+                    "end": "2026-09-01T02:20:00+00:00"
+                  },
+                  "approved_jobs": []
+                },
+                "content_sha256": "7333ea4fe3a5d26f61fa898b3caad1e4ac016ed07df0efa642fa84999aeafa20",
+                "source_system": "change-register",
+                "independence_group": "group-ea2f8012e80f4ec120a86c2b1566d5adbb5c4eee66801307aac32d8a1b95b7ee",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "host": "WS-088",
+                "as_of": "2026-09-01T02:20:00+00:00",
+                "source_scope": {
+                  "host": "WS-088",
+                  "as_of": "2026-09-01T02:20:00+00:00"
+                }
+              },
+              "window": null,
+              "completeness": "partial",
+              "truncated": false,
+              "missing_sources": [
+                "approval_archive"
+              ]
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 1.0,
+            "simulated_latency_ms": 50,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "history",
+          "arguments": {
+            "entity_type": "user",
+            "entity": "operator-b",
+            "window": {
+              "start": "2026-08-31T02:20:00+00:00",
+              "end": "2026-09-01T02:20:00+00:00"
+            },
+            "host": "WS-088",
+            "user": "operator-b",
+            "command_line": null,
+            "limit": 50
+          },
+          "result": {
+            "call_id": "replay-call-3",
+            "tool": "history",
+            "status": "unavailable",
+            "records": [],
+            "coverage": {
+              "scope": {
+                "entity_type": "user",
+                "entity": "operator-b"
+              },
+              "window": {
+                "start": "2026-08-31T02:20:00+00:00",
+                "end": "2026-09-01T02:20:00+00:00"
+              },
+              "completeness": "partial",
+              "truncated": false,
+              "missing_sources": [
+                "history_source_unavailable"
+              ]
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": "history_source_unavailable",
+            "retryable": false,
+            "simulated_cost_units": 2.0,
+            "simulated_latency_ms": 150,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "attack",
+          "arguments": {
+            "snapshot_version": "attack-local-v1",
+            "behavior_terms": [],
+            "technique_ids": [
+              "T1059.001"
+            ]
+          },
+          "result": {
+            "call_id": "replay-call-4",
+            "tool": "attack",
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "record-d5391d8cdff9606f68afc9718dd3403e59d07bec650a45c202fe6d8348fce6a9",
+                "payload": {
+                  "snapshot_version": "attack-local-v1",
+                  "published_at": "2026-08-01T00:00:00+00:00",
+                  "technique_id": "T1059.001",
+                  "behavior_terms": [
+                    "PowerShell"
+                  ],
+                  "description": "PowerShell execution can occur in authorized and unauthorized activity; mapping is not an attack verdict."
+                },
+                "content_sha256": "c64b27e2c71828c213097d3ffbc1ffde8198f824cabcee5dbcaaddd79dc8cd19",
+                "source_system": "local-attack-knowledge",
+                "independence_group": "group-c8560172b9f48d1010ba40d39fb2e1d706fddcaf70cfa71522ef8faffbac1c5a",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "snapshot_version": "attack-local-v1",
+                "behavior_terms": [],
+                "technique_ids": [
+                  "T1059.001"
+                ],
+                "source_scope": {
+                  "snapshot_version": "attack-local-v1"
+                }
+              },
+              "window": null,
+              "completeness": "complete",
+              "truncated": false,
+              "missing_sources": []
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 1.0,
+            "simulated_latency_ms": 20,
+            "actual_duration_ms": 0
+          }
+        },
+        {
+          "tool": "siem",
+          "arguments": {
+            "view": "process_tree",
+            "window": {
+              "start": "2026-09-01T02:10:00+00:00",
+              "end": "2026-09-01T02:20:00+00:00"
+            },
+            "host": "WS-088",
+            "user": "operator-b",
+            "process_id": "p-404",
+            "limit": 50
+          },
+          "result": {
+            "call_id": "replay-call-5",
+            "tool": "siem",
+            "status": "partial",
+            "records": [
+              {
+                "record_id": "record-9ed10a6fe7a79c2e1f4546eb2bd2ecb0d9ebd9e4bd6e020cef315e991f0daa4e",
+                "payload": {
+                  "view": "process_tree",
+                  "host": "WS-088",
+                  "user": "operator-b",
+                  "process_id": "p-404",
+                  "process_guid": "65695b0e7c0b77b0a89891cf19139ccf",
+                  "event_id": "086e89e14051505e440d7e0aaeed3fca",
+                  "occurred_at": "2026-09-01T02:14:00+00:00",
+                  "observed_at": "2026-09-01T02:19:00+00:00",
+                  "parent_process": null,
+                  "child_process": null,
+                  "command_line": null
+                },
+                "content_sha256": "a85664377c5d641ff673b5bbd75fb965bc7dffbd4c3042e1545b139c74e31946",
+                "source_system": "edr",
+                "independence_group": "group-0e87190a9a052de017c760fb945019e732b7ab11da228a6f03af2eb40c6e3b5f",
+                "reliability": {
+                  "level": "high",
+                  "basis": "Frozen synthetic source measurement, not model-generated",
+                  "policy_version": "source-policy-v1"
+                }
+              }
+            ],
+            "coverage": {
+              "scope": {
+                "view": "process_tree",
+                "host": "WS-088",
+                "user": "operator-b",
+                "process_id": "p-404",
+                "source_scope": {
+                  "view": "process_tree",
+                  "host": "WS-088",
+                  "user": null,
+                  "process_id": null
+                }
+              },
+              "window": {
+                "start": "2026-09-01T02:10:00+00:00",
+                "end": "2026-09-01T02:20:00+00:00"
+              },
+              "completeness": "partial",
+              "truncated": false,
+              "missing_sources": [
+                "child_process",
+                "command_line",
+                "parent_process"
+              ]
+            },
+            "snapshot_version": "synthetic-v1",
+            "error_code": null,
+            "retryable": false,
+            "simulated_cost_units": 0.0,
+            "simulated_latency_ms": 0,
+            "actual_duration_ms": 0
+          }
+        }
+      ],
+      "stats": {
+        "attempts": 6,
+        "backend_calls": 5,
+        "cache_hits": 1
+      }
+    }
+  },
+  "paired_queries": 27,
+  "paired_equal": true,
+  "normalization_policy": {
+    "version": "tool-result-envelope-v2",
+    "rules": [
+      {
+        "path": "/call_id",
+        "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields."
+      },
+      {
+        "path": "/actual_duration_ms",
+        "reason": "Measured wall duration varies with local scheduling."
+      }
+    ],
+    "object_key_order": "preserved",
+    "sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136"
+  },
+  "paired_comparisons": [
+    {
+      "tool": "siem",
+      "arguments": {
+        "view": "host_events",
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "host": "WS-088",
+        "user": "operator-b",
+        "process_id": "p-404",
+        "limit": 50
+      },
+      "comparison": {
+        "equal": true,
+        "differences": [],
+        "difference_count": 0,
+        "normalization_version": "tool-result-envelope-v2",
+        "normalization_sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136",
+        "normalized_fields": [
+          {
+            "path": "/call_id",
+            "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+            "left": "left-0",
+            "right": "right-0",
+            "changed": true
+          },
+          {
+            "path": "/actual_duration_ms",
+            "reason": "Measured wall duration varies with local scheduling.",
+            "left": 0,
+            "right": 0,
+            "changed": false
+          }
+        ],
+        "normalization_exclusions": [],
+        "reasons": [
+          "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+          "Measured wall duration varies with local scheduling."
+        ]
+      }
+    },
+    {
+      "tool": "siem",
+      "arguments": {
+        "view": "host_events",
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "host": "WS-088",
+        "user": "operator-b",
+        "process_id": "p-404",
+        "limit": 1
+      },
+      "comparison": {
+        "equal": true,
+        "differences": [],
+        "difference_count": 0,
+        "normalization_version": "tool-result-envelope-v2",
+        "normalization_sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136",
+        "normalized_fields": [
+          {
+            "path": "/call_id",
+            "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+            "left": "left-1",
+            "right": "right-1",
+            "changed": true
+          },
+          {
+            "path": "/actual_duration_ms",
+            "reason": "Measured wall duration varies with local scheduling.",
+            "left": 0,
+            "right": 15,
+            "changed": true
+          }
+        ],
+        "normalization_exclusions": [],
+        "reasons": [
+          "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+          "Measured wall duration varies with local scheduling."
+        ]
+      }
+    },
+    {
+      "tool": "siem",
+      "arguments": {
+        "view": "host_events",
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "host": "unobserved-host",
+        "user": "operator-b",
+        "process_id": "p-404",
+        "limit": 50
+      },
+      "comparison": {
+        "equal": true,
+        "differences": [],
+        "difference_count": 0,
+        "normalization_version": "tool-result-envelope-v2",
+        "normalization_sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136",
+        "normalized_fields": [
+          {
+            "path": "/call_id",
+            "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+            "left": "left-2",
+            "right": "right-2",
+            "changed": true
+          },
+          {
+            "path": "/actual_duration_ms",
+            "reason": "Measured wall duration varies with local scheduling.",
+            "left": 0,
+            "right": 0,
+            "changed": false
+          }
+        ],
+        "normalization_exclusions": [],
+        "reasons": [
+          "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+          "Measured wall duration varies with local scheduling."
+        ]
+      }
+    },
+    {
+      "tool": "siem",
+      "arguments": {
+        "view": "host_events",
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:14:00+00:00"
+        },
+        "host": "WS-088",
+        "user": "operator-b",
+        "process_id": "p-404",
+        "limit": 50
+      },
+      "comparison": {
+        "equal": true,
+        "differences": [],
+        "difference_count": 0,
+        "normalization_version": "tool-result-envelope-v2",
+        "normalization_sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136",
+        "normalized_fields": [
+          {
+            "path": "/call_id",
+            "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+            "left": "left-3",
+            "right": "right-3",
+            "changed": true
+          },
+          {
+            "path": "/actual_duration_ms",
+            "reason": "Measured wall duration varies with local scheduling.",
+            "left": 0,
+            "right": 0,
+            "changed": false
+          }
+        ],
+        "normalization_exclusions": [],
+        "reasons": [
+          "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+          "Measured wall duration varies with local scheduling."
+        ]
+      }
+    },
+    {
+      "tool": "siem",
+      "arguments": {
+        "view": "user_events",
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "host": "WS-088",
+        "user": "operator-b",
+        "process_id": "p-404",
+        "limit": 50
+      },
+      "comparison": {
+        "equal": true,
+        "differences": [],
+        "difference_count": 0,
+        "normalization_version": "tool-result-envelope-v2",
+        "normalization_sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136",
+        "normalized_fields": [
+          {
+            "path": "/call_id",
+            "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+            "left": "left-4",
+            "right": "right-4",
+            "changed": true
+          },
+          {
+            "path": "/actual_duration_ms",
+            "reason": "Measured wall duration varies with local scheduling.",
+            "left": 0,
+            "right": 0,
+            "changed": false
+          }
+        ],
+        "normalization_exclusions": [],
+        "reasons": [
+          "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+          "Measured wall duration varies with local scheduling."
+        ]
+      }
+    },
+    {
+      "tool": "siem",
+      "arguments": {
+        "view": "user_events",
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "host": "WS-088",
+        "user": "operator-b",
+        "process_id": "p-404",
+        "limit": 1
+      },
+      "comparison": {
+        "equal": true,
+        "differences": [],
+        "difference_count": 0,
+        "normalization_version": "tool-result-envelope-v2",
+        "normalization_sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136",
+        "normalized_fields": [
+          {
+            "path": "/call_id",
+            "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+            "left": "left-5",
+            "right": "right-5",
+            "changed": true
+          },
+          {
+            "path": "/actual_duration_ms",
+            "reason": "Measured wall duration varies with local scheduling.",
+            "left": 16,
+            "right": 0,
+            "changed": true
+          }
+        ],
+        "normalization_exclusions": [],
+        "reasons": [
+          "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+          "Measured wall duration varies with local scheduling."
+        ]
+      }
+    },
+    {
+      "tool": "siem",
+      "arguments": {
+        "view": "user_events",
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "host": "unobserved-host",
+        "user": "operator-b",
+        "process_id": "p-404",
+        "limit": 50
+      },
+      "comparison": {
+        "equal": true,
+        "differences": [],
+        "difference_count": 0,
+        "normalization_version": "tool-result-envelope-v2",
+        "normalization_sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136",
+        "normalized_fields": [
+          {
+            "path": "/call_id",
+            "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+            "left": "left-6",
+            "right": "right-6",
+            "changed": true
+          },
+          {
+            "path": "/actual_duration_ms",
+            "reason": "Measured wall duration varies with local scheduling.",
+            "left": 0,
+            "right": 0,
+            "changed": false
+          }
+        ],
+        "normalization_exclusions": [],
+        "reasons": [
+          "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+          "Measured wall duration varies with local scheduling."
+        ]
+      }
+    },
+    {
+      "tool": "siem",
+      "arguments": {
+        "view": "user_events",
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:14:00+00:00"
+        },
+        "host": "WS-088",
+        "user": "operator-b",
+        "process_id": "p-404",
+        "limit": 50
+      },
+      "comparison": {
+        "equal": true,
+        "differences": [],
+        "difference_count": 0,
+        "normalization_version": "tool-result-envelope-v2",
+        "normalization_sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136",
+        "normalized_fields": [
+          {
+            "path": "/call_id",
+            "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+            "left": "left-7",
+            "right": "right-7",
+            "changed": true
+          },
+          {
+            "path": "/actual_duration_ms",
+            "reason": "Measured wall duration varies with local scheduling.",
+            "left": 0,
+            "right": 0,
+            "changed": false
+          }
+        ],
+        "normalization_exclusions": [],
+        "reasons": [
+          "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+          "Measured wall duration varies with local scheduling."
+        ]
+      }
+    },
+    {
+      "tool": "siem",
+      "arguments": {
+        "view": "process_tree",
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "host": "WS-088",
+        "user": "operator-b",
+        "process_id": "p-404",
+        "limit": 50
+      },
+      "comparison": {
+        "equal": true,
+        "differences": [],
+        "difference_count": 0,
+        "normalization_version": "tool-result-envelope-v2",
+        "normalization_sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136",
+        "normalized_fields": [
+          {
+            "path": "/call_id",
+            "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+            "left": "left-8",
+            "right": "right-8",
+            "changed": true
+          },
+          {
+            "path": "/actual_duration_ms",
+            "reason": "Measured wall duration varies with local scheduling.",
+            "left": 0,
+            "right": 0,
+            "changed": false
+          }
+        ],
+        "normalization_exclusions": [],
+        "reasons": [
+          "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+          "Measured wall duration varies with local scheduling."
+        ]
+      }
+    },
+    {
+      "tool": "siem",
+      "arguments": {
+        "view": "process_tree",
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "host": "WS-088",
+        "user": "operator-b",
+        "process_id": "p-404",
+        "limit": 1
+      },
+      "comparison": {
+        "equal": true,
+        "differences": [],
+        "difference_count": 0,
+        "normalization_version": "tool-result-envelope-v2",
+        "normalization_sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136",
+        "normalized_fields": [
+          {
+            "path": "/call_id",
+            "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+            "left": "left-9",
+            "right": "right-9",
+            "changed": true
+          },
+          {
+            "path": "/actual_duration_ms",
+            "reason": "Measured wall duration varies with local scheduling.",
+            "left": 0,
+            "right": 0,
+            "changed": false
+          }
+        ],
+        "normalization_exclusions": [],
+        "reasons": [
+          "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+          "Measured wall duration varies with local scheduling."
+        ]
+      }
+    },
+    {
+      "tool": "siem",
+      "arguments": {
+        "view": "process_tree",
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "host": "unobserved-host",
+        "user": "operator-b",
+        "process_id": "p-404",
+        "limit": 50
+      },
+      "comparison": {
+        "equal": true,
+        "differences": [],
+        "difference_count": 0,
+        "normalization_version": "tool-result-envelope-v2",
+        "normalization_sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136",
+        "normalized_fields": [
+          {
+            "path": "/call_id",
+            "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+            "left": "left-10",
+            "right": "right-10",
+            "changed": true
+          },
+          {
+            "path": "/actual_duration_ms",
+            "reason": "Measured wall duration varies with local scheduling.",
+            "left": 0,
+            "right": 0,
+            "changed": false
+          }
+        ],
+        "normalization_exclusions": [],
+        "reasons": [
+          "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+          "Measured wall duration varies with local scheduling."
+        ]
+      }
+    },
+    {
+      "tool": "siem",
+      "arguments": {
+        "view": "process_tree",
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:14:00+00:00"
+        },
+        "host": "WS-088",
+        "user": "operator-b",
+        "process_id": "p-404",
+        "limit": 50
+      },
+      "comparison": {
+        "equal": true,
+        "differences": [],
+        "difference_count": 0,
+        "normalization_version": "tool-result-envelope-v2",
+        "normalization_sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136",
+        "normalized_fields": [
+          {
+            "path": "/call_id",
+            "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+            "left": "left-11",
+            "right": "right-11",
+            "changed": true
+          },
+          {
+            "path": "/actual_duration_ms",
+            "reason": "Measured wall duration varies with local scheduling.",
+            "left": 0,
+            "right": 0,
+            "changed": false
+          }
+        ],
+        "normalization_exclusions": [],
+        "reasons": [
+          "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+          "Measured wall duration varies with local scheduling."
+        ]
+      }
+    },
+    {
+      "tool": "siem",
+      "arguments": {
+        "view": "network_events",
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "host": "WS-088",
+        "user": "operator-b",
+        "process_id": "p-404",
+        "limit": 50
+      },
+      "comparison": {
+        "equal": true,
+        "differences": [],
+        "difference_count": 0,
+        "normalization_version": "tool-result-envelope-v2",
+        "normalization_sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136",
+        "normalized_fields": [
+          {
+            "path": "/call_id",
+            "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+            "left": "left-12",
+            "right": "right-12",
+            "changed": true
+          },
+          {
+            "path": "/actual_duration_ms",
+            "reason": "Measured wall duration varies with local scheduling.",
+            "left": 0,
+            "right": 0,
+            "changed": false
+          }
+        ],
+        "normalization_exclusions": [],
+        "reasons": [
+          "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+          "Measured wall duration varies with local scheduling."
+        ]
+      }
+    },
+    {
+      "tool": "siem",
+      "arguments": {
+        "view": "network_events",
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "host": "WS-088",
+        "user": "operator-b",
+        "process_id": "p-404",
+        "limit": 1
+      },
+      "comparison": {
+        "equal": true,
+        "differences": [],
+        "difference_count": 0,
+        "normalization_version": "tool-result-envelope-v2",
+        "normalization_sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136",
+        "normalized_fields": [
+          {
+            "path": "/call_id",
+            "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+            "left": "left-13",
+            "right": "right-13",
+            "changed": true
+          },
+          {
+            "path": "/actual_duration_ms",
+            "reason": "Measured wall duration varies with local scheduling.",
+            "left": 0,
+            "right": 0,
+            "changed": false
+          }
+        ],
+        "normalization_exclusions": [],
+        "reasons": [
+          "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+          "Measured wall duration varies with local scheduling."
+        ]
+      }
+    },
+    {
+      "tool": "siem",
+      "arguments": {
+        "view": "network_events",
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "host": "unobserved-host",
+        "user": "operator-b",
+        "process_id": "p-404",
+        "limit": 50
+      },
+      "comparison": {
+        "equal": true,
+        "differences": [],
+        "difference_count": 0,
+        "normalization_version": "tool-result-envelope-v2",
+        "normalization_sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136",
+        "normalized_fields": [
+          {
+            "path": "/call_id",
+            "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+            "left": "left-14",
+            "right": "right-14",
+            "changed": true
+          },
+          {
+            "path": "/actual_duration_ms",
+            "reason": "Measured wall duration varies with local scheduling.",
+            "left": 0,
+            "right": 0,
+            "changed": false
+          }
+        ],
+        "normalization_exclusions": [],
+        "reasons": [
+          "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+          "Measured wall duration varies with local scheduling."
+        ]
+      }
+    },
+    {
+      "tool": "siem",
+      "arguments": {
+        "view": "network_events",
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:14:00+00:00"
+        },
+        "host": "WS-088",
+        "user": "operator-b",
+        "process_id": "p-404",
+        "limit": 50
+      },
+      "comparison": {
+        "equal": true,
+        "differences": [],
+        "difference_count": 0,
+        "normalization_version": "tool-result-envelope-v2",
+        "normalization_sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136",
+        "normalized_fields": [
+          {
+            "path": "/call_id",
+            "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+            "left": "left-15",
+            "right": "right-15",
+            "changed": true
+          },
+          {
+            "path": "/actual_duration_ms",
+            "reason": "Measured wall duration varies with local scheduling.",
+            "left": 0,
+            "right": 0,
+            "changed": false
+          }
+        ],
+        "normalization_exclusions": [],
+        "reasons": [
+          "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+          "Measured wall duration varies with local scheduling."
+        ]
+      }
+    },
+    {
+      "tool": "asset",
+      "arguments": {
+        "host": "WS-088",
+        "as_of": "2026-09-01T02:20:00+00:00"
+      },
+      "comparison": {
+        "equal": true,
+        "differences": [],
+        "difference_count": 0,
+        "normalization_version": "tool-result-envelope-v2",
+        "normalization_sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136",
+        "normalized_fields": [
+          {
+            "path": "/call_id",
+            "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+            "left": "left-16",
+            "right": "right-16",
+            "changed": true
+          },
+          {
+            "path": "/actual_duration_ms",
+            "reason": "Measured wall duration varies with local scheduling.",
+            "left": 0,
+            "right": 0,
+            "changed": false
+          }
+        ],
+        "normalization_exclusions": [],
+        "reasons": [
+          "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+          "Measured wall duration varies with local scheduling."
+        ]
+      }
+    },
+    {
+      "tool": "asset",
+      "arguments": {
+        "host": "unobserved-host",
+        "as_of": "2026-09-01T02:20:00+00:00"
+      },
+      "comparison": {
+        "equal": true,
+        "differences": [],
+        "difference_count": 0,
+        "normalization_version": "tool-result-envelope-v2",
+        "normalization_sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136",
+        "normalized_fields": [
+          {
+            "path": "/call_id",
+            "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+            "left": "left-17",
+            "right": "right-17",
+            "changed": true
+          },
+          {
+            "path": "/actual_duration_ms",
+            "reason": "Measured wall duration varies with local scheduling.",
+            "left": 0,
+            "right": 0,
+            "changed": false
+          }
+        ],
+        "normalization_exclusions": [],
+        "reasons": [
+          "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+          "Measured wall duration varies with local scheduling."
+        ]
+      }
+    },
+    {
+      "tool": "history",
+      "arguments": {
+        "entity_type": "host",
+        "entity": "WS-088",
+        "window": {
+          "start": "2026-08-31T02:20:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "host": "WS-088",
+        "user": "operator-b",
+        "command_line": null,
+        "limit": 50
+      },
+      "comparison": {
+        "equal": true,
+        "differences": [],
+        "difference_count": 0,
+        "normalization_version": "tool-result-envelope-v2",
+        "normalization_sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136",
+        "normalized_fields": [
+          {
+            "path": "/call_id",
+            "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+            "left": "left-18",
+            "right": "right-18",
+            "changed": true
+          },
+          {
+            "path": "/actual_duration_ms",
+            "reason": "Measured wall duration varies with local scheduling.",
+            "left": 0,
+            "right": 0,
+            "changed": false
+          }
+        ],
+        "normalization_exclusions": [],
+        "reasons": [
+          "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+          "Measured wall duration varies with local scheduling."
+        ]
+      }
+    },
+    {
+      "tool": "history",
+      "arguments": {
+        "entity_type": "user",
+        "entity": "operator-b",
+        "window": {
+          "start": "2026-08-31T02:20:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "host": "WS-088",
+        "user": "operator-b",
+        "command_line": null,
+        "limit": 50
+      },
+      "comparison": {
+        "equal": true,
+        "differences": [],
+        "difference_count": 0,
+        "normalization_version": "tool-result-envelope-v2",
+        "normalization_sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136",
+        "normalized_fields": [
+          {
+            "path": "/call_id",
+            "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+            "left": "left-19",
+            "right": "right-19",
+            "changed": true
+          },
+          {
+            "path": "/actual_duration_ms",
+            "reason": "Measured wall duration varies with local scheduling.",
+            "left": 0,
+            "right": 0,
+            "changed": false
+          }
+        ],
+        "normalization_exclusions": [],
+        "reasons": [
+          "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+          "Measured wall duration varies with local scheduling."
+        ]
+      }
+    },
+    {
+      "tool": "history",
+      "arguments": {
+        "entity_type": "command",
+        "entity": "unobserved-command",
+        "window": {
+          "start": "2026-08-31T02:20:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "host": "WS-088",
+        "user": "operator-b",
+        "command_line": null,
+        "limit": 50
+      },
+      "comparison": {
+        "equal": true,
+        "differences": [],
+        "difference_count": 0,
+        "normalization_version": "tool-result-envelope-v2",
+        "normalization_sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136",
+        "normalized_fields": [
+          {
+            "path": "/call_id",
+            "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+            "left": "left-20",
+            "right": "right-20",
+            "changed": true
+          },
+          {
+            "path": "/actual_duration_ms",
+            "reason": "Measured wall duration varies with local scheduling.",
+            "left": 0,
+            "right": 0,
+            "changed": false
+          }
+        ],
+        "normalization_exclusions": [],
+        "reasons": [
+          "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+          "Measured wall duration varies with local scheduling."
+        ]
+      }
+    },
+    {
+      "tool": "threat_intel",
+      "arguments": {
+        "indicator_type": "ip",
+        "value": "192.0.2.1",
+        "as_of": "2026-09-01T02:20:00+00:00"
+      },
+      "comparison": {
+        "equal": true,
+        "differences": [],
+        "difference_count": 0,
+        "normalization_version": "tool-result-envelope-v2",
+        "normalization_sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136",
+        "normalized_fields": [
+          {
+            "path": "/call_id",
+            "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+            "left": "left-21",
+            "right": "right-21",
+            "changed": true
+          },
+          {
+            "path": "/actual_duration_ms",
+            "reason": "Measured wall duration varies with local scheduling.",
+            "left": 0,
+            "right": 0,
+            "changed": false
+          }
+        ],
+        "normalization_exclusions": [],
+        "reasons": [
+          "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+          "Measured wall duration varies with local scheduling."
+        ]
+      }
+    },
+    {
+      "tool": "threat_intel",
+      "arguments": {
+        "indicator_type": "domain",
+        "value": "example.test",
+        "as_of": "2026-09-01T02:20:00+00:00"
+      },
+      "comparison": {
+        "equal": true,
+        "differences": [],
+        "difference_count": 0,
+        "normalization_version": "tool-result-envelope-v2",
+        "normalization_sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136",
+        "normalized_fields": [
+          {
+            "path": "/call_id",
+            "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+            "left": "left-22",
+            "right": "right-22",
+            "changed": true
+          },
+          {
+            "path": "/actual_duration_ms",
+            "reason": "Measured wall duration varies with local scheduling.",
+            "left": 0,
+            "right": 0,
+            "changed": false
+          }
+        ],
+        "normalization_exclusions": [],
+        "reasons": [
+          "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+          "Measured wall duration varies with local scheduling."
+        ]
+      }
+    },
+    {
+      "tool": "threat_intel",
+      "arguments": {
+        "indicator_type": "hash",
+        "value": "h-unobserved",
+        "as_of": "2026-09-01T02:20:00+00:00"
+      },
+      "comparison": {
+        "equal": true,
+        "differences": [],
+        "difference_count": 0,
+        "normalization_version": "tool-result-envelope-v2",
+        "normalization_sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136",
+        "normalized_fields": [
+          {
+            "path": "/call_id",
+            "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+            "left": "left-23",
+            "right": "right-23",
+            "changed": true
+          },
+          {
+            "path": "/actual_duration_ms",
+            "reason": "Measured wall duration varies with local scheduling.",
+            "left": 0,
+            "right": 0,
+            "changed": false
+          }
+        ],
+        "normalization_exclusions": [],
+        "reasons": [
+          "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+          "Measured wall duration varies with local scheduling."
+        ]
+      }
+    },
+    {
+      "tool": "attack",
+      "arguments": {
+        "snapshot_version": "attack-local-v1",
+        "behavior_terms": [],
+        "technique_ids": [
+          "T1059.001"
+        ]
+      },
+      "comparison": {
+        "equal": true,
+        "differences": [],
+        "difference_count": 0,
+        "normalization_version": "tool-result-envelope-v2",
+        "normalization_sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136",
+        "normalized_fields": [
+          {
+            "path": "/call_id",
+            "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+            "left": "left-24",
+            "right": "right-24",
+            "changed": true
+          },
+          {
+            "path": "/actual_duration_ms",
+            "reason": "Measured wall duration varies with local scheduling.",
+            "left": 0,
+            "right": 0,
+            "changed": false
+          }
+        ],
+        "normalization_exclusions": [],
+        "reasons": [
+          "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+          "Measured wall duration varies with local scheduling."
+        ]
+      }
+    },
+    {
+      "tool": "attack",
+      "arguments": {
+        "snapshot_version": "attack-local-v1",
+        "behavior_terms": [
+          "PowerShell"
+        ],
+        "technique_ids": []
+      },
+      "comparison": {
+        "equal": true,
+        "differences": [],
+        "difference_count": 0,
+        "normalization_version": "tool-result-envelope-v2",
+        "normalization_sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136",
+        "normalized_fields": [
+          {
+            "path": "/call_id",
+            "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+            "left": "left-25",
+            "right": "right-25",
+            "changed": true
+          },
+          {
+            "path": "/actual_duration_ms",
+            "reason": "Measured wall duration varies with local scheduling.",
+            "left": 0,
+            "right": 0,
+            "changed": false
+          }
+        ],
+        "normalization_exclusions": [],
+        "reasons": [
+          "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+          "Measured wall duration varies with local scheduling."
+        ]
+      }
+    },
+    {
+      "tool": "attack",
+      "arguments": {
+        "snapshot_version": "attack-local-v1",
+        "behavior_terms": [],
+        "technique_ids": [
+          "T0000"
+        ]
+      },
+      "comparison": {
+        "equal": true,
+        "differences": [],
+        "difference_count": 0,
+        "normalization_version": "tool-result-envelope-v2",
+        "normalization_sha256": "81d983ec1efd254c4098ec75321b80d7d4f4a71129321e123102cf0afb68c136",
+        "normalized_fields": [
+          {
+            "path": "/call_id",
+            "reason": "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+            "left": "left-26",
+            "right": "right-26",
+            "changed": true
+          },
+          {
+            "path": "/actual_duration_ms",
+            "reason": "Measured wall duration varies with local scheduling.",
+            "left": 0,
+            "right": 0,
+            "changed": false
+          }
+        ],
+        "normalization_exclusions": [],
+        "reasons": [
+          "Opaque invocation identity, only when neither identifier is referenced in business fields.",
+          "Measured wall duration varies with local scheduling."
+        ]
+      }
+    }
+  ],
+  "limits": "Finite representative queries; actual model-request equivalence deferred to M5."
+}

@@ -1,0 +1,81 @@
+{
+  "scope": "generic M3 tools and early M4 budget only; not complete M2/M3/M4 acceptance",
+  "base_commit": "63fa8089845a05ad7e45d785b0adf081fa2dd52e",
+  "tools": {
+    "reviewer": "runtime_budget (did not author tool modules)",
+    "initial_report": "D:/project/Agent/m3-tools-independent-audit/review.md",
+    "initial_result": {
+      "official_passed": 144,
+      "probe_failed": 6,
+      "probe_passed": 11
+    },
+    "retest_report": "D:/project/Agent/m3-tools-independent-retest/review.md",
+    "retest_result": {
+      "original_probe_count": 17,
+      "server_tests": 32,
+      "all_tools_and_probes_passed": 171
+    },
+    "resolved": [
+      "T1 scope completeness",
+      "T2 lock waiting deadline"
+    ],
+    "reviewed_server_sha256": "19af72dee7792475888f6b187d1b08b85accabb568f3d0e05c86ebf143064034"
+  },
+  "budget": {
+    "reviewer": "m3_signatures (did not author budget)",
+    "initial_report": "D:/project/Agent/m3-budget-independent-audit/review.md",
+    "initial_result": {
+      "official_passed": 16,
+      "probe_failed": 6,
+      "probe_passed": 5
+    },
+    "retest_report": "D:/project/Agent/m3-budget-independent-audit/retest/review.md",
+    "retest_result": {
+      "official_passed": 33,
+      "old_probe_passed": 9,
+      "old_assertion_failed": 2,
+      "new_semantic_checks_passed": 4
+    },
+    "old_assertion_explanation": "old assertions demand successful accumulation; updated code instead rejects unrepresentable overflow atomically; new independent checks verify rejection, unchanged ledger and recovery",
+    "resolved": [
+      "B1 finite accumulation",
+      "B2 full Usage validation",
+      "B3 real ToolResult validation"
+    ],
+    "reviewed_budget_sha256": "65ad475884e60c1419754832fd0e2400db8c1ff2dee61218113a1297f4965c3e"
+  },
+  "archives": "independent frozen copies, tests and failure logs retained at report directories; not overwritten",
+  "documentation": {
+    "reviewer": "m3_selection (scope documentation/workflow only)",
+    "report": "m3-foundations-evidence/docs-review.md",
+    "source_copy": "D:/project/Agent/m3-docs-independent-audit",
+    "conclusion": "passed; five final reviewed documents frozen; CI not yet executed",
+    "report_sha256": "72053cac954bc0da13abef97bced146879377d769cd340beaa244301f4f3eb62"
+  },
+  "archived_reports": [
+    {
+      "path": "tools-initial-review.md",
+      "sha256": "452e428f9c40f47fdc64506e023123ea4e91c50ea7a13c8fc43f4ac7a0cd4468"
+    },
+    {
+      "path": "tools-retest-review.md",
+      "sha256": "7a7738e7d8d20949d5b10772130a08bdb9bc5a857a83d0e192641e41602569ac"
+    },
+    {
+      "path": "budget-initial-review.md",
+      "sha256": "74e4dc0c9d14c71a4444c0b19cae8e55529dcdb1e7d15cb501ee4ec945747683"
+    },
+    {
+      "path": "budget-retest-review.md",
+      "sha256": "af9045072cc3c08a33e36689e79febbbe7e2842af8602013882ce296582ac719"
+    },
+    {
+      "path": "docs-review.md",
+      "sha256": "72053cac954bc0da13abef97bced146879377d769cd340beaa244301f4f3eb62"
+    },
+    {
+      "path": "docs-review-snapshot.json",
+      "sha256": "44041fb56187c49b1d2878d53ed05c13ce6e3e78aa26b5c6078ba2d35830965b"
+    }
+  ]
+}
