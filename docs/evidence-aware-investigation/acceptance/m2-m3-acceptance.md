@@ -88,6 +88,19 @@ source-index 与独立源码快照仍对应实际被测实现，不将后续文�
 
 ## 后续依赖与实验结论
 
+### CI 后续发现与修正
+
+验收记录提交 `5ab13f9` 的 push run `37210072763` 有 1 失败/446 通过；
+同 SHA 的 PR run `37210076164` 两 job 均通过。失败是原通用服务测试
+`test_declared_latency_timeout_is_counted_without_evidence` 假设前处理耗时为 0：
+CI 实际耗时 16ms，服务正确把 50ms 预算扣成 34ms 后端延迟，原断言却要求 50ms。
+
+补丁只修改该测试：注入可控时钟，分别核对 0/16ms 前处理、50/34ms 后端
+延迟、费用和重试；真实等锁 deadline 测试保留，服务运行时代码没有改动。
+本地完整 **448 passed**，独立复验和新提交 CI 在合并前继续核对；历史 447
+及源码提交 `751c77d` 的成功记录保留，不能用后来结果改写首次 CI 失败。
+原 CI 日志、测试结果、源码差量见 [ci-clock-fix](m2-m3-evidence/ci-clock-fix/)。
+
 下一步 M4：公共 Evidence Registry → Dispatcher → Trace → 模型适配及用量
 对账 → 集成复核。M5 辅助评测方案审查可以并行交付，不阻塞当前开发。
 

@@ -242,12 +242,22 @@ async def test_permanent_unavailable_is_cached_but_not_turned_into_absence():
 
 
 @pytest.mark.asyncio
-async def test_declared_latency_timeout_is_counted_without_evidence():
+@pytest.mark.parametrize("overhead_ms", [0, 16])
+async def test_declared_latency_timeout_is_counted_without_evidence(overhead_ms):
+    # Admission/lock time consumes the same deadline. A real CI runner can
+    # spend 16 ms here; it is incorrect to always expect all 50 ms for backend
+    # latency. Use a logical clock to check both cases without scheduler noise.
+    clock_reads = 0
+    def clock():
+        nonlocal clock_reads
+        clock_reads += 1
+        return 0.0 if clock_reads == 1 else overhead_ms / 1000
     query = process_query()
-    server = MockToolServer(fixture("siem", query, process_payload()), simulate_latency=False)
+    server = MockToolServer(fixture("siem", query, process_payload()), simulate_latency=False, clock=clock)
     result = await server.siem(query, context(timeout=50))
     assert result.status == "timeout" and not result.records and result.retryable
-    assert result.simulated_latency_ms == 50 and result.simulated_cost_units == 2
+    assert result.simulated_latency_ms == 50 - overhead_ms and result.simulated_cost_units == 2
+    assert result.actual_duration_ms == overhead_ms
     assert server.stats().backend_calls == 1
     retry = await server.siem(query, context("retry"))
     assert retry.status == "ok" and server.stats().backend_calls == 2
