@@ -1,6 +1,6 @@
 # 最小案例设计：5 个已知真值、不同可观察性的调查
 
-状态：设计案例，尚未实现 JSON fixtures 或运行模型。所有组织、host、账号、hash 均为合成；示例 IP 使用文档网段，其 TI 标签只在 Mock 世界内有效。
+状态：五案 JSON fixtures、加载校验与工具回放已实现，尚未运行模型；技术门槛见 [M2/M3 验收](acceptance/m2-m3-acceptance.md)。所有组织、host、账号、hash 均为合成；示例 IP 使用文档网段，其 TI 标签只在 Mock 世界内有效。
 
 ## 共同约定
 

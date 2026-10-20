@@ -1,0 +1,350 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/OracleCase",
+  "$defs": {
+    "JsonValue": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/JsonValue"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          }
+        }
+      ]
+    },
+    "OracleCase": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "case_id": {
+          "type": "string"
+        },
+        "family_id": {
+          "type": "string"
+        },
+        "split": {
+          "enum": [
+            "dev",
+            "test"
+          ]
+        },
+        "ground_truth": {
+          "enum": [
+            "malicious",
+            "benign"
+          ]
+        },
+        "complete_world_evidence": {
+          "type": "object",
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/JsonValue"
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": {
+                        "$ref": "#/$defs/JsonValue"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/JsonValue"
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": {
+                        "$ref": "#/$defs/JsonValue"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "observable_fact_keys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "critical_fact_keys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "distractor_fact_keys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sufficient_sets": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "acceptable_verdicts": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "TP",
+              "FP",
+              "Suspicious",
+              "Abstain"
+            ]
+          }
+        },
+        "resolvable_with_full_observable_evidence": {
+          "type": "boolean"
+        },
+        "expected_actions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ActionExpectation"
+          }
+        },
+        "rubric_version": {
+          "type": "string"
+        },
+        "annotation_rationale": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "case_id",
+        "family_id",
+        "split",
+        "ground_truth",
+        "complete_world_evidence",
+        "observable_fact_keys",
+        "critical_fact_keys",
+        "distractor_fact_keys",
+        "sufficient_sets",
+        "acceptable_verdicts",
+        "resolvable_with_full_observable_evidence",
+        "expected_actions",
+        "rubric_version",
+        "annotation_rationale"
+      ]
+    },
+    "ActionExpectation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "when_observed_fact_keys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "when_missing_fact_keys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "acceptable_tools": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "siem",
+              "threat_intel",
+              "asset",
+              "history",
+              "attack"
+            ]
+          }
+        },
+        "argument_constraints": {
+          "type": "object",
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/JsonValue"
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": {
+                        "$ref": "#/$defs/JsonValue"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/JsonValue"
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": {
+                        "$ref": "#/$defs/JsonValue"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "evidence_goal": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "when_observed_fact_keys",
+        "when_missing_fact_keys",
+        "acceptable_tools",
+        "argument_constraints",
+        "evidence_goal"
+      ]
+    }
+  }
+}

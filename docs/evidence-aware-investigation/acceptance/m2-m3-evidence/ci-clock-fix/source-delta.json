@@ -1,0 +1,20 @@
+{
+  "base_commit": "5ab13f9b72c8f53704694760a5f13bc8c9a487d5",
+  "changed_source_files": [
+    {
+      "path": "investigation/tests/test_tool_server.py",
+      "workspace_sha256": "46e5aa9208dc692f840dfbbdd8fabcc890a2fd472f311cb03b458b435f7df677",
+      "base_blob_sha256": "55be88814fe1a0f50142ddb4e17e164cb717b4a589c8766c9daac12c254ba7b5",
+      "git_blob_sha256": "46e5aa9208dc692f840dfbbdd8fabcc890a2fd472f311cb03b458b435f7df677",
+      "git_blob_oid": "903a0a31b70b6c4cbfb97013456ebf09ffeb64c0",
+      "difference": "none"
+    }
+  ],
+  "runtime_changed": false,
+  "scope": "One test gains controlled 0/16ms admission overhead cases; real timeout/lock tests retained",
+  "failed_run": 37210072763,
+  "same_head_successful_run": 37210076164,
+  "local_tests": 448,
+  "independent_checks": 36,
+  "independent_conclusion": "passed; runtime unchanged"
+}

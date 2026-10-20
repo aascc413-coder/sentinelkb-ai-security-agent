@@ -1,0 +1,148 @@
+.......................................................FF..FFFFFFF...... [ 93%]
+.....                                                                    [100%]
+================================== FAILURES ===================================
+_ test_all_oracle_specific_metadata_is_rejected_in_public_raw[expected_actions] _
+
+hidden_key = 'expected_actions'
+
+    @pytest.mark.parametrize("hidden_key", ["ground_truth", "oracle_canary", "sufficient_sets",
+        "expected_actions", "resolvable_with_full_observable_evidence"])
+    def test_all_oracle_specific_metadata_is_rejected_in_public_raw(hidden_key):
+        public = load_public(DATA / "public/c1.json", remap_ids=False)
+        raw = {**public.alert.raw, "extra": {hidden_key: ["oracle hint"]}}
+        reference = replace(public.alert.raw_reference, content_sha256=content_hash(raw))
+>       with pytest.raises(ProtocolViolation):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ProtocolViolation
+
+test_review_probes.py:61: Failed
+_ test_all_oracle_specific_metadata_is_rejected_in_public_raw[resolvable_with_full_observable_evidence] _
+
+hidden_key = 'resolvable_with_full_observable_evidence'
+
+    @pytest.mark.parametrize("hidden_key", ["ground_truth", "oracle_canary", "sufficient_sets",
+        "expected_actions", "resolvable_with_full_observable_evidence"])
+    def test_all_oracle_specific_metadata_is_rejected_in_public_raw(hidden_key):
+        public = load_public(DATA / "public/c1.json", remap_ids=False)
+        raw = {**public.alert.raw, "extra": {hidden_key: ["oracle hint"]}}
+        reference = replace(public.alert.raw_reference, content_sha256=content_hash(raw))
+>       with pytest.raises(ProtocolViolation):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ProtocolViolation
+
+test_review_probes.py:61: Failed
+_ test_all_oracle_specific_metadata_is_rejected_in_tool_records[expected_actions] _
+
+hidden_key = 'expected_actions'
+
+    @pytest.mark.parametrize("hidden_key", ["ground_truth", "oracle_canary", "expected_actions",
+        "resolvable_with_full_observable_evidence"])
+    def test_all_oracle_specific_metadata_is_rejected_in_tool_records(hidden_key):
+        env = load_environment(DATA / "environment/world-1.json", remap_ids=False)
+        rec = env.records_by_tool["siem"][0]
+        payload = {**rec.payload, "extra": {hidden_key: "oracle hint"}}
+        rec = replace(rec, payload=payload, content_sha256=content_hash(payload))
+        records = {**env.records_by_tool, "siem": (rec, *env.records_by_tool["siem"][1:])}
+>       with pytest.raises(ProtocolViolation):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ProtocolViolation
+
+test_review_probes.py:73: Failed
+_ test_all_oracle_specific_metadata_is_rejected_in_tool_records[resolvable_with_full_observable_evidence] _
+
+hidden_key = 'resolvable_with_full_observable_evidence'
+
+    @pytest.mark.parametrize("hidden_key", ["ground_truth", "oracle_canary", "expected_actions",
+        "resolvable_with_full_observable_evidence"])
+    def test_all_oracle_specific_metadata_is_rejected_in_tool_records(hidden_key):
+        env = load_environment(DATA / "environment/world-1.json", remap_ids=False)
+        rec = env.records_by_tool["siem"][0]
+        payload = {**rec.payload, "extra": {hidden_key: "oracle hint"}}
+        rec = replace(rec, payload=payload, content_sha256=content_hash(payload))
+        records = {**env.records_by_tool, "siem": (rec, *env.records_by_tool["siem"][1:])}
+>       with pytest.raises(ProtocolViolation):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ProtocolViolation
+
+test_review_probes.py:73: Failed
+_ test_oracle_expected_action_constraints_are_valid_for_acceptable_tools[constraints0] _
+
+constraints = {'host': True}
+
+    @pytest.mark.parametrize("constraints", [{"host": True}, {"host": 17}, {"unknown_filter": "x"},
+        {"as_of": "not-time"}, {"limit": False}])
+    def test_oracle_expected_action_constraints_are_valid_for_acceptable_tools(constraints):
+        oracle = load_oracle(DATA / "oracle/c1.json")
+        action = ActionExpectation(("E0",), ("E4",), ("asset",), constraints, "Check authorization")
+>       with pytest.raises(ProtocolViolation):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ProtocolViolation
+
+test_review_probes.py:82: Failed
+_ test_oracle_expected_action_constraints_are_valid_for_acceptable_tools[constraints1] _
+
+constraints = {'host': 17}
+
+    @pytest.mark.parametrize("constraints", [{"host": True}, {"host": 17}, {"unknown_filter": "x"},
+        {"as_of": "not-time"}, {"limit": False}])
+    def test_oracle_expected_action_constraints_are_valid_for_acceptable_tools(constraints):
+        oracle = load_oracle(DATA / "oracle/c1.json")
+        action = ActionExpectation(("E0",), ("E4",), ("asset",), constraints, "Check authorization")
+>       with pytest.raises(ProtocolViolation):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ProtocolViolation
+
+test_review_probes.py:82: Failed
+_ test_oracle_expected_action_constraints_are_valid_for_acceptable_tools[constraints2] _
+
+constraints = {'unknown_filter': 'x'}
+
+    @pytest.mark.parametrize("constraints", [{"host": True}, {"host": 17}, {"unknown_filter": "x"},
+        {"as_of": "not-time"}, {"limit": False}])
+    def test_oracle_expected_action_constraints_are_valid_for_acceptable_tools(constraints):
+        oracle = load_oracle(DATA / "oracle/c1.json")
+        action = ActionExpectation(("E0",), ("E4",), ("asset",), constraints, "Check authorization")
+>       with pytest.raises(ProtocolViolation):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ProtocolViolation
+
+test_review_probes.py:82: Failed
+_ test_oracle_expected_action_constraints_are_valid_for_acceptable_tools[constraints3] _
+
+constraints = {'as_of': 'not-time'}
+
+    @pytest.mark.parametrize("constraints", [{"host": True}, {"host": 17}, {"unknown_filter": "x"},
+        {"as_of": "not-time"}, {"limit": False}])
+    def test_oracle_expected_action_constraints_are_valid_for_acceptable_tools(constraints):
+        oracle = load_oracle(DATA / "oracle/c1.json")
+        action = ActionExpectation(("E0",), ("E4",), ("asset",), constraints, "Check authorization")
+>       with pytest.raises(ProtocolViolation):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ProtocolViolation
+
+test_review_probes.py:82: Failed
+_ test_oracle_expected_action_constraints_are_valid_for_acceptable_tools[constraints4] _
+
+constraints = {'limit': False}
+
+    @pytest.mark.parametrize("constraints", [{"host": True}, {"host": 17}, {"unknown_filter": "x"},
+        {"as_of": "not-time"}, {"limit": False}])
+    def test_oracle_expected_action_constraints_are_valid_for_acceptable_tools(constraints):
+        oracle = load_oracle(DATA / "oracle/c1.json")
+        action = ActionExpectation(("E0",), ("E4",), ("asset",), constraints, "Check authorization")
+>       with pytest.raises(ProtocolViolation):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ProtocolViolation
+
+test_review_probes.py:82: Failed
+=========================== short test summary info ===========================
+FAILED investigation::test_all_oracle_specific_metadata_is_rejected_in_public_raw[expected_actions]
+FAILED investigation::test_all_oracle_specific_metadata_is_rejected_in_public_raw[resolvable_with_full_observable_evidence]
+FAILED investigation::test_all_oracle_specific_metadata_is_rejected_in_tool_records[expected_actions]
+FAILED investigation::test_all_oracle_specific_metadata_is_rejected_in_tool_records[resolvable_with_full_observable_evidence]
+FAILED investigation::test_oracle_expected_action_constraints_are_valid_for_acceptable_tools[constraints0]
+FAILED investigation::test_oracle_expected_action_constraints_are_valid_for_acceptable_tools[constraints1]
+FAILED investigation::test_oracle_expected_action_constraints_are_valid_for_acceptable_tools[constraints2]
+FAILED investigation::test_oracle_expected_action_constraints_are_valid_for_acceptable_tools[constraints3]
+FAILED investigation::test_oracle_expected_action_constraints_are_valid_for_acceptable_tools[constraints4]
+9 failed, 68 passed in 1.19s

@@ -1,0 +1,311 @@
+{
+  "source": "D:\\project\\Agent\\m3-independent-foundations\\investigation",
+  "copy": "D:\\project\\Agent\\m2-rubric-diff-independent-review\\snapshot\\investigation",
+  "source_git_head": "8f01f1fa22d7c0242793878a294176de425a283a",
+  "files": [
+    {
+      "path": ".gitignore",
+      "sha256": "bd213ef79e930cf956bdabdce50a8615b4f37a79f006c05115b9da3cf4635941"
+    },
+    {
+      "path": "conftest.py",
+      "sha256": "e92f9bf3ff365cf74ff790b502095c2f7487e5fc884b15f9cdc2ea3db4e9f301"
+    },
+    {
+      "path": "datasets/environment/shared-pair.json",
+      "sha256": "89e135113cc32e96631b4b75ac271aa20a40de9dd909bbf0f266989065e55fd9"
+    },
+    {
+      "path": "datasets/environment/world-1.json",
+      "sha256": "ea74df830c6c9ac24f083b9c1199123cb6b3c97c4a7bcd736c95aa54c42979c9"
+    },
+    {
+      "path": "datasets/environment/world-2.json",
+      "sha256": "89bcca2bf1b7db2d30523fe161aca95ded127885c27b4b0e6304de182f52acd7"
+    },
+    {
+      "path": "datasets/environment/world-3.json",
+      "sha256": "fdd0ec4c5c8d87bcbd6b198335608bfc078b7df2a16124c31ee2678eae816716"
+    },
+    {
+      "path": "datasets/manifest.json",
+      "sha256": "d83b5aa1001996de48deacbc8ae49907e3bd61ff1dbe628825dc0144e795f392"
+    },
+    {
+      "path": "datasets/oracle/c1.json",
+      "sha256": "942c1d6deb764b4ac4a4045fad65d2cb2857d7a2c3f8815d02268538d584484e"
+    },
+    {
+      "path": "datasets/oracle/c2.json",
+      "sha256": "90fdf10826f65be61fd81f41e3fab38ac5228f05603e04ee97658b512435e854"
+    },
+    {
+      "path": "datasets/oracle/c3.json",
+      "sha256": "a189c2e437d0fe7eedf8a0c6d05b296f33bed69dcdde3d668607ace30a057e5c"
+    },
+    {
+      "path": "datasets/oracle/c4.json",
+      "sha256": "fc3dda2993c791b8ea0180ea6d8a508ce5ced96692a3706db76106c0149e019c"
+    },
+    {
+      "path": "datasets/oracle/c5.json",
+      "sha256": "5f70d5f9aaecca371dfaa8d19164398a6c98370be156646a08afb01ebca94bac"
+    },
+    {
+      "path": "datasets/public/c1.json",
+      "sha256": "6905f08f83316957ab51cb5c885137d81592c84d1d87540b55326a15265d1715"
+    },
+    {
+      "path": "datasets/public/c2.json",
+      "sha256": "f01d95ed3432335651bceefb91b1024a0bd58267dd7826db3d71c6e17b97a0c6"
+    },
+    {
+      "path": "datasets/public/c3.json",
+      "sha256": "f903ed07fa5d63b04de70cbe430fd491e8a083edf64550ffe23195e4b61103f7"
+    },
+    {
+      "path": "datasets/public/c4.json",
+      "sha256": "d1f72b1e8d61e4891a2179e98bee3b78967a01435042009554472da7fd57432c"
+    },
+    {
+      "path": "datasets/public/c5.json",
+      "sha256": "d1f72b1e8d61e4891a2179e98bee3b78967a01435042009554472da7fd57432c"
+    },
+    {
+      "path": "evaluation/__init__.py",
+      "sha256": "614228efc5d03d890f35178a4e79a53b84994bf1eee480f3b680cb202cc37a37"
+    },
+    {
+      "path": "evaluation/contracts.py",
+      "sha256": "d317aab7e63bcf26076a72dbbab580f955f199bee17d0f987478c548d0467221"
+    },
+    {
+      "path": "evaluation/oracle_loader.py",
+      "sha256": "cd9e925fcc6a1eaac5074d3eacc46126b2d357317a232aa058663e7c01c12a75"
+    },
+    {
+      "path": "evaluation/schemas/oracle_case.schema.json",
+      "sha256": "53a317bec9233ca7fd8b7909eb47b7fa3ae5ba5f6a8dc5c4fe1c67a534291a40"
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "9ae0d325d475fd3825f9101fed7d0b857d46a117fd94fd03c4f956dd210b86a9"
+    },
+    {
+      "path": "README.md",
+      "sha256": "7becd08317b3bd937c42e733579c03e1f2d7699e46458158fe48bdeed1baab6a"
+    },
+    {
+      "path": "requirements-lock.txt",
+      "sha256": "27e410da3abb49665ecd9e96d0f543d6fd421c436329b031cdc85d5b88bd3204"
+    },
+    {
+      "path": "rubrics/powershell-v1.json",
+      "sha256": "c40ec12911ab27a79c17d28ab0bc38bb4eeb136b009b41737632a6c1ddd75248"
+    },
+    {
+      "path": "rubrics/README.md",
+      "sha256": "80c29b91bcf36e9bf39dfb42d0043e0c1b99430b7686893ee1c25ba5ae120c6c"
+    },
+    {
+      "path": "src/evidence_investigation/__init__.py",
+      "sha256": "a06d6bed3e53799c0f2040105ae23e25d8c1dede599a622aab12b6da83f87528"
+    },
+    {
+      "path": "src/evidence_investigation/runtime/__init__.py",
+      "sha256": "aa62f2c64a306fd6d67527bdb3706a442facf1083622eb20ade11a1bb030470a"
+    },
+    {
+      "path": "src/evidence_investigation/runtime/budget.py",
+      "sha256": "65ad475884e60c1419754832fd0e2400db8c1ff2dee61218113a1297f4965c3e"
+    },
+    {
+      "path": "src/evidence_investigation/state/__init__.py",
+      "sha256": "c329122ac19d862edde36b2079c822970d30f3ae01db572bd88d1934ad608f58"
+    },
+    {
+      "path": "src/evidence_investigation/state/adapters.py",
+      "sha256": "26cbf931bba2fdb68d2a92cf1cf62e97fd9ff44fd04ac0649b141373ee68cf55"
+    },
+    {
+      "path": "src/evidence_investigation/state/codec.py",
+      "sha256": "650704eba39c8748bf8722d4ab434168f584645bb7b7ee3ffb3581c753b1041b"
+    },
+    {
+      "path": "src/evidence_investigation/state/content.py",
+      "sha256": "09334e7cddf30b434cc52166c4b50c2902090139b6bea2c230de5b78c8ec3eed"
+    },
+    {
+      "path": "src/evidence_investigation/state/contracts.py",
+      "sha256": "062fc6647467e7f533242b6cb347f6d5f6b58813796320e002b46486a7152a19"
+    },
+    {
+      "path": "src/evidence_investigation/state/errors.py",
+      "sha256": "99641d797688cc624956b6cb2fdbc81d97a7a9d94659ef9fe2c2c3f5597c050c"
+    },
+    {
+      "path": "src/evidence_investigation/state/normalization.py",
+      "sha256": "1f033af2d912bc0f22127bffe9fdcd84df3ba995cbea8d161888a87740137c52"
+    },
+    {
+      "path": "src/evidence_investigation/state/public_loader.py",
+      "sha256": "0afd6351908e1887ef71d1029f50505c2dbc338796946679885f7aff47baf3a6"
+    },
+    {
+      "path": "src/evidence_investigation/state/rubric.py",
+      "sha256": "98ef4196e4dc9307b66d8b0e55bbd79642ab71bfb27f5f144ab58a442a733ead"
+    },
+    {
+      "path": "src/evidence_investigation/state/schema_loader.py",
+      "sha256": "ac44d6286378a8ee6a62ff0e70c58361ea1942ecbc212ea318d06972e8d14bb1"
+    },
+    {
+      "path": "src/evidence_investigation/state/schemas/action.schema.json",
+      "sha256": "d7604c3ca2c7754d5506095efef80120fb34072c16c3d918d8f776cd2389934d"
+    },
+    {
+      "path": "src/evidence_investigation/state/schemas/common.schema.json",
+      "sha256": "12c2743088c283242f769241c0df56f1b00d4b83722b55492a811cdd075a0076"
+    },
+    {
+      "path": "src/evidence_investigation/state/schemas/final_assessment.schema.json",
+      "sha256": "bdac2340060745dd6116b79dbb5bcbf8aa6d27b38f0c1eb26d2d8abd98e936b9"
+    },
+    {
+      "path": "src/evidence_investigation/state/schemas/hypothesis_proposal.schema.json",
+      "sha256": "8c30bd46be14c539597cede9be6a709e0a5401ba3cdd44791a1c7c97d3d886fe"
+    },
+    {
+      "path": "src/evidence_investigation/state/schemas/plan.schema.json",
+      "sha256": "144ba7a4b5114077419615894a0eb1265928b0331425d1418cc656a60b914308"
+    },
+    {
+      "path": "src/evidence_investigation/state/schemas/public_case.schema.json",
+      "sha256": "9279617b76ab41b90531b7c618fe747254926267d6bd16113ac693aa15abf7bf"
+    },
+    {
+      "path": "src/evidence_investigation/state/schemas/sufficiency_explanation.schema.json",
+      "sha256": "23546a10f725809368d8937e77050a370e705e798500af5392d3247ea93b92a1"
+    },
+    {
+      "path": "src/evidence_investigation/state/validation.py",
+      "sha256": "8e2444349d3d830ad7aa42487036209a1b39547345c3d79a11eb575cf2a1f263"
+    },
+    {
+      "path": "src/evidence_investigation/tools/__init__.py",
+      "sha256": "2288e587478d589fab08ed94939fe3b985fe5abef9d3ae3c59f4b39f4c7a4944"
+    },
+    {
+      "path": "src/evidence_investigation/tools/contracts.py",
+      "sha256": "1f24adbae51dad8ff784ed40f21f34aeb0a472bfb72bcd523666981ee53d8b71"
+    },
+    {
+      "path": "src/evidence_investigation/tools/diff_report.py",
+      "sha256": "99f72f64d96c051dc76fa53ee6e60c36098da74b018df88aafa53ead1ce9d89c"
+    },
+    {
+      "path": "src/evidence_investigation/tools/fixture_loader.py",
+      "sha256": "aa434eb357c171fa8dba975ec98e4a0ab7bd078eb58c6e036daff26f688a2038"
+    },
+    {
+      "path": "src/evidence_investigation/tools/schemas/environment_fixture.schema.json",
+      "sha256": "687dbd10e0a9b6920bb817aac7a5e479a47fb24036bdbbdcf022dbaf59b5523e"
+    },
+    {
+      "path": "src/evidence_investigation/tools/selection.py",
+      "sha256": "016651842cc44ac8fd3b933180aed69d2732b41502f5b5a57766d343ad62b8e1"
+    },
+    {
+      "path": "src/evidence_investigation/tools/server.py",
+      "sha256": "19af72dee7792475888f6b187d1b08b85accabb568f3d0e05c86ebf143064034"
+    },
+    {
+      "path": "src/evidence_investigation/tools/signatures.py",
+      "sha256": "059e0c1acd560e429b91b156cbf5ba1ddbfa41a434a42a25d9ddd1d2b3d64332"
+    },
+    {
+      "path": "src/evidence_investigation.egg-info/dependency_links.txt",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "src/evidence_investigation.egg-info/PKG-INFO",
+      "sha256": "d2e22c2dbf847b2450a77aec26b584669a4f8af33b35f412962e398f4291ef0d"
+    },
+    {
+      "path": "src/evidence_investigation.egg-info/requires.txt",
+      "sha256": "ab849ba2369a4d2b76a4143e143f78e3019629c061eb87bf666defbb14c8c42d"
+    },
+    {
+      "path": "src/evidence_investigation.egg-info/SOURCES.txt",
+      "sha256": "ccf7806e5c4d2d32459ee5478a34c2a59ea6bbe9ba9e2cac2c5fb36f91ef6c50"
+    },
+    {
+      "path": "src/evidence_investigation.egg-info/top_level.txt",
+      "sha256": "c828c65458e484a39371da91587878357bd4bac6255644d3a7c2bea99ed36f5e"
+    },
+    {
+      "path": "tests/test_adapters.py",
+      "sha256": "43b6d79a5379dbe83ac03f308da4dce1c98556727cfe029d62c63182b6904a79"
+    },
+    {
+      "path": "tests/test_budget.py",
+      "sha256": "51383c837373db22171752c5bb1e4a46d3397f10304d026b2886bca25e9e56c5"
+    },
+    {
+      "path": "tests/test_codec.py",
+      "sha256": "24cdcd69574ec1582fe5b795257cc92ee22f68b9c5ac84573715c9f2efdf3b6d"
+    },
+    {
+      "path": "tests/test_dataset_loaders.py",
+      "sha256": "f7f6c982d82c7c3b7d879d1db862f64763c355d5548fc6ff1550f94b33ccf1ca"
+    },
+    {
+      "path": "tests/test_foundations_integration.py",
+      "sha256": "aa0906cad5037a2fbfe94ece5b451f659768c1e902c5c35ff5e85455d72b7014"
+    },
+    {
+      "path": "tests/test_import_boundaries.py",
+      "sha256": "a34ec489e5d7c5e50c968c23044016b2ee5335f251c4e92892c8e5812fb0c840"
+    },
+    {
+      "path": "tests/test_m1_review_regressions.py",
+      "sha256": "d5928b67ed0eac3895561fae2dff17789ecd00ddc701f1365bfa4681994895ba"
+    },
+    {
+      "path": "tests/test_model_schemas.py",
+      "sha256": "2eb1edcc874bdfca61519098200e9e867d07270712ed25699c8bdac4f95b6477"
+    },
+    {
+      "path": "tests/test_normalization.py",
+      "sha256": "80f55306679a07ef9dd23ac15965e3cf863eb01bc2130d7b7196fcea1dace2a2"
+    },
+    {
+      "path": "tests/test_package.py",
+      "sha256": "4d3e2c0db48f577ae3362fd118bd2e524bd31cee862cfc3d5fa9b47046730388"
+    },
+    {
+      "path": "tests/test_rubric.py",
+      "sha256": "2675b93f1d29e6b64ef327eccf640755bfcdf6c7bf59fa2882bb83968eb3f6f6"
+    },
+    {
+      "path": "tests/test_tool_diff_report.py",
+      "sha256": "b33815dd6d70072381b3d57372cd83f0c98129b48c6b748d47204b93963954e6"
+    },
+    {
+      "path": "tests/test_tool_selection.py",
+      "sha256": "f966d91f833aaa5d214218ba95f461e9dfe620098806cef6bae74343478dbc6a"
+    },
+    {
+      "path": "tests/test_tool_server.py",
+      "sha256": "55be88814fe1a0f50142ddb4e17e164cb717b4a589c8766c9daac12c254ba7b5"
+    },
+    {
+      "path": "tests/test_tool_signatures.py",
+      "sha256": "1b1d6f4bd47dac3c22bb1eb99ebc73dedeb9bd0d6cb2dee3bf8a63e6c2c6e625"
+    },
+    {
+      "path": "tests/test_validation.py",
+      "sha256": "506574c66282209e25bea953d66d6a436046f939cac9917fdfdeeda12720f003"
+    }
+  ]
+}

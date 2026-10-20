@@ -1,0 +1,61 @@
+{
+  "scope": "generic tool and budget foundations; not full M2/M3/M4 acceptance",
+  "implementation_commit": "72e808fefb1ef29726991a9d8d4199e31ee8a9a8",
+  "verified_at": "2026-10-03T18:36:33.2576269Z",
+  "pull_request": "https://github.com/aascc413-coder/sentinelkb-ai-security-agent/pull/1",
+  "draft": true,
+  "runs": [
+    {
+      "id": 37144528275,
+      "event": "push",
+      "head_sha": "72e808fefb1ef29726991a9d8d4199e31ee8a9a8",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/37144528275",
+      "jobs": [
+        {
+          "id": 111265626453,
+          "name": "test",
+          "head_sha": "72e808fefb1ef29726991a9d8d4199e31ee8a9a8",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/37144528275/job/111265626453"
+        },
+        {
+          "id": 111265626477,
+          "name": "investigation-tests",
+          "head_sha": "72e808fefb1ef29726991a9d8d4199e31ee8a9a8",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/37144528275/job/111265626477"
+        }
+      ]
+    },
+    {
+      "id": 37144630067,
+      "event": "pull_request",
+      "head_sha": "72e808fefb1ef29726991a9d8d4199e31ee8a9a8",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/37144630067",
+      "jobs": [
+        {
+          "id": 111265921089,
+          "name": "investigation-tests",
+          "head_sha": "72e808fefb1ef29726991a9d8d4199e31ee8a9a8",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/37144630067/job/111265921089"
+        },
+        {
+          "id": 111265921152,
+          "name": "test",
+          "head_sha": "72e808fefb1ef29726991a9d8d4199e31ee8a9a8",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/37144630067/job/111265921152"
+        }
+      ]
+    }
+  ]
+}

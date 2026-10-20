@@ -1,0 +1,54 @@
+{
+  "dataset_version": "synthetic-v1",
+  "purpose": "engineering seed; not a statistical benchmark",
+  "rubric_version": "powershell-v1",
+  "cases": [
+    {
+      "case_id": "C1",
+      "public": "public/c1.json",
+      "environment": "environment/world-1.json",
+      "oracle": "oracle/c1.json"
+    },
+    {
+      "case_id": "C2",
+      "public": "public/c2.json",
+      "environment": "environment/world-2.json",
+      "oracle": "oracle/c2.json"
+    },
+    {
+      "case_id": "C3",
+      "public": "public/c3.json",
+      "environment": "environment/world-3.json",
+      "oracle": "oracle/c3.json"
+    },
+    {
+      "case_id": "C4",
+      "public": "public/c4.json",
+      "environment": "environment/shared-pair.json",
+      "oracle": "oracle/c4.json"
+    },
+    {
+      "case_id": "C5",
+      "public": "public/c5.json",
+      "environment": "environment/shared-pair.json",
+      "oracle": "oracle/c5.json"
+    }
+  ],
+  "file_sha256": {
+    "public/c1.json": "c59fd65cf8b9defb621eaaffb77f152549fa928a558ad2b49e19ba03c65159f8",
+    "public/c2.json": "fd1f05115c69c892fe04fdeb6c2b896ce6ae55e5ac8491a2d53717d3022b974e",
+    "public/c3.json": "9f9ba1e7991f57eed105954df48698c1728a7e10ed5b87cbb45191aca14f4ece",
+    "public/c4.json": "b01ae24fe00954df4fba3764f897fcce66f5cb33d67ca63f555637e22178a522",
+    "public/c5.json": "b01ae24fe00954df4fba3764f897fcce66f5cb33d67ca63f555637e22178a522",
+    "environment/shared-pair.json": "f1547bbfe259f77d6fcbfd6711b63eb103c6d82eddf10c4742acd6952507d6bc",
+    "environment/world-1.json": "8925ab0d9498ed05a995f44c5f6fbbf0146da49a14c457ad78a33003b43cfc0e",
+    "environment/world-2.json": "f10c3c003c7e6a61dd7f85d63ef74b6dcb170fef247ef1998e00d093d5a861db",
+    "environment/world-3.json": "959263d39d2d96e95bc2dfcf3291d4604051a31828601b258f2d8c3c2bfa123f",
+    "oracle/c1.json": "b2d007167a7e650d0988814a64895f8264806377fecdce49d35f15abe0c33a85",
+    "oracle/c2.json": "a42e2e471236fb53b2fab6a9113264535cb6a86800faa5bacf9d42a5f6959874",
+    "oracle/c3.json": "61c0206e70693a8bd89eaac208dcfd1edfc8178df532b3552b19e8b37ad4ae48",
+    "oracle/c4.json": "6bc97dea9dc0424223e60468504fd5f2860e1b6f6ead5914a9f8fa5f9e468dd7",
+    "oracle/c5.json": "5be9132a91fe9f1ff78801d9da13bc3bd5701ae8b9e8340134de1a64f7c8b6c6"
+  },
+  "boundary": "Authoring/evaluation only. Runtime receives one PublicCase; tool server owns its mapped environment. All cases are dev."
+}

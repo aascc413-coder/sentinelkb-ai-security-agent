@@ -1,6 +1,6 @@
 # 不依赖 M2 的通用组件交付
 
-状态：通用组件主实现自检及独立复核通过，待分支远端 CI；不是 M2 / M3 / M4 完整里程碑验收。
+状态：**通用组件自检、独立复核及同一实现提交的双 CI 均通过。** 草稿 [PR #1](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/pull/1) 已建立，尚未合并；完整 M2 / M3 / M4 的剩余依赖见下文。
 
 依据：2026-10-04 用户授权自主拆分、并行实施、验证修复，并优先推进不受外部验收进度影响的工作。使用独立 worktree `D:/project/Agent/m3-independent-foundations`、分支 `codex/m3-independent-foundations`，基础提交 `63fa808`。
 
@@ -35,7 +35,7 @@
 
 ## 验证与剩余依赖
 
-正式测试最终结果见 `m3-foundations-evidence/tests.log` 和 `tests.xml`，源码与测试文件完整快照见 `snapshot.json`。这是本分支 Python 3.12.10 的新虚拟环境，按已有 21 项 lock 安装，没有新增依赖；`pip check` 无冲突。
+正式测试最终结果见 `m3-foundations-evidence/tests.log` 和 `tests.xml`，源码与测试文件完整快照见 `snapshot.json`。这些快照及 Git blob 对照对应实现提交 `72e808fefb1ef29726991a9d8d4199e31ee8a9a8` 的提验字节；本次 CI 完成状态更新属于后续文档，不用旧快照冒充当前文档哈希。这是本分支 Python 3.12.10 的新虚拟环境，按已有 21 项 lock 安装，没有新增依赖；`pip check` 无冲突。
 
 | 检查 | 结果 |
 |---|---|
@@ -46,6 +46,9 @@
 | 预算独立复验 | 33 官方通过；原探针 9 通过、2 个旧断言因明确拒绝溢出而失败并保留；4 个新探针验证原子拒绝、恢复和未知计量，通过 |
 | 离线演示 | 首次后端调用、缓存命中、未知实体 unavailable，计数分别可核对 |
 | 产品边界 | `code/python/` 无改动；公共 M1 契约和 M2 预审文件无改动 |
+| 实现提交远端 CI | `72e808f` 的 `test` 与 `investigation-tests` 在 push 和 PR 两次运行均 success，见 `m3-foundations-evidence/ci.json` |
+
+远端实现验证：[push run 37144528275](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/37144528275)、[PR run 37144630067](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/37144630067)。两次运行的实际 head SHA 均为 `72e808fefb1ef29726991a9d8d4199e31ee8a9a8`，不是只看总体绿色状态。
 
 ### 已修复问题
 

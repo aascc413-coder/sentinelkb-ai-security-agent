@@ -1,0 +1,21 @@
+{
+  "note": "Separate fixed-dataset freeze; initial failed evidence untouched",
+  "sha256": {
+    "investigation/datasets/manifest.json": "41de366715ada625f22fe136873fc43e66b20d386d973e9cf6d922d32b771a67",
+    "investigation/datasets/environment/shared-pair.json": "86611469acdf18511c7a4baf019500684802e4851eb1ad2dfc50eebf1447d780",
+    "investigation/datasets/environment/world-1.json": "b68d26d0946e735f1ad0bd8881740ea3bd21925d23d8da97fc1b9c5ea91279ad",
+    "investigation/datasets/environment/world-2.json": "98c3602d84988e723803347e11a990d0121d0e5af0350ca802292742daa98f62",
+    "investigation/datasets/environment/world-3.json": "9cd91eb13a436be5e4f7876d6b4e36cc7b24d11efc291751be540074b2d3916f",
+    "investigation/datasets/oracle/c1.json": "ffdf850e4db67ff3b014192231b4679bf863fdfe13a7ac08208e95d614fa7417",
+    "investigation/datasets/oracle/c2.json": "157545a45a29a4f3241f036e6f1a519008837bc97cefab8bc87ed4d254b4cd80",
+    "investigation/datasets/oracle/c3.json": "e81dbb5309a1bfadd9ca663504cfdeb3714f4147680afdd82f02a8b723363f03",
+    "investigation/datasets/oracle/c4.json": "99047025fc87f14991c769b343e700586573342294b3c372ce71dfa0453d06ce",
+    "investigation/datasets/oracle/c5.json": "ec266f31a6ad6d6f7dead36b76c28d9b7d1dcec35f6a5cc4fe39a447d929ba0d",
+    "investigation/datasets/public/c1.json": "6905f08f83316957ab51cb5c885137d81592c84d1d87540b55326a15265d1715",
+    "investigation/datasets/public/c2.json": "f01d95ed3432335651bceefb91b1024a0bd58267dd7826db3d71c6e17b97a0c6",
+    "investigation/datasets/public/c3.json": "f903ed07fa5d63b04de70cbe430fd491e8a083edf64550ffe23195e4b61103f7",
+    "investigation/datasets/public/c4.json": "d1f72b1e8d61e4891a2179e98bee3b78967a01435042009554472da7fd57432c",
+    "investigation/datasets/public/c5.json": "d1f72b1e8d61e4891a2179e98bee3b78967a01435042009554472da7fd57432c",
+    "investigation/scripts/build_seed_dataset.py": "8312f81fa88cb535c52a8941ebdc23f0324c28d4746e6286288a889ebafaf873"
+  }
+}

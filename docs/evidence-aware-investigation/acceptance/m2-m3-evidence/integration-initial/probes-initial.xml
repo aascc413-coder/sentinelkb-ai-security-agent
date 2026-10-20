@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="18" time="1.513" timestamp="2026-10-04T22:24:05.309616+08:00" hostname="LAPTOP-BTPEDGKK"><testcase classname="probes" name="test_dependency_code_comes_from_frozen_copy" time="0.001" /><testcase classname="probes" name="test_c1_permutations_and_mirror_identity[order0]" time="0.035" /><testcase classname="probes" name="test_c1_permutations_and_mirror_identity[order1]" time="0.037" /><testcase classname="probes" name="test_c1_permutations_and_mirror_identity[order2]" time="0.032" /><testcase classname="probes" name="test_c1_permutations_and_mirror_identity[order3]" time="0.032" /><testcase classname="probes" name="test_c1_permutations_and_mirror_identity[order4]" time="0.032" /><testcase classname="probes" name="test_c1_permutations_and_mirror_identity[order5]" time="0.032" /><testcase classname="probes" name="test_event_upper_boundary_empty_is_not_unknown_or_truncated" time="0.046" /><testcase classname="probes" name="test_same_window_alternative_approval_scope_and_independence" time="0.045" /><testcase classname="probes" name="test_mixed_ti_constraints_atomic_in_both_orders[order0]" time="0.054" /><testcase classname="probes" name="test_mixed_ti_constraints_atomic_in_both_orders[order1]" time="0.026" /><testcase classname="probes" name="test_paired_reversed_independent_orders_response_cost_coverage" time="0.054" /><testcase classname="probes" name="test_paired_timeout_not_cached_but_warm_cache_can_finish_fast" time="0.039" /><testcase classname="probes" name="test_summary_rejects_dangling_oracle_ref" time="0.064" /><testcase classname="probes" name="test_summary_rejects_visible_hidden_world_annotation" time="0.159"><failure message="Failed: DID NOT RAISE ProtocolViolation">tmp_path = WindowsPath('C:/Users/scc/AppData/Local/Temp/pytest-of-scc/pytest-51/test_summary_rejects_visible_h0')
+
+    def test_summary_rejects_visible_hidden_world_annotation(tmp_path):
+     root=copy_data(tmp_path);modify(root,'oracle/c4.json',lambda d:d['observable_fact_keys'].append('E6'))
+&gt;    with pytest.raises(ProtocolViolation):module('dataset_summary').summarize(root)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E    Failed: DID NOT RAISE ProtocolViolation
+
+probes.py:100: Failed</failure></testcase><testcase classname="probes" name="test_summary_rejects_mismatched_annotation_tool_source" time="0.179"><failure message="Failed: DID NOT RAISE ProtocolViolation">tmp_path = WindowsPath('C:/Users/scc/AppData/Local/Temp/pytest-of-scc/pytest-51/test_summary_rejects_mismatche0')
+
+    def test_summary_rejects_mismatched_annotation_tool_source(tmp_path):
+     root=copy_data(tmp_path);modify(root,'oracle/c1.json',lambda d:d['complete_world_evidence']['E1'].update(source='asset'))
+&gt;    with pytest.raises(ProtocolViolation):module('dataset_summary').summarize(root)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E    Failed: DID NOT RAISE ProtocolViolation
+
+probes.py:103: Failed</failure></testcase><testcase classname="probes" name="test_summary_rejects_unhashed_bytes_in_unused_declared_file" time="0.144"><failure message="Failed: DID NOT RAISE ProtocolViolation">tmp_path = WindowsPath('C:/Users/scc/AppData/Local/Temp/pytest-of-scc/pytest-51/test_summary_rejects_unhashed_0')
+
+    def test_summary_rejects_unhashed_bytes_in_unused_declared_file(tmp_path):
+     root=copy_data(tmp_path);extra=root/'public/unused.json';extra.write_bytes((root/'public/c1.json').read_bytes())
+     mp=root/'manifest.json';m=json.loads(mp.read_text());m['file_sha256']['public/unused.json']='0'*64;mp.write_text(json.dumps(m))
+&gt;    with pytest.raises(ProtocolViolation):module('dataset_summary').summarize(root)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E    Failed: DID NOT RAISE ProtocolViolation
+
+probes.py:107: Failed</failure></testcase><testcase classname="probes" name="test_replay_never_reads_oracle_or_imports_evaluator" time="0.270" /></testsuite></testsuites>

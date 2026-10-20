@@ -1,0 +1,237 @@
+{
+  "rubric_version": "powershell-v1",
+  "family": "powershell_execution",
+  "criteria": [
+    {
+      "criterion_id": "G0",
+      "required_observations": [
+        "Every material factual claim and its registered evidence reference."
+      ],
+      "program_checks": [
+        "Require evidence_id in registry; resolve raw_reference.record_id/json_pointer; verify content_sha256 against the actual alert or returned record.",
+        "Tool and knowledge references require a completed call_id in this run and the frozen snapshot; values must agree with the referenced payload, not just exist.",
+        "Interpretations and model-generated text are not source facts."
+      ],
+      "model_explanation": [
+        "No model explanation can repair an invalid source or contradict the referenced value."
+      ],
+      "conflict_handling": [
+        "Forged references or conflicting source values block a definitive conclusion."
+      ],
+      "unverifiable": [
+        "Missing/truncated source or unresolved pointer is unknown; a known hash/value mismatch is unmet, never met."
+      ]
+    },
+    {
+      "criterion_id": "G1",
+      "required_observations": [
+        "Event identities, host, process instance identifiers, event timestamps and investigated activity window."
+      ],
+      "program_checks": [
+        "Associate all material behavior to the same host and process instance using a stable GUID or an equally explicit instance linkage; PID or IP alone is insufficient.",
+        "Check occurred_at lies in the relevant activity window and observed/published timestamps do not exceed as_of."
+      ],
+      "model_explanation": [
+        "Explain the explicit correlation chain and the limits of any indirect association."
+      ],
+      "conflict_handling": [
+        "Inconsistent instance identity or a known out-of-window event is unmet; unresolved association conflicts block TP and FP."
+      ],
+      "unverifiable": [
+        "Absent instance linkage or timestamps is unknown; do not substitute a shared IP, account or PID."
+      ]
+    },
+    {
+      "criterion_id": "G2",
+      "required_observations": [
+        "Source-recorded attack behavior chain or a high-quality direct observation of unauthorized malicious behavior."
+      ],
+      "program_checks": [
+        "Require grounded actual behavior/content and linked effects, not a label alone; identify which attack-relevant predicate was observed.",
+        "TI reputation/unknown, ATT&CK mappings, detector_claim, PowerShell execution, encoded metadata and absent approval cannot independently satisfy this gate.",
+        "TI verdict fields are not scored as host behavior; actual script or independently correlated effects must supply the attack basis."
+      ],
+      "model_explanation": [
+        "Explain why the observed behavior demonstrates malicious execution and what benign mechanism it excludes."
+      ],
+      "conflict_handling": [
+        "High-quality contrary behavior or an unresolved authorized explanation blocks met; source coverage loss is not attack evidence."
+      ],
+      "unverifiable": [
+        "Missing script/body/effects or only weak indicators yields unknown; verified benign behavior inconsistent with the proposed attack basis yields unmet."
+      ]
+    },
+    {
+      "criterion_id": "G3",
+      "required_observations": [
+        "Strongest plausible benign explanation, corresponding approval/job records and current execution details."
+      ],
+      "program_checks": [
+        "Check a concrete competing explanation against host/account/time/job/script or hash/parameters and actual effects.",
+        "A negative approval lookup is valid only with complete approval-register coverage for the same host and activity window; an equivalent complete history approval check is accepted.",
+        "No approval alone cannot establish malicious behavior; missing archive, partial coverage and unavailable history cannot prove no approval."
+      ],
+      "model_explanation": [
+        "Explain how the strongest benign hypothesis was tested and why it fails to explain the material attack behavior."
+      ],
+      "conflict_handling": [
+        "Unresolved high-quality approval or behavior conflict blocks met; do not discard a conflicting record because it opposes the leading hypothesis."
+      ],
+      "unverifiable": [
+        "No tested benign explanation or incomplete approval coverage is unknown."
+      ]
+    },
+    {
+      "criterion_id": "G4",
+      "required_observations": [
+        "Source quality, independence_group, canonical fact_key, coverage scope and missing sources."
+      ],
+      "program_checks": [
+        "Deduplicate mirrored facts by fact_key; the same fact obtained through asset and history is not two independent supports.",
+        "Verify sufficient relevant coverage and quality for each material claim; incomplete coverage cannot establish absence.",
+        "Do not require a fixed number of tools or sources: one complete verifiable high-quality behavior record can suffice; many repeated weak records cannot."
+      ],
+      "model_explanation": [
+        "Describe independent corroboration, dependencies and exactly which event scope was checked."
+      ],
+      "conflict_handling": [
+        "Unresolved source-quality/coverage conflict blocks met; adding evidence may reduce sufficiency."
+      ],
+      "unverifiable": [
+        "Unknown source quality, provenance dependency or material coverage is unknown."
+      ]
+    },
+    {
+      "criterion_id": "B1",
+      "required_observations": [
+        "Actual execution details and a positive approved operation record."
+      ],
+      "program_checks": [
+        "Match actual host, account, activity time, job/task, script content or hash, and execution parameters to the approved operation.",
+        "Verify the approval time interval contains execution; a maintenance window or administrator identity alone never proves matching authorization."
+      ],
+      "model_explanation": [
+        "Explain the specific approved operation and its match to this activity, not the general legitimacy of the user."
+      ],
+      "conflict_handling": [
+        "A known job/hash/parameter mismatch is unmet even within a maintenance window; unresolved competing approval data blocks met."
+      ],
+      "unverifiable": [
+        "Missing matching fields, missing approval archives or unavailable approval source is unknown."
+      ]
+    },
+    {
+      "criterion_id": "B2",
+      "required_observations": [
+        "Recorded execution behavior and effects, plus the approved scope and targets."
+      ],
+      "program_checks": [
+        "Verify the actual script/task behavior and same-instance network/file effects agree with the approved operation.",
+        "TI unknown/benign, lack of malicious TI, ATT&CK knowledge and periodic history cannot replace current behavior consistency.",
+        "No network records only establishes no network behavior when complete relevant scope/window coverage proves absence."
+      ],
+      "model_explanation": [
+        "Explain why observed effects are within the approved operation and identify checked external/internal targets."
+      ],
+      "conflict_handling": [
+        "Observed out-of-scope behavior is unmet; a high-quality unresolved contradiction blocks met."
+      ],
+      "unverifiable": [
+        "Missing current behavior/effects or partial/unavailable relevant logs is unknown."
+      ]
+    },
+    {
+      "criterion_id": "B3",
+      "required_observations": [
+        "Coverage of relevant behavior window and scope, risk counterevidence and the proposed closure claims."
+      ],
+      "program_checks": [
+        "Require adequate coverage to check material exceptions and no unresolved high-quality malicious counterevidence.",
+        "Limit closure to this alert activity and checked scope; reject host-wide safety/clean claims unsupported by the investigated scope.",
+        "Unknown sources and partial empty results cannot be converted into absence; no fixed tool count grants coverage."
+      ],
+      "model_explanation": [
+        "State the checked scope and unresolved facts outside it; FP recommends closure of this activity only."
+      ],
+      "conflict_handling": [
+        "Unresolved high-quality counterevidence or both TP and FP groups met blocks closure; do not pick a larger confidence score."
+      ],
+      "unverifiable": [
+        "Unverified relevant scope or unavailable material counterevidence source is unknown."
+      ]
+    }
+  ],
+  "policy": {
+    "tp_required": [
+      "G0",
+      "G1",
+      "G2",
+      "G3",
+      "G4"
+    ],
+    "fp_required": [
+      "G0",
+      "G1",
+      "B1",
+      "B2",
+      "B3"
+    ],
+    "criterion_outcomes": [
+      "met",
+      "unmet",
+      "unknown"
+    ],
+    "hard_stops": [
+      "tool_budget",
+      "token_budget",
+      "step_budget",
+      "deadline"
+    ],
+    "suspicious_allowed_stops": [
+      "no_useful_action",
+      "no_available_tool"
+    ],
+    "decision_rules": [
+      "met requires all program checks verified and no unresolved material conflict; unmet means a verified contradiction; unknown means unavailable information, not a negative observation.",
+      "TP requires all TP gates met, FP group not all met and material conflicts resolved; FP requires all FP gates met, TP group not all met and material conflicts resolved.",
+      "Both groups met is conflicting_evidence: investigate the contradiction or Abstain; never select the higher score.",
+      "After a final admitted tool result, a remaining reserved finalization evaluation may produce TP/FP only if all gates are independently verified before the deadline; otherwise a hard-stop result is Abstain.",
+      "Suspicious requires neither group met, G0/G1 verified for at least one declared substantive risk pattern, unresolved decision evidence, and all affordable legal useful remaining actions assessed exhausted/unavailable; hard-stop must not be triggered.",
+      "Hard budget stop without a valid sufficient conclusion forces Abstain, preserving grounded risk flags; Suspicious cannot bypass this rule.",
+      "Only vague alert trigger facts, unresolved decisive source conflict, protocol/model failure or no verified substantive risk pattern yields Abstain; retain missing evidence and reason.",
+      "Determining gates and patterns requires implementation of mechanical checks plus scoped semantic explanation; loading this rubric is not that implementation."
+    ]
+  },
+  "suspicious_patterns": [
+    {
+      "pattern_id": "approval_execution_mismatch",
+      "required_observations": [
+        "Positive approved operation and grounded current execution belonging to the same host/account/activity."
+      ],
+      "program_checks": [
+        "Compare task/job, script hash/content and parameters field by field; require at least one known mismatch, stable event association and explicit references to both values."
+      ],
+      "excluded_observations": [
+        "Only a maintenance window, missing approval archive, detector label or TI unknown is not a mismatch."
+      ]
+    },
+    {
+      "pattern_id": "unexplained_new_external_connection",
+      "required_observations": [
+        "Grounded same-instance external connection and reliable comparable history establishing a new target; no matching approved target explanation after an available approval check."
+      ],
+      "program_checks": [
+        "Verify observed destination, external classification, newness from explicit reliable source facts/history and G0/G1 event linkage; an unavailable history does not establish newness."
+      ],
+      "excluded_observations": [
+        "External IP alone, lack of TI reputation, missing network payload, unknown history and ATT&CK mapping alone do not satisfy the pattern."
+      ]
+    }
+  ],
+  "scope": [
+    "Family-level operational standard for alert-scoped PowerShell investigation; not a formal proof of real-world safety.",
+    "No case identifier, host, job or hidden world truth determines a gate.",
+    "Only alert, returned tool record or trusted knowledge facts may be cited; knowledge mapping is not observed attack behavior.",
+    "M2 freezes descriptions and program obligations; M7 runtime checks and M5 independent scoring remain separate implementations using this version."
+  ]
+}

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="9" skipped="0" tests="77" time="1.143" timestamp="2026-10-04T22:19:40.542787+08:00" hostname="LAPTOP-BTPEDGKK"><testcase classname="tests.test_dataset_loaders" name="test_valid_loads_and_consistent_opaque_references" time="0.014" /><testcase classname="tests.test_dataset_loaders" name="test_twin_remapping_ignores_filename_and_world_label" time="0.005" /><testcase classname="tests.test_dataset_loaders" name="test_closed_schema_rejects_wrong_zone_and_unknown_fields[PublicCase-load_public-value0]" time="0.003" /><testcase classname="tests.test_dataset_loaders" name="test_closed_schema_rejects_wrong_zone_and_unknown_fields[EnvironmentFixture-load_environment-value1]" time="0.003" /><testcase classname="tests.test_dataset_loaders" name="test_closed_schema_rejects_wrong_zone_and_unknown_fields[OracleCase-load_oracle-value2]" time="0.004" /><testcase classname="tests.test_dataset_loaders" name="test_duplicate_json_keys_and_nan_are_rejected_before_decode[load_public]" time="0.003" /><testcase classname="tests.test_dataset_loaders" name="test_duplicate_json_keys_and_nan_are_rejected_before_decode[load_environment]" time="0.002" /><testcase classname="tests.test_dataset_loaders" name="test_duplicate_json_keys_and_nan_are_rejected_before_decode[load_oracle]" time="0.002" /><testcase classname="tests.test_dataset_loaders" name="test_invalid_public_provenance_and_time_rejected[&lt;lambda&gt;0]" time="0.001" /><testcase classname="tests.test_dataset_loaders" name="test_invalid_public_provenance_and_time_rejected[&lt;lambda&gt;1]" time="0.006" /><testcase classname="tests.test_dataset_loaders" name="test_invalid_public_provenance_and_time_rejected[&lt;lambda&gt;2]" time="0.001" /><testcase classname="tests.test_dataset_loaders" name="test_invalid_public_provenance_and_time_rejected[&lt;lambda&gt;3]" time="0.001" /><testcase classname="tests.test_dataset_loaders" name="test_invalid_public_provenance_and_time_rejected[&lt;lambda&gt;4]" time="0.001" /><testcase classname="tests.test_dataset_loaders" name="test_invalid_public_provenance_and_time_rejected[&lt;lambda&gt;5]" time="0.001" /><testcase classname="tests.test_dataset_loaders" name="test_nested_oracle_metadata_rejected_but_legitimate_verdict_words_allowed" time="0.002" /><testcase classname="tests.test_dataset_loaders" name="test_fixture_refuses_future_naive_and_impossible_publication[published_at-2026-09-01T02:21:00+00:00]" time="0.002" /><testcase classname="tests.test_dataset_loaders" name="test_fixture_refuses_future_naive_and_impossible_publication[observed_at-2026-09-01T02:10:00+00:00]" time="0.002" /><testcase classname="tests.test_dataset_loaders" name="test_fixture_refuses_future_naive_and_impossible_publication[occurred_at-2026-09-01T02:14:00+08:00]" time="0.002" /><testcase classname="tests.test_dataset_loaders" name="test_fixture_refuses_future_naive_and_impossible_publication[published_at-not-a-time]" time="0.002" /><testcase classname="tests.test_dataset_loaders" name="test_prospective_approval_expiry_does_not_make_publication_future" time="0.002" /><testcase classname="tests.test_dataset_loaders" name="test_status_coverage_constraints_and_dangling_references_rejected[rule0]" time="0.002" /><testcase classname="tests.test_dataset_loaders" name="test_status_coverage_constraints_and_dangling_references_rejected[rule1]" time="0.002" /><testcase classname="tests.test_dataset_loaders" name="test_status_coverage_constraints_and_dangling_references_rejected[rule2]" time="0.002" /><testcase classname="tests.test_dataset_loaders" name="test_status_coverage_constraints_and_dangling_references_rejected[rule3]" time="0.002" /><testcase classname="tests.test_dataset_loaders" name="test_status_coverage_constraints_and_dangling_references_rejected[rule4]" time="0.002" /><testcase classname="tests.test_dataset_loaders" name="test_status_coverage_constraints_and_dangling_references_rejected[rule5]" time="0.002" /><testcase classname="tests.test_dataset_loaders" name="test_status_coverage_constraints_and_dangling_references_rejected[rule6]" time="0.002" /><testcase classname="tests.test_dataset_loaders" name="test_status_coverage_constraints_and_dangling_references_rejected[rule7]" time="0.002" /><testcase classname="tests.test_dataset_loaders" name="test_status_coverage_constraints_and_dangling_references_rejected[rule8]" time="0.002" /><testcase classname="tests.test_dataset_loaders" name="test_status_coverage_constraints_and_dangling_references_rejected[rule9]" time="0.002" /><testcase classname="tests.test_dataset_loaders" name="test_duplicate_record_ids_across_tools_and_ambiguous_rules_rejected" time="0.005" /><testcase classname="tests.test_dataset_loaders" name="test_record_hash_and_provenance_rejected" time="0.003" /><testcase classname="tests.test_dataset_loaders" name="test_oracle_semantic_errors_rejected[update0]" time="0.001" /><testcase classname="tests.test_dataset_loaders" name="test_oracle_semantic_errors_rejected[update1]" time="0.001" /><testcase classname="tests.test_dataset_loaders" name="test_oracle_semantic_errors_rejected[update2]" time="0.001" /><testcase classname="tests.test_dataset_loaders" name="test_oracle_semantic_errors_rejected[update3]" time="0.001" /><testcase classname="tests.test_dataset_loaders" name="test_oracle_semantic_errors_rejected[update4]" time="0.001" /><testcase classname="tests.test_dataset_loaders" name="test_oracle_semantic_errors_rejected[update5]" time="0.001" /><testcase classname="tests.test_dataset_loaders" name="test_oracle_semantic_errors_rejected[update6]" time="0.001" /><testcase classname="tests.test_dataset_loaders" name="test_oracle_semantic_errors_rejected[update7]" time="0.001" /><testcase classname="tests.test_dataset_loaders" name="test_oracle_semantic_errors_rejected[update8]" time="0.001" /><testcase classname="tests.test_dataset_loaders" name="test_hidden_only_critical_keys_and_empty_observable_denominator_are_valid" time="0.001" /><testcase classname="tests.test_dataset_loaders" name="test_schema_assets_match_generated_contracts" time="0.002" /><testcase classname="tests.test_dataset_loaders" name="test_direct_validator_rejects_structurally_json_valid_but_untyped_objects" time="0.003" /><testcase classname="" name="test_real_four_worlds_five_public_five_oracles_load" time="0.107" /><testcase classname="" name="test_manifest_file_hashes_and_twins_are_exact" time="0.005" /><testcase classname="" name="test_invalid_environment_constraints_are_rejected[constraints0]" time="0.025" /><testcase classname="" name="test_invalid_environment_constraints_are_rejected[constraints1]" time="0.025" /><testcase classname="" name="test_invalid_environment_constraints_are_rejected[constraints2]" time="0.025" /><testcase classname="" name="test_invalid_environment_constraints_are_rejected[constraints3]" time="0.025" /><testcase classname="" name="test_invalid_environment_constraints_are_rejected[constraints4]" time="0.025" /><testcase classname="" name="test_invalid_environment_constraints_are_rejected[constraints5]" time="0.026" /><testcase classname="" name="test_all_oracle_specific_metadata_is_rejected_in_public_raw[ground_truth]" time="0.003" /><testcase classname="" name="test_all_oracle_specific_metadata_is_rejected_in_public_raw[oracle_canary]" time="0.002" /><testcase classname="" name="test_all_oracle_specific_metadata_is_rejected_in_public_raw[sufficient_sets]" time="0.002" /><testcase classname="" name="test_all_oracle_specific_metadata_is_rejected_in_public_raw[expected_actions]" time="0.003"><failure message="Failed: DID NOT RAISE ProtocolViolation">hidden_key = 'expected_actions'
+
+    @pytest.mark.parametrize("hidden_key", ["ground_truth", "oracle_canary", "sufficient_sets",
+        "expected_actions", "resolvable_with_full_observable_evidence"])
+    def test_all_oracle_specific_metadata_is_rejected_in_public_raw(hidden_key):
+        public = load_public(DATA / "public/c1.json", remap_ids=False)
+        raw = {**public.alert.raw, "extra": {hidden_key: ["oracle hint"]}}
+        reference = replace(public.alert.raw_reference, content_sha256=content_hash(raw))
+&gt;       with pytest.raises(ProtocolViolation):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ProtocolViolation
+
+test_review_probes.py:61: Failed</failure></testcase><testcase classname="" name="test_all_oracle_specific_metadata_is_rejected_in_public_raw[resolvable_with_full_observable_evidence]" time="0.003"><failure message="Failed: DID NOT RAISE ProtocolViolation">hidden_key = 'resolvable_with_full_observable_evidence'
+
+    @pytest.mark.parametrize("hidden_key", ["ground_truth", "oracle_canary", "sufficient_sets",
+        "expected_actions", "resolvable_with_full_observable_evidence"])
+    def test_all_oracle_specific_metadata_is_rejected_in_public_raw(hidden_key):
+        public = load_public(DATA / "public/c1.json", remap_ids=False)
+        raw = {**public.alert.raw, "extra": {hidden_key: ["oracle hint"]}}
+        reference = replace(public.alert.raw_reference, content_sha256=content_hash(raw))
+&gt;       with pytest.raises(ProtocolViolation):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ProtocolViolation
+
+test_review_probes.py:61: Failed</failure></testcase><testcase classname="" name="test_all_oracle_specific_metadata_is_rejected_in_tool_records[ground_truth]" time="0.028" /><testcase classname="" name="test_all_oracle_specific_metadata_is_rejected_in_tool_records[oracle_canary]" time="0.029" /><testcase classname="" name="test_all_oracle_specific_metadata_is_rejected_in_tool_records[expected_actions]" time="0.031"><failure message="Failed: DID NOT RAISE ProtocolViolation">hidden_key = 'expected_actions'
+
+    @pytest.mark.parametrize("hidden_key", ["ground_truth", "oracle_canary", "expected_actions",
+        "resolvable_with_full_observable_evidence"])
+    def test_all_oracle_specific_metadata_is_rejected_in_tool_records(hidden_key):
+        env = load_environment(DATA / "environment/world-1.json", remap_ids=False)
+        rec = env.records_by_tool["siem"][0]
+        payload = {**rec.payload, "extra": {hidden_key: "oracle hint"}}
+        rec = replace(rec, payload=payload, content_sha256=content_hash(payload))
+        records = {**env.records_by_tool, "siem": (rec, *env.records_by_tool["siem"][1:])}
+&gt;       with pytest.raises(ProtocolViolation):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ProtocolViolation
+
+test_review_probes.py:73: Failed</failure></testcase><testcase classname="" name="test_all_oracle_specific_metadata_is_rejected_in_tool_records[resolvable_with_full_observable_evidence]" time="0.031"><failure message="Failed: DID NOT RAISE ProtocolViolation">hidden_key = 'resolvable_with_full_observable_evidence'
+
+    @pytest.mark.parametrize("hidden_key", ["ground_truth", "oracle_canary", "expected_actions",
+        "resolvable_with_full_observable_evidence"])
+    def test_all_oracle_specific_metadata_is_rejected_in_tool_records(hidden_key):
+        env = load_environment(DATA / "environment/world-1.json", remap_ids=False)
+        rec = env.records_by_tool["siem"][0]
+        payload = {**rec.payload, "extra": {hidden_key: "oracle hint"}}
+        rec = replace(rec, payload=payload, content_sha256=content_hash(payload))
+        records = {**env.records_by_tool, "siem": (rec, *env.records_by_tool["siem"][1:])}
+&gt;       with pytest.raises(ProtocolViolation):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ProtocolViolation
+
+test_review_probes.py:73: Failed</failure></testcase><testcase classname="" name="test_oracle_expected_action_constraints_are_valid_for_acceptable_tools[constraints0]" time="0.015"><failure message="Failed: DID NOT RAISE ProtocolViolation">constraints = {'host': True}
+
+    @pytest.mark.parametrize("constraints", [{"host": True}, {"host": 17}, {"unknown_filter": "x"},
+        {"as_of": "not-time"}, {"limit": False}])
+    def test_oracle_expected_action_constraints_are_valid_for_acceptable_tools(constraints):
+        oracle = load_oracle(DATA / "oracle/c1.json")
+        action = ActionExpectation(("E0",), ("E4",), ("asset",), constraints, "Check authorization")
+&gt;       with pytest.raises(ProtocolViolation):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ProtocolViolation
+
+test_review_probes.py:82: Failed</failure></testcase><testcase classname="" name="test_oracle_expected_action_constraints_are_valid_for_acceptable_tools[constraints1]" time="0.015"><failure message="Failed: DID NOT RAISE ProtocolViolation">constraints = {'host': 17}
+
+    @pytest.mark.parametrize("constraints", [{"host": True}, {"host": 17}, {"unknown_filter": "x"},
+        {"as_of": "not-time"}, {"limit": False}])
+    def test_oracle_expected_action_constraints_are_valid_for_acceptable_tools(constraints):
+        oracle = load_oracle(DATA / "oracle/c1.json")
+        action = ActionExpectation(("E0",), ("E4",), ("asset",), constraints, "Check authorization")
+&gt;       with pytest.raises(ProtocolViolation):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ProtocolViolation
+
+test_review_probes.py:82: Failed</failure></testcase><testcase classname="" name="test_oracle_expected_action_constraints_are_valid_for_acceptable_tools[constraints2]" time="0.015"><failure message="Failed: DID NOT RAISE ProtocolViolation">constraints = {'unknown_filter': 'x'}
+
+    @pytest.mark.parametrize("constraints", [{"host": True}, {"host": 17}, {"unknown_filter": "x"},
+        {"as_of": "not-time"}, {"limit": False}])
+    def test_oracle_expected_action_constraints_are_valid_for_acceptable_tools(constraints):
+        oracle = load_oracle(DATA / "oracle/c1.json")
+        action = ActionExpectation(("E0",), ("E4",), ("asset",), constraints, "Check authorization")
+&gt;       with pytest.raises(ProtocolViolation):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ProtocolViolation
+
+test_review_probes.py:82: Failed</failure></testcase><testcase classname="" name="test_oracle_expected_action_constraints_are_valid_for_acceptable_tools[constraints3]" time="0.015"><failure message="Failed: DID NOT RAISE ProtocolViolation">constraints = {'as_of': 'not-time'}
+
+    @pytest.mark.parametrize("constraints", [{"host": True}, {"host": 17}, {"unknown_filter": "x"},
+        {"as_of": "not-time"}, {"limit": False}])
+    def test_oracle_expected_action_constraints_are_valid_for_acceptable_tools(constraints):
+        oracle = load_oracle(DATA / "oracle/c1.json")
+        action = ActionExpectation(("E0",), ("E4",), ("asset",), constraints, "Check authorization")
+&gt;       with pytest.raises(ProtocolViolation):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ProtocolViolation
+
+test_review_probes.py:82: Failed</failure></testcase><testcase classname="" name="test_oracle_expected_action_constraints_are_valid_for_acceptable_tools[constraints4]" time="0.015"><failure message="Failed: DID NOT RAISE ProtocolViolation">constraints = {'limit': False}
+
+    @pytest.mark.parametrize("constraints", [{"host": True}, {"host": 17}, {"unknown_filter": "x"},
+        {"as_of": "not-time"}, {"limit": False}])
+    def test_oracle_expected_action_constraints_are_valid_for_acceptable_tools(constraints):
+        oracle = load_oracle(DATA / "oracle/c1.json")
+        action = ActionExpectation(("E0",), ("E4",), ("asset",), constraints, "Check authorization")
+&gt;       with pytest.raises(ProtocolViolation):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ProtocolViolation
+
+test_review_probes.py:82: Failed</failure></testcase><testcase classname="" name="test_source_hash_and_id_remapping_preserve_business_data" time="0.043" /><testcase classname="" name="test_future_top_level_observation_times_cannot_pass[observed_at]" time="0.029" /><testcase classname="" name="test_future_top_level_observation_times_cannot_pass[published_at]" time="0.029" /><testcase classname="" name="test_future_top_level_observation_times_cannot_pass[occurred_at]" time="0.030" /><testcase classname="" name="test_oracle_reference_observability_truth_resolvability[changes0]" time="0.014" /><testcase classname="" name="test_oracle_reference_observability_truth_resolvability[changes1]" time="0.015" /><testcase classname="" name="test_oracle_reference_observability_truth_resolvability[changes2]" time="0.015" /><testcase classname="" name="test_oracle_reference_observability_truth_resolvability[changes3]" time="0.015" /><testcase classname="" name="test_all_real_oracle_observable_record_references_resolve" time="0.125" /><testcase classname="" name="test_declared_schema_matches_generated_environment_contract" time="0.001" /><testcase classname="" name="test_public_and_offline_module_import_boundaries" time="0.002" /></testsuite></testsuites>

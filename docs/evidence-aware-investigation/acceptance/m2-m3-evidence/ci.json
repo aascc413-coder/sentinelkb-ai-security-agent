@@ -1,0 +1,54 @@
+{
+  "tested_source_commit": "751c77da0fdb5feb2a259c856e0107f3a0caf30f",
+  "gate": "M2 checked first, then M3 integration; both technical reviews + exact-head dual CI passed",
+  "runs": [
+    {
+      "run_id": 37209746221,
+      "event": "push",
+      "head_sha": "751c77da0fdb5feb2a259c856e0107f3a0caf30f",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/37209746221",
+      "jobs": [
+        {
+          "name": "investigation-tests",
+          "head_sha": "751c77da0fdb5feb2a259c856e0107f3a0caf30f",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/37209746221/job/111458320882"
+        },
+        {
+          "name": "test",
+          "head_sha": "751c77da0fdb5feb2a259c856e0107f3a0caf30f",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/37209746221/job/111458320970"
+        }
+      ]
+    },
+    {
+      "run_id": 37209748506,
+      "event": "pull_request",
+      "head_sha": "751c77da0fdb5feb2a259c856e0107f3a0caf30f",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/37209748506",
+      "jobs": [
+        {
+          "name": "test",
+          "head_sha": "751c77da0fdb5feb2a259c856e0107f3a0caf30f",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/37209748506/job/111458328120"
+        },
+        {
+          "name": "investigation-tests",
+          "head_sha": "751c77da0fdb5feb2a259c856e0107f3a0caf30f",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/37209748506/job/111458328196"
+        }
+      ]
+    }
+  ]
+}

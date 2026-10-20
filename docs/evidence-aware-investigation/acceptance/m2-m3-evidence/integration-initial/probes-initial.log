@@ -1,0 +1,41 @@
+..............FFF.                                                       [100%]
+================================== FAILURES ===================================
+____________ test_summary_rejects_visible_hidden_world_annotation _____________
+
+tmp_path = WindowsPath('C:/Users/scc/AppData/Local/Temp/pytest-of-scc/pytest-51/test_summary_rejects_visible_h0')
+
+    def test_summary_rejects_visible_hidden_world_annotation(tmp_path):
+     root=copy_data(tmp_path);modify(root,'oracle/c4.json',lambda d:d['observable_fact_keys'].append('E6'))
+>    with pytest.raises(ProtocolViolation):module('dataset_summary').summarize(root)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E    Failed: DID NOT RAISE ProtocolViolation
+
+probes.py:100: Failed
+___________ test_summary_rejects_mismatched_annotation_tool_source ____________
+
+tmp_path = WindowsPath('C:/Users/scc/AppData/Local/Temp/pytest-of-scc/pytest-51/test_summary_rejects_mismatche0')
+
+    def test_summary_rejects_mismatched_annotation_tool_source(tmp_path):
+     root=copy_data(tmp_path);modify(root,'oracle/c1.json',lambda d:d['complete_world_evidence']['E1'].update(source='asset'))
+>    with pytest.raises(ProtocolViolation):module('dataset_summary').summarize(root)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E    Failed: DID NOT RAISE ProtocolViolation
+
+probes.py:103: Failed
+_________ test_summary_rejects_unhashed_bytes_in_unused_declared_file _________
+
+tmp_path = WindowsPath('C:/Users/scc/AppData/Local/Temp/pytest-of-scc/pytest-51/test_summary_rejects_unhashed_0')
+
+    def test_summary_rejects_unhashed_bytes_in_unused_declared_file(tmp_path):
+     root=copy_data(tmp_path);extra=root/'public/unused.json';extra.write_bytes((root/'public/c1.json').read_bytes())
+     mp=root/'manifest.json';m=json.loads(mp.read_text());m['file_sha256']['public/unused.json']='0'*64;mp.write_text(json.dumps(m))
+>    with pytest.raises(ProtocolViolation):module('dataset_summary').summarize(root)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E    Failed: DID NOT RAISE ProtocolViolation
+
+probes.py:107: Failed
+=========================== short test summary info ===========================
+FAILED probes.py::test_summary_rejects_visible_hidden_world_annotation - Fail...
+FAILED probes.py::test_summary_rejects_mismatched_annotation_tool_source - Fa...
+FAILED probes.py::test_summary_rejects_unhashed_bytes_in_unused_declared_file
+3 failed, 15 passed in 1.57s
