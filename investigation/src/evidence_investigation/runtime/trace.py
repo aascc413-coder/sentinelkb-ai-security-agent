@@ -43,6 +43,10 @@ class TraceRecorder:
     ):
         if not run_id or not isinstance(run_id, str):
             raise ProtocolViolation("invalid_run_id", "run_id 必须为非空字符串")
+        if Path(run_id).name != run_id or run_id in {".", ".."} or "/" in run_id or "\\" in run_id:
+            raise ProtocolViolation("invalid_run_id", "run_id must be a single path component")
+        if manifest.run_id != run_id:
+            raise ProtocolViolation("run_id_mismatch", "manifest and recorder run_id differ")
         self.run_id = run_id
         self._manifest = decode(RunManifest, encode(manifest))
         self._usage_provider = usage_provider
@@ -53,7 +57,11 @@ class TraceRecorder:
         self._final: FinalAssessment | None = None
         self._finalized = False
         self.dir = Path(output_dir) / run_id
-        self.dir.mkdir(parents=True, exist_ok=True)
+        Path(output_dir).mkdir(parents=True, exist_ok=True)
+        try:
+            self.dir.mkdir(exist_ok=False)
+        except FileExistsError as exc:
+            raise ProtocolViolation("run_exists", "refusing to mix existing trace files") from exc
         (self.dir / "manifest.json").write_text(
             json.dumps(encode(self._manifest), ensure_ascii=False, indent=1),
             encoding="utf-8",

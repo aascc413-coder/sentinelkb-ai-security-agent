@@ -1,0 +1,99 @@
+{
+  "revision": "126f0be19b8208cd6e423e7910a9fdf6a720a162",
+  "import_path": "D:\\project\\Agent\\m4-independent-audit\\source\\investigation\\src\\evidence_investigation\\__init__.py",
+  "probes": {
+    "invalid_schema": {
+      "error": "ProtocolViolation: [unknown_schema] 未知 Schema：nope.schema.json",
+      "next_admission": "RuntimeError: another operation is pending",
+      "accepted": null,
+      "events": [
+        "budget_checked"
+      ],
+      "model_output_records": 0
+    },
+    "repair_service_error": {
+      "error": "ModelError: repair unavailable",
+      "next_admission": "RuntimeError: another operation is pending",
+      "accepted": null,
+      "events": [
+        "budget_checked"
+      ],
+      "model_output_records": 0
+    },
+    "repair_budget_exhausted": {
+      "error": "BudgetExceeded: token_budget",
+      "next_admission": "BudgetExceeded: token_budget",
+      "accepted": null,
+      "events": [
+        "budget_checked"
+      ],
+      "model_output_records": 0
+    },
+    "late_model": {
+      "error": null,
+      "next_admission": "BudgetExceeded: deadline",
+      "accepted": {
+        "verdict": "Abstain",
+        "disposition": "human_review",
+        "stop_reason": "no_useful_action",
+        "claims": [],
+        "final_evidence_ids": []
+      },
+      "events": [
+        "budget_checked",
+        "model_output_recorded",
+        "budget_reconciled"
+      ],
+      "model_output_records": 1,
+      "stop_reason": "deadline"
+    },
+    "absence_window_collision": {
+      "first_ids": [
+        "ev-0002"
+      ],
+      "second_ids": [
+        "ev-0002"
+      ],
+      "stored_window": {
+        "start": "2026-09-01T02:10:00+00:00",
+        "end": "2026-09-01T02:20:00+00:00"
+      },
+      "second_window": {
+        "start": "2026-08-31T02:10:00+00:00",
+        "end": "2026-08-31T02:20:00+00:00"
+      }
+    },
+    "mutable_evidence": {
+      "stored_value": "198.51.100.99",
+      "hash_matches": false
+    },
+    "retry_trace": {
+      "requested": [
+        "5f10e97a07b144d28f6d8d95271fa9e1",
+        "1b7ba6d05adf4a8c9a3be9a4a6f672da"
+      ],
+      "returned": [
+        "1b7ba6d05adf4a8c9a3be9a4a6f672da"
+      ],
+      "missing_returns": [
+        "5f10e97a07b144d28f6d8d95271fa9e1"
+      ],
+      "attempts": 2
+    },
+    "nonjson": {
+      "error": "response is not valid JSON: Expecting value: line 1 column 1 (char 0)",
+      "charged_tokens": 900,
+      "usage_complete": false,
+      "events": [
+        "budget_checked"
+      ]
+    },
+    "duplicate_trace_run": {
+      "sequences": [
+        1,
+        1
+      ],
+      "new_run_has_stale_final": true
+    }
+  }
+}

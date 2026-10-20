@@ -18,6 +18,7 @@
 
 from __future__ import annotations
 
+from copy import deepcopy
 from dataclasses import dataclass, replace
 from uuid import uuid4
 
@@ -89,6 +90,12 @@ class Dispatcher:
             self._authorize_entities(call.tool, canonical)
         except ProtocolViolation as exc:
             self.budget.record_tool_result(None)
+            try:
+                rejected_arguments = encode(call.arguments)
+            except ProtocolViolation:
+                rejected_arguments = {"unencodable_type": type(call.arguments).__name__}
+            self._emit(step, "tool_requested", {"call_id": call_id, "tool": call.tool,
+                       "arguments": rejected_arguments, "redundant": False})
             outcome = DispatchOutcome(call_id, call.tool, None,
                                       protocol_error_code=exc.code, detail=exc.message)
             self._emit(step, "tool_returned", outcome)
@@ -98,7 +105,10 @@ class Dispatcher:
         redundant = signature in self._ledger
         if signature in self._permanent_unavailable:
             # 永久不可用不再查询：以新 call_id 复制既有结果（缓存命中语义）。
-            cached = replace(self._ledger[signature]["result"], call_id=call_id)
+            self._emit(step, "tool_requested", {"call_id": call_id, "tool": call.tool,
+                       "arguments": encode(canonical), "redundant": True})
+            cached = replace(self._ledger[signature]["result"], call_id=call_id,
+                             simulated_cost_units=0.0, simulated_latency_ms=0, actual_duration_ms=0)
             self.budget.record_tool_result(cached, backend_called=False, cache_hit=True)
             outcome = DispatchOutcome(call_id, call.tool, cached, cache_hit=True,
                                       redundant=True)
@@ -107,6 +117,7 @@ class Dispatcher:
 
         outcome = await self._invoke(call.tool, canonical, call_id, step, redundant,
                                      signature, retry_of=None)
+        self._emit(step, "tool_returned", outcome)
         if (outcome.result is not None and outcome.result.status == "timeout"
                 and outcome.result.retryable and outcome.result.error_code == "tool_timeout"
                 and not outcome.late):
@@ -114,13 +125,12 @@ class Dispatcher:
             self.budget.begin_tool_attempt()  # 重试计费
             retry = await self._invoke(call.tool, canonical, retry_id, step,
                                        redundant, signature, retry_of=call_id)
-            if retry.result is not None and not retry.late:
+            if retry.result is not None and not retry.late and retry.protocol_error_code is None:
                 self._remember(signature, retry.result)
             self._emit(step, "tool_returned", retry)
             return retry
-        if outcome.result is not None and not outcome.late:
+        if outcome.result is not None and not outcome.late and outcome.protocol_error_code is None:
             self._remember(signature, outcome.result)
-        self._emit(step, "tool_returned", outcome)
         return outcome
 
     # ── 内部实现 ────────────────────────────────────────────────
@@ -142,7 +152,15 @@ class Dispatcher:
             outcome = DispatchOutcome(call_id, tool, None, backend_called=True,
                                       retry_of=retry_of,
                                       protocol_error_code=exc.code, detail=exc.message)
-            self._emit(step, "tool_returned", outcome)
+            return outcome
+        except BaseException as exc:
+            self.budget.record_tool_result(None, backend_called=True)
+            outcome = DispatchOutcome(call_id, tool, None, backend_called=True,
+                                      retry_of=retry_of, protocol_error_code="tool_exception",
+                                      detail=f"{type(exc).__name__}: {exc}")
+            if not isinstance(exc, Exception):
+                self._emit(step, "tool_returned", outcome)
+                raise
             return outcome
         cache_hit = cache_expected and result.simulated_cost_units == 0.0
         backend_called = not cache_hit
@@ -152,13 +170,21 @@ class Dispatcher:
         evidence_ids: tuple[str, ...] = ()
         operational_ids: tuple[str, ...] = ()
         if not late:
-            registration = self.registry.register_tool_result(result)
+            version_before = self.registry.version
+            try:
+                registration = self.registry.register_tool_result(result)
+            except ProtocolViolation as exc:
+                return DispatchOutcome(call_id, tool, result, cache_hit=cache_hit,
+                                       backend_called=backend_called, redundant=redundant,
+                                       retry_of=retry_of, protocol_error_code=exc.code,
+                                       detail=exc.message)
             evidence_ids, operational_ids = registration.evidence_ids, registration.operational_ids
             self._emit(step, "evidence_registered",
                        {"call_id": call_id, "evidence_ids": list(evidence_ids),
                         "merged_fact_keys": list(registration.merged_fact_keys),
                         "operational_ids": list(operational_ids),
-                        "state_version": registration.version_after})
+                        "state_version": registration.version_after,
+                        "state_version_before": version_before})
         return DispatchOutcome(
             call_id, tool, result, evidence_ids, operational_ids,
             cache_hit, backend_called, redundant, late, retry_of,
@@ -169,7 +195,7 @@ class Dispatcher:
             if result.status == "unavailable" and not result.retryable:
                 self._permanent_unavailable.add(signature)
             self._ledger[signature] = {
-                "result": result, "status": result.status,
+                "result": deepcopy(result), "status": result.status,
             }
         if self.world_snapshot is None and result.snapshot_version:
             self.world_snapshot = result.snapshot_version
@@ -208,6 +234,7 @@ class Dispatcher:
             return
         if event_type == "tool_requested":
             self.trace.emit("tool_requested", payload, step=step,
+                            state_version_before=self.registry.version,
                             state_version_after=self.registry.version)
         elif event_type == "tool_returned":
             body = dict(payload.__dict__) if hasattr(payload, "__dict__") else {}
@@ -215,9 +242,11 @@ class Dispatcher:
                 body["result"] = encode(body["result"])
             body["state_version"] = self.registry.version
             self.trace.emit("tool_returned", body, step=step,
+                            state_version_before=self.registry.version,
                             state_version_after=self.registry.version)
         elif event_type == "evidence_registered":
             self.trace.emit("evidence_registered", payload, step=step,
+                            state_version_before=payload.get("state_version_before", 0),
                             state_version_after=payload.get("state_version", 0))
         else:  # pragma: no cover - 防御分支
             self.trace.emit(event_type, {"detail": str(payload)}, step=step)

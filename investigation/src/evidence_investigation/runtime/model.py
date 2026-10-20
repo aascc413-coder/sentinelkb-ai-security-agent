@@ -14,8 +14,9 @@
 
 from __future__ import annotations
 
+import asyncio
 import json
-from dataclasses import dataclass, replace
+from dataclasses import dataclass
 from typing import Any, Callable, Sequence
 
 import httpx
@@ -30,6 +31,15 @@ from evidence_investigation.state.schema_loader import validate_model_output
 
 class ModelError(RuntimeError):
     """模型服务不可用/超时/HTTP 失败；调用方映射 stop_reason=model_error。"""
+
+
+class ModelFormatError(ModelError):
+    """Provider responded, but content was not a JSON object; preserve billing and text."""
+
+    def __init__(self, message, raw_output, usage):
+        super().__init__(message)
+        self.raw_output = raw_output
+        self.usage = usage
 
 
 def _extract_content(response_json: dict) -> dict[str, JsonValue]:
@@ -59,7 +69,7 @@ def _usage_of(response_json: dict) -> Usage | None:
         return None
     prompt = usage.get("prompt_tokens")
     completion = usage.get("completion_tokens")
-    if not isinstance(prompt, int) or not isinstance(completion, int):
+    if type(prompt) is not int or type(completion) is not int or min(prompt, completion) < 0:
         return None
     return Usage(input_tokens=prompt, output_tokens=completion, usage_complete=True)
 
@@ -134,7 +144,16 @@ class OpenAICompatAdapter:
             response_json = response.json()
         except ValueError as exc:
             raise ModelError("model service returned non-JSON body") from exc
-        return _extract_content(response_json), _usage_of(response_json)
+        usage = _usage_of(response_json) if isinstance(response_json, dict) else None
+        try:
+            output = _extract_content(response_json)
+        except ModelError as exc:
+            try:
+                raw = response_json["choices"][0]["message"]["content"]
+            except (KeyError, IndexError, TypeError):
+                raw = response_json
+            raise ModelFormatError(str(exc), raw, usage) from exc
+        return output, usage
 
     async def aclose(self) -> None:
         await self._client.aclose()
@@ -156,87 +175,99 @@ async def run_model_call(
     messages: tuple[dict[str, JsonValue], ...],
     schema_name: str, max_output_tokens: int,
     estimated_input_tokens: int | None = None,
-    trace=None, step: int = 0,
+    trace=None, step: int = 0, output_validator=None,
 ) -> ModelCallResult:
-    """带预算、Schema 校验、一次修复与四态留存的规定模型调用入口。"""
-    from evidence_investigation.state.schema_loader import schema_contents
+    """Reserve/reconcile every attempt; record failures before attempting one paid repair.
 
-    estimate = estimated_input_tokens if estimated_input_tokens is not None \
-        else _estimate_input(messages, schema_name)
-    plan = budget.reserve_model(
-        estimate, max_output_tokens,
-        estimate_note="chars/4 per message plus fixed schema overhead"
-        if estimated_input_tokens is None else "caller-supplied estimate",
-    )
-    if trace is not None:
-        trace.emit("budget_checked",
-                   {"phase": phase, "kind": "model_reserve",
+    output_validator is a shared deterministic validator (e.g. grounding), not a
+    sufficiency scorer. It raises ProtocolViolation and uses the same repair path.
+    Model records are append-only revisions identified by call_id; the last one
+    contains the cumulative raw/validation/repaired/accepted states.
+    """
+    from evidence_investigation.state.schema_loader import schema_contents
+    from .budget import BudgetExceeded
+
+    schema = schema_contents(schema_name)  # Fail before reserving anything.
+    current_messages = tuple(messages)
+    plans = []
+    first_raw = None
+    first_error = None
+    record_id = None
+    for attempt in range(2):
+        estimate = (estimated_input_tokens if estimated_input_tokens is not None
+                    else _estimate_input(current_messages, schema_name))
+        if attempt and estimated_input_tokens is not None:
+            estimate += _estimate_input(current_messages[len(messages):], schema_name)
+        plan = budget.reserve_model(
+            estimate, max_output_tokens, finalization=phase == "final",
+            estimate_note="caller estimate plus repair prompt" if estimated_input_tokens is not None
+            else "chars/4 estimate; not provider billing",
+        )
+        if record_id is None:
+            record_id = f"{run_id}:{phase}:{budget.snapshot().model_calls}"
+        raw, usage, failure = None, None, None
+        try:
+            if trace is not None:
+                trace.emit("budget_checked", {
+                    "call_id": record_id, "attempt": attempt + 1,
+                    "phase": phase, "kind": "model_reserve",
                     "estimated_input_tokens": estimate,
                     "max_output_tokens": max_output_tokens,
-                    "finalization_reserve": plan.finalization_reserve},
-                   step=step)
-
-    raw, usage = None, None
-    try:
-        raw, usage = await adapter.complete(
-            list(messages), schema_contents(schema_name), max_output_tokens,
-            timeout_seconds=max(1.0, budget.remaining_timeout_ms / 1000),
-        )
-    except ModelError:
-        # 服务失败：费用/usage 未知 → 对账为 None（保留保守预留，不填零）再上抛。
-        budget.reconcile_model(plan, None)
-        raise
-    raw_record = ModelOutputRecord(
-        call_id=f"{run_id}:{phase}:{budget.snapshot().model_calls}",
-        phase=phase, raw_output=raw, validation_error=None,
-        repaired_output=None, accepted_output=raw, token_plan=None,
-    )
-    try:
-        validate_model_output(raw, schema_name)
-    except ProtocolViolation as exc:
-        # 非法输出：修复一次，修复计入预算（V4-3A）。
-        # 顺序预算要求先对账第一次调用，再预留修复调用。
-        first_error = f"[{exc.code}] {exc.message}"
-        plan_final = budget.reconcile_model(plan, usage)
-        repair_plan = budget.reserve_model(
-            estimate, max_output_tokens,
-            estimate_note="repair attempt after schema violation",
-        )
-        repair_messages = tuple(messages) + (
-            {"role": "user",
-             "content": f"上次输出不符合 Schema：{first_error}。请重新只输出符合 Schema 的 JSON 对象。"},
-        )
-        repaired_raw, repair_usage = await adapter.complete(
-            list(repair_messages), schema_contents(schema_name), max_output_tokens,
-            timeout_seconds=max(1.0, budget.remaining_timeout_ms / 1000),
-        )
+                    "finalization_reserve": plan.finalization_reserve,
+                }, step=step)
+            remaining = budget.remaining_timeout_ms / 1000
+            if remaining <= 0:
+                raise BudgetExceeded("deadline")
+            raw, usage = await asyncio.wait_for(adapter.complete(
+                list(current_messages), schema, max_output_tokens,
+                timeout_seconds=remaining,
+            ), timeout=remaining)
+        except ModelFormatError as exc:
+            raw, usage = exc.raw_output, exc.usage
+            failure = ProtocolViolation("model_output_invalid", str(exc))
+        except BaseException as exc:
+            # Includes task cancellation: release pending and retain unknown charge.
+            failure = exc
         try:
-            validate_model_output(repaired_raw, schema_name)
-        except ProtocolViolation as second_exc:
-            record = _record(raw_record, first_error, repaired_raw, None)
-            plan_second = budget.reconcile_model(repair_plan, repair_usage)
-            _emit_model_events(trace, step, record, plan_final, plan_second)
-            raise ProtocolViolation(
-                "model_output_invalid",
-                f"修复后仍不符合 Schema：{second_exc.message}",
-            ) from second_exc
-        record = _record(raw_record, first_error, repaired_raw, repaired_raw)
-        plan_second = budget.reconcile_model(repair_plan, repair_usage)
-        _emit_model_events(trace, step, record, plan_final, plan_second)
-        return ModelCallResult(repaired_raw, record,
-                               (plan_final, plan_second), True, repair_usage)
-    plan_final = budget.reconcile_model(plan, usage)
-    _emit_model_events(trace, step, raw_record, plan_final)
-    return ModelCallResult(raw, raw_record, (plan_final,), False, usage)
-
-
-def _record(base: ModelOutputRecord, error: str, repaired: Any, accepted: Any) -> ModelOutputRecord:
-    return ModelOutputRecord(
-        call_id=base.call_id, phase=base.phase,
-        raw_output=base.raw_output, validation_error=error,
-        repaired_output=repaired, accepted_output=accepted,
-        token_plan=base.token_plan,
-    )
+            reconciled = budget.reconcile_model(plan, usage)
+        except (ValueError, ProtocolViolation) as exc:
+            # Malformed provider usage is unknown, not free and not a stuck ledger.
+            reconciled = budget.reconcile_model(plan, None)
+            failure = ModelError(f"invalid provider usage: {exc}")
+        plans.append(reconciled)
+        if budget.stopped_reason == "deadline":
+            failure = BudgetExceeded("deadline")
+        if failure is None:
+            try:
+                validate_model_output(raw, schema_name)
+                if output_validator is not None:
+                    output_validator(raw)
+            except ProtocolViolation as exc:
+                failure = exc
+        if attempt == 0:
+            first_raw = raw
+            first_error = str(failure) if failure is not None else None
+        record = ModelOutputRecord(
+            call_id=record_id, phase=phase, raw_output=first_raw,
+            validation_error=first_error,
+            repaired_output=raw if attempt else None,
+            accepted_output=raw if failure is None else None, token_plan=None,
+        )
+        _emit_model_events(trace, step, record, reconciled)
+        if failure is None:
+            return ModelCallResult(raw, record, tuple(plans), bool(attempt), usage)
+        if trace is not None:
+            trace.emit("error", {"call_id": record_id, "attempt": attempt + 1,
+                                 "phase": phase, "detail": str(failure)}, step=step)
+        if not isinstance(failure, ProtocolViolation):
+            raise failure
+        if attempt:
+            raise ProtocolViolation("model_output_invalid", str(failure)) from failure
+        current_messages = tuple(messages) + (
+            {"role": "assistant", "content": json.dumps(raw, ensure_ascii=False)},
+            {"role": "user", "content": f"Output validation failed: {first_error}. Return a corrected JSON object using only available evidence."},
+        )
+    raise AssertionError("unreachable")
 
 
 def _emit_model_events(trace, step: int, record: ModelOutputRecord, *plans: TokenPlan) -> None:

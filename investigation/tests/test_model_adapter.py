@@ -129,7 +129,9 @@ async def test_trace_records_four_states_and_reconciliation(tmp_path):
     bundle = read_trace(tmp_path, "run-m")
     kinds = [e.event_type for e in bundle.events]
     assert "model_output_recorded" in kinds and "budget_reconciled" in kinds
-    recorded = next(e for e in bundle.events if e.event_type == "model_output_recorded")
+    records = [e for e in bundle.events if e.event_type == "model_output_recorded"]
+    assert records[0].payload["accepted_output"] is None
+    recorded = records[-1]
     assert recorded.payload["validation_error"] is not None
     assert recorded.payload["accepted_output"] == VALID_FINAL
     reconciled = next(e for e in bundle.events if e.event_type == "budget_reconciled")

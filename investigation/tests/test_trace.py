@@ -54,34 +54,34 @@ def test_three_files_written_and_replayable(tmp_path):
 
 
 def test_unknown_event_type_rejected(tmp_path):
-    recorder = TraceRecorder("run-2", make_manifest(), tmp_path,
+    recorder = TraceRecorder("run-2", make_manifest("run-2"), tmp_path,
                              usage_provider=Usage)
     with pytest.raises(ProtocolViolation, match="unknown_event"):
         recorder.emit("made_up_event", {})
 
 
 def test_emit_after_finalize_rejected(tmp_path):
-    recorder = TraceRecorder("run-3", make_manifest(), tmp_path, usage_provider=Usage)
+    recorder = TraceRecorder("run-3", make_manifest("run-3"), tmp_path, usage_provider=Usage)
     recorder.finalize(make_final())
     with pytest.raises(ProtocolViolation, match="trace_finalized"):
         recorder.emit("error", {})
 
 
 def test_double_finalize_rejected(tmp_path):
-    recorder = TraceRecorder("run-4", make_manifest(), tmp_path, usage_provider=Usage)
+    recorder = TraceRecorder("run-4", make_manifest("run-4"), tmp_path, usage_provider=Usage)
     recorder.finalize(make_final())
     with pytest.raises(ProtocolViolation, match="trace_finalized"):
         recorder.finalize(make_final())
 
 
 def test_non_encodable_payload_rejected(tmp_path):
-    recorder = TraceRecorder("run-5", make_manifest(), tmp_path, usage_provider=Usage)
+    recorder = TraceRecorder("run-5", make_manifest("run-5"), tmp_path, usage_provider=Usage)
     with pytest.raises(ProtocolViolation):
         recorder.emit("error", {"bad": object()})
 
 
 def test_events_jsonl_is_line_oriented(tmp_path):
-    recorder = TraceRecorder("run-6", make_manifest(), tmp_path, usage_provider=Usage)
+    recorder = TraceRecorder("run-6", make_manifest("run-6"), tmp_path, usage_provider=Usage)
     recorder.emit("alert_received", {"n": 1})
     recorder.emit("error", {"n": 2})
     lines = (tmp_path / "run-6" / "events.jsonl").read_text(encoding="utf-8").splitlines()

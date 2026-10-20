@@ -20,6 +20,7 @@ M2 fixture 适配时评估。迟到响应由 call_id 去重防护：同一结果
 
 from __future__ import annotations
 
+from copy import deepcopy
 import ipaddress
 import json
 import re
@@ -77,7 +78,7 @@ class EvidenceRegistry:
     def __init__(self, alert: Alert):
         if not alert.alert_id:
             raise ProtocolViolation("missing_alert_id", "alert_id 不能为空")
-        self.alert = alert
+        self._alert = deepcopy(alert)
         self._facts: dict[str, _FactEntry] = {}
         self._operational: dict[str, Evidence] = {}
         self._seen_call_ids: set[str] = set()
@@ -94,16 +95,20 @@ class EvidenceRegistry:
     # ── 查询接口 ────────────────────────────────────────────────
 
     @property
+    def alert(self) -> Alert:
+        return deepcopy(self._alert)
+
+    @property
     def version(self) -> int:
         return self._version
 
     def get(self, evidence_id: str) -> Evidence:
         for entry in self._facts.values():
             if entry.evidence.evidence_id == evidence_id:
-                return entry.evidence
+                return deepcopy(entry.evidence)
         for evidence in self._operational.values():
             if evidence.evidence_id == evidence_id:
-                return evidence
+                return deepcopy(evidence)
         raise ProtocolViolation("dangling_reference", f"未知证据 ID：{evidence_id}")
 
     def require_known(self, evidence_ids: Iterable[str]) -> None:
@@ -114,10 +119,10 @@ class EvidenceRegistry:
                 raise ProtocolViolation("dangling_reference", f"引用了未获得的证据：{item}")
 
     def facts(self) -> tuple[Evidence, ...]:
-        return tuple(entry.evidence for entry in self._facts.values())
+        return tuple(deepcopy(entry.evidence) for entry in self._facts.values())
 
     def operational_facts(self) -> tuple[Evidence, ...]:
-        return tuple(self._operational.values())
+        return tuple(deepcopy(e) for e in self._operational.values())
 
     def corroboration(self, fact_key: str) -> tuple[str, ...]:
         """同一 fact_key 的佐证记录（含镜像日志的 record_id 列表）。"""
@@ -142,6 +147,23 @@ class EvidenceRegistry:
             raise ProtocolViolation(
                 "duplicate_registration", f"结果 {result.call_id} 已登记（迟到响应防护）"
             )
+        result = deepcopy(result)
+        # Validate the complete batch before mutating the registry.
+        for record in result.records:
+            if canonical_hash(record.payload) != record.content_sha256:
+                raise ProtocolViolation("content_hash_mismatch", record.record_id)
+            if _parse_utc(record.payload.get("observed_at") or record.payload.get("published_at")) is None:
+                raise ProtocolViolation("unregistrable_record", record.record_id)
+        counter_before = self._counter
+        prepared = {}
+        try:
+            for record in result.records:
+                key = f"{result.tool}:{canonical_hash(record.payload)}"
+                if key not in self._facts and key not in prepared:
+                    prepared[key] = self._build_fact(result, record)
+        except ProtocolViolation:
+            self._counter = counter_before
+            raise
         self._seen_call_ids.add(result.call_id)
         evidence_ids: list[str] = []
         merged: list[str] = []
@@ -155,7 +177,7 @@ class EvidenceRegistry:
                 merged.append(fact_key)
                 continue
             self._facts[fact_key] = _FactEntry(
-                self._build_fact(result, record),
+                prepared[fact_key],
                 (record.record_id,), (record.source_system,), (result.call_id,),
             )
             evidence_ids.append(self._facts[fact_key].evidence.evidence_id)
@@ -229,17 +251,16 @@ class EvidenceRegistry:
         }
         spec: tuple[str, str, JsonValue] | None = None
         if result.status in {"unavailable", "timeout", "error"}:
-            spec = (f"source:{result.tool}:{result.status}", "source_unavailable", envelope)
+            spec = (f"source:{result.tool}:{canonical_hash(envelope)}", "source_unavailable", envelope)
         elif result.status == "empty":
-            absence_scope = {k: v for k, v in result.coverage.scope.items()
-                             if k not in {"window", "limit"}}
             provable = (result.coverage.completeness == "complete"
-                        and not result.coverage.truncated)
-            spec = (f"absence:{result.tool}:{canonical_hash(absence_scope)}",
+                        and not result.coverage.truncated
+                        and not result.coverage.missing_sources)
+            spec = (f"absence:{result.tool}:{canonical_hash(envelope)}",
                     "query_absence" if provable else "coverage_limit",
                     {**envelope, "absence_provable": provable})
         elif result.status == "partial":
-            spec = (f"source:{result.tool}:partial:{result.call_id}",
+            spec = (f"source:{result.tool}:partial:{canonical_hash(envelope)}",
                     "coverage_limit", envelope)
         if spec is None:
             return ()

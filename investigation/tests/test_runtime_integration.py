@@ -11,9 +11,12 @@ from evidence_investigation.runtime.registry import EvidenceRegistry
 from evidence_investigation.runtime.trace import TraceRecorder, read_trace
 from evidence_investigation.state.contracts import (
     Alert, Budget, Coverage, EventType, FinalAssessment, RawReference, Reliability,
-    RunManifest, SIEMQuery, TimeWindow, ToolCall, ToolRecord,
+    RunManifest, SIEMQuery, TimeWindow, ToolCall, ToolRecord, ToolResult, Claim,
 )
 from evidence_investigation.state.errors import ProtocolViolation
+from evidence_investigation.state.codec import encode, decode
+from evidence_investigation.state.validation import validate_final_assessment
+from evidence_investigation.state.adapters import final_assessment_from_output
 from evidence_investigation.tools.contracts import EnvironmentFixture, FixtureRule
 from evidence_investigation.tools.server import MockToolServer, content_hash
 
@@ -64,7 +67,7 @@ async def test_full_chain_dispatch_trace_model(tmp_path):
     trace = TraceRecorder(run_id, make_manifest(run_id), tmp_path,
                           usage_provider=budget.snapshot)
     dispatcher = Dispatcher(run_id, AS_OF, registry, budget, server, trace=trace)
-    trace.emit("alert_received", {"alert_id": alert.alert_id}, step=0,
+    trace.emit("alert_received", {"alert": encode(alert)}, step=0,
                state_version_after=registry.version)
 
     outcome = await dispatcher.dispatch(
@@ -77,7 +80,15 @@ async def test_full_chain_dispatch_trace_model(tmp_path):
         unresolved_questions=(), risk_flags=("encoded",), abstain_reason=None,
         confidence_status="uncalibrated",
     )
-    trace.finalize(final)
+    model = FakeScriptedModel([encode(final)])
+    response = await run_model_call(
+        budget, model, run_id=run_id, phase="final",
+        messages=({"role": "user", "content": "Investigate the supplied records."},),
+        schema_name="final_assessment.schema.json", max_output_tokens=800,
+        trace=trace, output_validator=lambda output: validate_final_assessment(
+            final_assessment_from_output(output), [e.evidence_id for e in registry.facts()]),
+    )
+    trace.finalize(final_assessment_from_output(response.output))
 
     bundle = read_trace(tmp_path, run_id)
     kinds = [e.event_type for e in bundle.events]
@@ -89,27 +100,60 @@ async def test_full_chain_dispatch_trace_model(tmp_path):
     assert [e.sequence for e in bundle.events] == list(range(1, len(bundle.events) + 1))
     # usage 快照随事件演化（非全零）
     assert bundle.events[-1].usage_snapshot.tool_attempts == 1
+    assert model.calls == 1
+    # Reconstruct facts using only persisted alert + raw tool results, no backend.
+    replay = EvidenceRegistry(decode(Alert, bundle.events[0].payload["alert"]))
+    for event in bundle.events:
+        if event.event_type == "tool_returned" and not event.payload["late"]:
+            replay.register_tool_result(decode(ToolResult, event.payload["result"]))
+    assert encode(replay.facts()) == encode(registry.facts())
+    validate_final_assessment(bundle.final, [e.evidence_id for e in replay.facts()])
 
 
 @pytest.mark.asyncio
 async def test_zero_tool_budget_still_allows_model_work_a4():
     """A4 正控：max_tool_calls=0 不禁止无工具工作；只有真正调用工具才被拒。"""
     budget = BudgetController(Budget(max_tool_calls=0, max_tokens=16000))
-    model = FakeScriptedModel([{
+    # Synthetic positive control with a declared, narrow test policy: a signed
+    # canary execution receipt is sufficient for this canary alert only.
+    from dataclasses import replace
+    alert = replace(make_alert(), alert_type="canary_execution_confirmed",
+                    raw={"receipt_verified": True, "executed": True,
+                         "canary_id": "attack-simulation-001"})
+    registry = EvidenceRegistry(alert)
+    eid = registry.facts()[0].evidence_id
+    output = {
         "verdict": "TP", "disposition": "escalate", "stop_reason": "sufficient",
-        "claims": [], "final_evidence_ids": [],
-    }])
-    # 告警自身已登记事实（初始证据充分），无工具调用也能完成模型结论
-    registry = EvidenceRegistry(make_alert())
-    assert len(registry.facts()) == 1
+        "claims": [encode(Claim("claim-1", alert.host, "canary_executed", True,
+                                (eid,), "Verified canary execution receipt", "observation"))],
+        "final_evidence_ids": [eid],
+    }
+    def check_canary(value):
+        validate_final_assessment(final_assessment_from_output(value), [eid])
+        evidence = registry.get(eid).value["raw"]
+        if not (evidence.get("receipt_verified") and evidence.get("executed")):
+            raise ProtocolViolation("insufficient_evidence", "canary receipt absent")
+        assert value["claims"][0]["evidence_ids"] == [eid]
+    model = FakeScriptedModel([output])
     result = await run_model_call(
         budget, model, run_id="run-a4", phase="final",
-        messages=({"role": "user", "content": "仅凭告警判断"},),
+        messages=({"role": "user", "content": "Evaluate the supplied canary receipt."},),
         schema_name="final_assessment.schema.json", max_output_tokens=800,
-        estimated_input_tokens=100,
+        estimated_input_tokens=100, output_validator=check_canary,
     )
     assert result.output["verdict"] == "TP"
+    assert result.output["final_evidence_ids"] == [eid]
     assert budget.snapshot().tool_attempts == 0
+    # Paired negative control: same model verdict must fail with a missing receipt.
+    registry = EvidenceRegistry(replace(alert, raw={"executed": True}))
+    with pytest.raises(ProtocolViolation, match="model_output_invalid"):
+        await run_model_call(
+            BudgetController(Budget(max_tool_calls=0)), FakeScriptedModel([output, output]),
+            run_id="run-a4-negative", phase="final",
+            messages=({"role": "user", "content": "Evaluate the supplied receipt."},),
+            schema_name="final_assessment.schema.json", max_output_tokens=800,
+            output_validator=check_canary,
+        )
 
     registry2 = EvidenceRegistry(make_alert())
     budget2 = BudgetController(Budget(max_tool_calls=0))
