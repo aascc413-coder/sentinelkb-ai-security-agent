@@ -2,7 +2,7 @@
 
 日期：2026-10-21。原提验提交：126f0be19b8208cd6e423e7910a9fdf6a720a162。
 
-当前状态：本地技术验证通过，独立最终复验通过，正式提交远端 CI 待核对。此前 311 passed 自检与仅 H1/H2 的辅助复核不足以关闭 M4，已由本轮审查纠正。原始独立发现保存在 m4-evidence/initial-review.md 和 initial-probe-results.json；其中外部探针路径属于当时审查目录，正式可运行回归现已收入 investigation/tests/test_m4_review_regressions.py。
+当前状态：**M4 技术验收通过**。本地与独立复验 504 项通过；正式提交 `3384e727e2096d0ce7dd70a431d0e7bcbc8b2e0d` 的远端 `test` 和 `investigation-tests` 均成功，运行 39472492147，详见 m4-evidence/ci.json。后续 M5 按依赖推进。此前 311 passed 自检与仅 H1/H2 的辅助复核不足以关闭 M4，已由本轮审查纠正。原始独立发现保存在 m4-evidence/initial-review.md 和 initial-probe-results.json；其中外部探针路径属于当时审查目录，正式可运行回归现已收入 investigation/tests/test_m4_review_regressions.py。
 
 ## 本轮修改
 
