@@ -1,0 +1,32 @@
+{
+  "milestone": "M6",
+  "implementation_commit": "7cd8887a468cfe581386b0a55db223bed4467516",
+  "hash_kind": "Git blob SHA-1 of committed bytes",
+  "files": {
+    "docs/evidence-aware-investigation/m6-baseline-contract.md": "1f2780058ec2f588a19becf482d6d3753d0c4137",
+    "investigation/evaluation/evaluator.py": "6f0a54f8596803c098bfe6a2c52b2f4609cce7be",
+    "investigation/pyproject.toml": "31b7e48e25ec755b074e0fc569a58ff38421e9f5",
+    "investigation/src/evidence_investigation/baselines/__init__.py": "2d2903e4168288414a55049987612b4c31d832fa",
+    "investigation/src/evidence_investigation/baselines/common.py": "226b421ff0197b3a10d4dd06d743ba8d2d61dde2",
+    "investigation/src/evidence_investigation/baselines/direct.py": "25a8764e6a02e28f2f4452e978eeddab281a2b61",
+    "investigation/src/evidence_investigation/baselines/fixed.py": "f0cef4f57cff59a8e49acf2b798bb57cb04b6509",
+    "investigation/src/evidence_investigation/baselines/react.py": "2ef8d91957630bf923735eff9f5b171f1e93d263",
+    "investigation/src/evidence_investigation/prompts/__init__.py": "75ea6f9c87e164779ad1871cdeaea24ebff105b3",
+    "investigation/src/evidence_investigation/prompts/direct-v1.txt": "c9c01e6e7917ecbeea6f777a074c72158e58d2b1",
+    "investigation/src/evidence_investigation/prompts/fixed-final-v1.txt": "6ca5b9aaee4324d61e1c625fc48763a1f85237bc",
+    "investigation/src/evidence_investigation/prompts/react-v1.txt": "635daec6d726deb118aef3fd5446c7e8ffbd70cd",
+    "investigation/src/evidence_investigation/runtime/model.py": "c72f2d89631e1eae1799833cf20a0f4e0382fd12",
+    "investigation/src/evidence_investigation/state/__init__.py": "e53f3c9f9fc0ded6a20b07cdd691335f18d71307",
+    "investigation/src/evidence_investigation/state/adapters.py": "13ad39b88ec94ec9dae70778008b52fa725fc35f",
+    "investigation/src/evidence_investigation/state/contracts.py": "7228a3913bbd35b85f1babd4ab52ab89110de2e6",
+    "investigation/src/evidence_investigation/state/schema_loader.py": "10bc3639cf17ec52f1d6251872e1fe9746ad1aab",
+    "investigation/tests/test_adapters.py": "c7bd14812868bd1395f09b7788e073b8aa1f6b71",
+    "investigation/tests/test_baselines.py": "0198caec8873a21c7e7fb5baacc5c1b4296ffe3b",
+    "investigation/tests/test_evaluation_integration.py": "0d6bfbe1dc89ff1f07708645f54d71d5585ba071",
+    "investigation/tests/test_evaluation_leakage.py": "694588282fa7d4c4dce50302a3a9ce221f2b6f84",
+    "investigation/tests/test_evaluator.py": "79117ff270c3adaf480a5dde24db28df866c615b",
+    "investigation/tests/test_model_adapter.py": "1dbdb7d100932eb41679a586056cb2d6b3ed0f32",
+    "investigation/tests/test_model_schemas.py": "0660600d4ac88df8741f1b17800e854d5828dfe3"
+  }
+}
+

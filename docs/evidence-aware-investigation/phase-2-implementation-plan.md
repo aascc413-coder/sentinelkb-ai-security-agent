@@ -235,7 +235,7 @@ v4 复评（V4-1–V4-3）纳入位置：V4-1→M3 验收（明确覆盖范围+�
 | M3 工具服务层 | 已完成；M2 门槛通过后确认五案回放、27 组双胞胎查询与独立复验；M4 父依赖已满足 | `751c77d`（五案集成） | 同上，两 job 均通过；PR run 37209748506 也通过 |
 | M4 运行时层与公共 Registry | 已完成（完整链路、独立复核、双 CI） | `3384e72`（实现），`79d0042`（验收记录） | 通过（`79d0042`，[run 39550140454](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/39550140454)） |
 | M5 评测核心 | 已完成（独立复核、冻结标注、持久化 artifact、双 CI）；见 [验收记录](acceptance/m5-integration-acceptance.md) | `0016c80`（集成），`af8028b`（最终标注与 artifact） | 通过（`af8028b`，[run 39759499643](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/39759499643)） |
-| M6 基线层 | | | |
+| M6 基线层 | 已完成（自检、辅助独立复核、同一提交双 CI） | `7cd8887`（实现） | 通过（`7cd8887`，[run 39817946163](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/39817946163)） |
 | M7 Proposed 层 | | | |
 | M8a 工程验收报告（假模型） | | | |
 | M8b 真实模型探索报告 | | | |
