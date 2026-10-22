@@ -218,6 +218,18 @@ def _is_assessment_attempt(raw):
     )
 
 
+def _is_sufficiency_explanation(raw):
+    """Recognize Proposed's terminal explanation, which also reserves final tokens.
+
+    The Proposed runtime deliberately records this call with ``phase=final`` so
+    it can spend the protected finalization reserve.  Its schema is not a
+    FinalAssessment, however, and it must not enter proposal-error metrics.
+    """
+    return isinstance(raw, dict) and {
+        'rubric_version', 'criteria', 'unresolved_alternatives'
+    } <= set(raw)
+
+
 def score_run(replay: ReplayResult, oracle: OracleCase, *, namespace: str = "runtime-v1",
               annotation: CaseEvaluationAnnotation | None = None) -> CaseScore:
     """Score one replay against independent annotations; no hidden data reaches agent.
@@ -290,13 +302,21 @@ def score_run(replay: ReplayResult, oracle: OracleCase, *, namespace: str = "run
             int(annotation is not None), 1),
         'final_evidence_error_rate': _count(int(_assessment_error(encode(final), facts, valid_ids)), 1),
     }
-    by_call = defaultdict(list)
+    revisions_by_call = defaultdict(list)
     for revision in replay.model_output_revisions:
-        raw = revision.get('raw_output')
-        accepted = revision.get('accepted_output')
-        if (revision.get('phase') == 'final' or _is_assessment_attempt(raw)
-                or _is_assessment_attempt(accepted)):
-            by_call[revision['call_id']].append(revision)
+        revisions_by_call[revision['call_id']].append(revision)
+    by_call = {}
+    for call_id, revisions in revisions_by_call.items():
+        outputs = [revision.get(key) for revision in revisions
+                   for key in ('raw_output', 'accepted_output')]
+        assessment_attempt = any(_is_assessment_attempt(output) for output in outputs)
+        sufficiency_only = (any(_is_sufficiency_explanation(output) for output in outputs)
+                            and not assessment_attempt)
+        if assessment_attempt or (
+            any(revision.get('phase') == 'final' for revision in revisions)
+            and not sufficiency_only
+        ):
+            by_call[call_id] = revisions
     scoped = [revisions for revisions in by_call.values()
               if 'available_evidence_ids' in revisions[0]]
     raw_errors = sum(_assessment_error(_assessment_payload(revisions[0].get('raw_output')), facts,

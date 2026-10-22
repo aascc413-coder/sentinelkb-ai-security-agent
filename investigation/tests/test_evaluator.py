@@ -234,6 +234,24 @@ def test_malformed_react_finish_attempt_counts_as_proposal_error():
     assert scored.metrics['model_accepted_error_rate'].value is None
 
 
+def test_proposed_terminal_sufficiency_explanation_is_not_a_final_proposal():
+    replay, oracle = sample(1)
+    explanation = {
+        'rubric_version': oracle.rubric_version,
+        'criteria': [],
+        'unresolved_alternatives': ['missing approval'],
+    }
+    revisions = ({
+        'call_id': 'proposed-explanation', 'phase': 'final',
+        'raw_output': explanation, 'accepted_output': explanation,
+        'available_evidence_ids': list(replay.facts),
+    },)
+    scored = score_run(replace(replay, model_output_revisions=revisions), oracle)
+    assert scored.metrics['model_proposal_error_rate'].value is None
+    assert scored.metrics['model_proposal_scoring_coverage'].value is None
+    assert scored.metrics['model_accepted_error_rate'].value is None
+
+
 @pytest.mark.parametrize('case', [1,2,3,4,5])
 def test_default_runtime_id_remapping_preserves_oracle_mapping(case):
     replay, oracle = sample(case, remap_ids=True)

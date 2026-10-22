@@ -12,12 +12,12 @@ SentinelKB 的独立实验包：实现"带调查预算和拒判机制"的安全�
 
 - 与产品代码 `code/python/` **零依赖**：不导入 LangGraph、Neo4j、ChromaDB 或任何产品模块。
 - 运行依赖为 `jsonschema`、`httpx`、`rfc3339-validator`，版本以 `requirements-lock.txt` 锁定。
-- 评测代码在包外 `evaluation/`，已含契约与 oracle loader；指标/evaluator 待 M5，实现包不导入它（逻辑隔离）。
+- 评测代码在包外 `evaluation/`，负责离线回放、泄漏检查、行为与结果指标；实现包不导入它（逻辑隔离）。
 - CI 使用独立 job（`investigation-tests`），干净环境只安装本包自身依赖。
 
 ## 本地开发
 
-通用工具和预算组件的历史交付见 [组件记录](../docs/evidence-aware-investigation/acceptance/m3-foundations-acceptance.md)。本次新增 M2 数据与 M3 五案联调见 [验收记录](../docs/evidence-aware-investigation/acceptance/m2-m3-acceptance.md)；M4 仍仅完成预算组件。通用离线演示：
+通用工具和预算组件的历史交付见 [组件记录](../docs/evidence-aware-investigation/acceptance/m3-foundations-acceptance.md)，五案联调见 [M2/M3 验收](../docs/evidence-aware-investigation/acceptance/m2-m3-acceptance.md)，Proposed 调查闭环见 [M7 验收](../docs/evidence-aware-investigation/acceptance/m7-proposed-acceptance.md)。通用离线演示：
 
 ```powershell
 investigation\.venv\Scripts\python.exe investigation\scripts\demo_tools.py
@@ -53,6 +53,7 @@ investigation/
     baselines/              # M6：Direct / Fixed / ReAct
     prompts/                # M6：提示模板与版本
   evaluation/               # M5：指标、独立评分、回放（包外，不被 Agent 导入）
+  benchmark/                # M8：跨运行时与评测边界的实验编排器
   datasets/                 # M2：public / environment / oracle，manifest 仅开发/评测侧
   rubrics/                  # M2：冻结的告警族门槛，M5/M7 后续共同引用
   tests/                    # 各里程碑测试
@@ -69,3 +70,18 @@ investigation/.venv/Scripts/python.exe investigation/scripts/replay_seed_tools.p
 第一条验证数据、哈希、oracle 引用和双胞胎静态输入；第二条保存五案实际工具
 响应及27组代表查询的差异报告到 `investigation/runs/`。它们没有调用模型或
 生成研判结论，不是算法比较。数据边界见 [datasets/README.md](datasets/README.md)。
+
+## M8a 假模型工程验收
+
+从 `investigation/` 目录运行。输出目录必须不存在，Runner 不覆盖旧批次：
+
+```powershell
+python -m benchmark.m8a run --output ..\evals\reports\m8a-<batch> --repeats 3
+python -m benchmark.m8a replay --artifact ..\evals\reports\m8a-<batch>
+```
+
+`run` 会执行 75 个默认预算运行及 100 个预算冒烟运行，保存实际模型请求、
+Trace、输入快照、逐方法报告、清单与 SHA-256。`replay` 只读归档，不调用模型
+或工具，并检查校验和与重算报告的一致性。这里的 token 数和模型行为均为合成
+工程数据，不能用于证明任何方法优于其他方法。详细边界见
+[M8a 工程契约](../docs/evidence-aware-investigation/m8a-engineering-contract.md)。
