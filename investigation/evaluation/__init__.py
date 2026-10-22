@@ -11,7 +11,9 @@ evidence_investigation.state，不得导入 tools.*（环境侧）。
 from .contracts import (
     ActionExpectation,
     AggregateMetrics,
+    CaseEvaluationAnnotation,
     CaseScore,
+    EvaluationAnnotationSet,
     MetricCount,
     OracleCase,
 )
@@ -19,7 +21,9 @@ from .contracts import (
 __all__ = [
     "ActionExpectation",
     "AggregateMetrics",
+    "CaseEvaluationAnnotation",
     "CaseScore",
+    "EvaluationAnnotationSet",
     "MetricCount",
     "OracleCase",
 ]

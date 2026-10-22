@@ -9,7 +9,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
-from evidence_investigation.state.contracts import JsonValue, ToolName, Verdict, Usage
+from evidence_investigation.state.contracts import Budget, JsonValue, ToolName, Verdict, Usage
 
 
 @dataclass(frozen=True)
@@ -41,6 +41,29 @@ class OracleCase:
     expected_actions: tuple[ActionExpectation, ...]
     rubric_version: str
     annotation_rationale: str
+
+
+@dataclass(frozen=True)
+class CaseEvaluationAnnotation:
+    """Evaluation-only labels that are unsafe to infer from world truth."""
+
+    case_id: str
+    discriminating_fact_keys: tuple[str, ...]
+    risk_clue_fact_keys: tuple[str, ...]
+    required_abstention: bool
+    avoidable_abstention: bool
+    required_human_review: bool
+    rationale: str
+
+
+@dataclass(frozen=True)
+class EvaluationAnnotationSet:
+    """Labels bound to one exact budget profile and rubric version."""
+
+    annotation_version: str
+    rubric_version: str
+    budget_profile: Budget
+    cases: tuple[CaseEvaluationAnnotation, ...]
 
 
 @dataclass(frozen=True)

@@ -8,8 +8,10 @@ from pathlib import Path
 import pytest
 
 from evaluation.leakage import CapturingModelAdapter, LeakagePolicy
+from evaluation.annotation_loader import load_annotations
 from evaluation.oracle_loader import load_oracle
-from evaluation.report import aggregate_report, evaluate_run
+from evaluation.report import (aggregate_report, evaluate_persisted_run, evaluate_run,
+                               save_evaluation_report)
 from evidence_investigation.runtime.budget import BudgetController
 from evidence_investigation.runtime.dispatcher import Dispatcher
 from evidence_investigation.runtime.model import FakeScriptedModel, run_model_call
@@ -20,6 +22,7 @@ from evidence_investigation.state.codec import encode
 from evidence_investigation.state.contracts import (
     AssetQuery, Budget, Claim, HistoryQuery, RunManifest, SIEMQuery, TimeWindow, ToolCall,
 )
+from evidence_investigation.state.errors import ProtocolViolation
 from evidence_investigation.state.public_loader import load_public
 from evidence_investigation.tools.fixture_loader import load_environment
 from evidence_investigation.tools.server import MockToolServer
@@ -32,7 +35,7 @@ async def seed_trace(tmp_path, case_number, verdict, *, leaked=False):
     alert = load_public(DATA / f"public/c{case_number}.json").alert
     world = f"world-{case_number}" if case_number < 4 else "shared-pair"
     environment = load_environment(DATA / f"environment/{world}.json")
-    budget = BudgetController(Budget(max_tool_calls=12))
+    budget = BudgetController(Budget())
     registry = EvidenceRegistry(alert)
     run_id = f"engineering-{case_number}"
     manifest = RunManifest(run_id, "fixed_all", "fake", {}, {}, "synthetic-v1",
@@ -72,10 +75,13 @@ async def seed_trace(tmp_path, case_number, verdict, *, leaked=False):
 @pytest.mark.asyncio
 async def test_five_scripted_cases_have_independent_scores_and_real_request_captures(tmp_path):
     rows, manifests = [], {}
+    annotations = load_annotations(Path(__file__).resolve().parents[1] /
+                                   "evaluation/annotations/powershell-dev-v1.json")
     for number, verdict in enumerate(("TP", "FP", "Suspicious", "Abstain", "Abstain"), 1):
         folder, manifest, captures, policy = await seed_trace(tmp_path, number, verdict)
         oracle = load_oracle(DATA / f"oracle/c{number}.json")
-        result = evaluate_run(folder, oracle, manifest, captured_requests=captures, leakage_policy=policy)
+        result = evaluate_run(folder, oracle, manifest, captured_requests=captures,
+                              leakage_policy=policy, annotation_set=annotations)
         assert result.score.run_status == "valid", result.score.annotation_notes
         assert result.input_request_count == 1 and result.leakage_finding_count == 0
         assert result.score.metrics["evidence_grounding_rate"].value == 1
@@ -87,9 +93,22 @@ async def test_five_scripted_cases_have_independent_scores_and_real_request_capt
         manifests[manifest.run_id] = manifest
     report = aggregate_report(rows, method="fixed_all", dataset_version="synthetic-v1", manifests=manifests)
     assert report.verdicts.aggregate.attempted_runs == 5
+    assert report.annotation_version == "powershell-dev-eval-v1"
     assert report.verdicts.aggregate.failed_runs == 0
     assert report.verdicts.aggregate.metrics["decision_coverage"].value == 2/5
     assert report.verdicts.aggregate.metrics["false_close_rate"].value == 0
+    assert report.metric_totals["discriminating_evidence_recall"].value == 1
+    assert report.metric_totals["required_abstention_recall"].value == 1
+    assert report.metric_totals["avoidable_abstention_rate"].value == 0
+    assert report.metric_totals["required_human_review_recall"].value == 1
+    assert report.metric_totals["suspicious_citable_risk_proportion"].value == 1
+    report_path = tmp_path / "five-case-evaluation.json"
+    save_evaluation_report(report_path, report)
+    saved = json.loads(report_path.read_text(encoding="utf-8"))
+    assert saved["verdicts"]["aggregate"]["attempted_runs"] == 5
+    assert saved["metric_totals"]["required_abstention_recall"]["value"] == 1
+    with pytest.raises(ProtocolViolation, match="report_exists"):
+        save_evaluation_report(report_path, report)
     # These verdicts are scripted test vectors, not an experiment result.
 
 
@@ -122,6 +141,27 @@ async def test_missing_trace_retained_as_protocol_failure(tmp_path):
     assert result.score.run_status == "protocol_failure"
     assert result.score.verdict is None
     assert not result.score.usage.usage_complete
+
+
+@pytest.mark.asyncio
+async def test_missing_persisted_capture_is_retained_as_failed_attempt(tmp_path):
+    folder, manifest, _, _ = await seed_trace(tmp_path, 1, "TP")
+    oracle = load_oracle(DATA / "oracle/c1.json")
+    result = evaluate_persisted_run(folder, tmp_path / "missing-capture.json", oracle, manifest)
+    assert result.score.run_status == "protocol_failure"
+    assert "invalid_dataset_json" in result.score.annotation_notes[0]
+
+
+@pytest.mark.asyncio
+async def test_suspicious_without_annotated_risk_counts_in_risk_denominator(tmp_path):
+    folder, manifest, captures, policy = await seed_trace(tmp_path, 4, "Suspicious")
+    oracle = load_oracle(DATA / "oracle/c4.json")
+    annotations = load_annotations(Path(__file__).resolve().parents[1] /
+                                   "evaluation/annotations/powershell-dev-v1.json")
+    result = evaluate_run(folder, oracle, manifest, captured_requests=captures,
+                          leakage_policy=policy, annotation_set=annotations)
+    metric = result.score.metrics["suspicious_citable_risk_proportion"]
+    assert (metric.numerator, metric.denominator, metric.value) == (0, 1, 0)
 
 @pytest.mark.asyncio
 async def test_twin_cases_actual_adapter_requests_equal_except_transport_call_ids(tmp_path):

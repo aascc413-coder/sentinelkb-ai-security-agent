@@ -124,7 +124,10 @@ _HIDDEN_KEYS = frozenset({"case_id", "family_id", "ground_truth", "complete_worl
                          "observable_fact_keys", "critical_fact_keys", "distractor_fact_keys",
                          "sufficient_sets", "acceptable_verdicts", "annotation_rationale",
                          "expected_actions", "resolvable_with_full_observable_evidence",
-                         "oracle_only", "oracle_canary", "hidden_world_evidence"})
+                         "oracle_only", "oracle_canary", "hidden_world_evidence",
+                         "discriminating_fact_keys", "risk_clue_fact_keys",
+                         "required_abstention", "avoidable_abstention",
+                         "required_human_review", "annotation_version", "budget_profile"})
 
 
 def reject_hidden_metadata(value: JsonValue) -> None:

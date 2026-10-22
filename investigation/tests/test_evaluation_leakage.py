@@ -7,7 +7,9 @@ import pytest
 
 from evaluation.leakage import (
     CapturingModelAdapter, LeakageBlocked, LeakagePolicy, inspect_request,
+    load_capture_bundle, save_capture_bundle,
 )
+from evidence_investigation.state.errors import ProtocolViolation
 from evidence_investigation.runtime.budget import BudgetController
 from evidence_investigation.runtime.model import (
     FakeScriptedModel, ModelError, OpenAICompatAdapter, run_model_call,
@@ -36,6 +38,14 @@ def test_normal_business_terms_and_public_metadata_are_not_leakage():
         "threat_intelligence": {"verdict": "malicious", "source": "mock-tiexpress"},
         "budget": {"max_tool_calls": 6}, "run_id": "run-1", "rubric_version": "powershell-v1",
     })}], "max_output_tokens": 100}
+    assert inspect_request(request) == ()
+
+
+def test_public_planning_rationale_is_not_an_annotation_leak():
+    request = {"messages": [{"role": "user", "content": {
+        "action": "query", "rationale": "The network source may reduce uncertainty",
+        "candidates": [{"rationale": "Check process behavior"}],
+    }}]}
     assert inspect_request(request) == ()
 
 
@@ -211,3 +221,32 @@ async def test_inspection_depth_limit_is_explicit_and_blockable():
 def test_invalid_policies_are_rejected(policy):
     with pytest.raises(ValueError):
         policy()
+
+
+@pytest.mark.asyncio
+async def test_capture_bundle_is_immutable_run_bound_and_digest_checked(tmp_path):
+    wrapper = CapturingModelAdapter(FakeScriptedModel([FINAL]))
+    await call(wrapper, [{"role": "user", "content": "public facts"}])
+    path = tmp_path / "evaluation" / "model-requests.json"
+    save_capture_bundle(path, "boundary-check", wrapper.captures)
+    assert load_capture_bundle(path, "boundary-check").captures == wrapper.captures
+    with pytest.raises(ProtocolViolation, match="capture_exists"):
+        save_capture_bundle(path, "boundary-check", wrapper.captures)
+    with pytest.raises(ProtocolViolation, match="capture_run_mismatch"):
+        load_capture_bundle(path, "another-run")
+    envelope = json.loads(path.read_text(encoding="utf-8"))
+    envelope["bundle"]["captures"][0]["request"]["max_output_tokens"] += 1
+    path.write_text(json.dumps(envelope), encoding="utf-8")
+    with pytest.raises(ProtocolViolation, match="digest"):
+        load_capture_bundle(path, "boundary-check")
+
+
+@pytest.mark.asyncio
+async def test_structurally_incomplete_capture_is_rejected_even_with_valid_digest(tmp_path):
+    from dataclasses import replace
+    wrapper = CapturingModelAdapter(FakeScriptedModel([FINAL]))
+    await call(wrapper, [{"role": "user", "content": "public facts"}])
+    path = tmp_path / "incomplete.json"
+    save_capture_bundle(path, "boundary-check", (replace(wrapper.captures[0], request={}),))
+    with pytest.raises(ProtocolViolation, match="fields differ"):
+        load_capture_bundle(path, "boundary-check")

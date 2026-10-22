@@ -22,7 +22,7 @@ from evidence_investigation.state.codec import encode
 from evidence_investigation.state.content import content_hash, opaque_id
 from evidence_investigation.state.errors import ProtocolViolation
 
-from .contracts import CaseScore, MetricCount, OracleCase
+from .contracts import CaseEvaluationAnnotation, CaseScore, MetricCount, OracleCase
 from .replay import ReplayFact, ReplayResult
 
 
@@ -200,7 +200,8 @@ def _assessment_error(raw, facts, valid_ids):
                    for claim in final.claims if claim.kind == 'observation'))
 
 
-def score_run(replay: ReplayResult, oracle: OracleCase, *, namespace: str = "runtime-v1") -> CaseScore:
+def score_run(replay: ReplayResult, oracle: OracleCase, *, namespace: str = "runtime-v1",
+              annotation: CaseEvaluationAnnotation | None = None) -> CaseScore:
     """Score one replay against independent annotations; no hidden data reaches agent.
 
     Sufficient means at least one frozen alternative set was acquired AND cited,
@@ -210,6 +211,8 @@ def score_run(replay: ReplayResult, oracle: OracleCase, *, namespace: str = "run
     """
     if replay.manifest.rubric_version != oracle.rubric_version:
         raise ProtocolViolation('rubric_mismatch', 'trace and oracle rubric versions differ')
+    if annotation is not None and annotation.case_id != oracle.case_id:
+        raise ProtocolViolation('annotation_case_mismatch', 'evaluation annotation belongs to another case')
     facts = replay.facts
     valid_ids = {eid for eid, fact in facts.items()
                  if eid == fact.evidence_id and _provenance_valid(fact, replay)}
@@ -222,11 +225,11 @@ def score_run(replay: ReplayResult, oracle: OracleCase, *, namespace: str = "run
     for eid in valid_ids:
         fact = facts[eid]
         for key in oracle.observable_fact_keys:
-            annotation = oracle.complete_world_evidence[key]
-            if (isinstance(annotation, dict) and _source_matches(fact, annotation)
-                    and set(fact.record_ids) & _record_ids(annotation, namespace)
-                    and isinstance(annotation.get('observation'), dict)
-                    and not _observation_matches(fact, annotation)):
+            oracle_annotation = oracle.complete_world_evidence[key]
+            if (isinstance(oracle_annotation, dict) and _source_matches(fact, oracle_annotation)
+                    and set(fact.record_ids) & _record_ids(oracle_annotation, namespace)
+                    and isinstance(oracle_annotation.get('observation'), dict)
+                    and not _observation_matches(fact, oracle_annotation)):
                 conflicts.add(key)
     determinate = final.verdict in {'TP', 'FP'}
     sufficient = None
@@ -247,9 +250,26 @@ def score_run(replay: ReplayResult, oracle: OracleCase, *, namespace: str = "run
         'critical_evidence_recall': _count(len(acquired & available_critical), len(available_critical)),
         'unobservable_critical_fraction': _count(len(set(oracle.critical_fact_keys)-available_critical), len(oracle.critical_fact_keys)),
         'sufficiency_pass_rate': _count(int(bool(sufficient)), int(determinate)),
-        'discriminating_evidence_recall': _count(0, 0),
-        'required_abstention_recall': _count(0, 0),
-        'avoidable_abstention_rate': _count(0, 0),
+        'discriminating_evidence_recall': _count(
+            len(acquired & set(annotation.discriminating_fact_keys)) if annotation else 0,
+            len(annotation.discriminating_fact_keys) if annotation else 0),
+        'required_abstention_recall': _count(
+            int(final.verdict == 'Abstain') if annotation and annotation.required_abstention else 0,
+            int(annotation.required_abstention) if annotation else 0),
+        'avoidable_abstention_rate': _count(
+            int(final.verdict == 'Abstain') if annotation and annotation.avoidable_abstention else 0,
+            int(annotation.avoidable_abstention) if annotation else 0),
+        'required_human_review_recall': _count(
+            int(final.verdict in {'Suspicious', 'Abstain'})
+            if annotation and annotation.required_human_review else 0,
+            int(annotation.required_human_review) if annotation else 0),
+        'suspicious_citable_risk_proportion': _count(
+            int(bool(cited & set(annotation.risk_clue_fact_keys)))
+            if annotation and final.verdict == 'Suspicious' else 0,
+            int(final.verdict == 'Suspicious')
+            if annotation else 0),
+        'risk_clue_annotation_coverage': _count(
+            int(annotation is not None), 1),
         'final_evidence_error_rate': _count(int(_assessment_error(encode(final), facts, valid_ids)), 1),
     }
     by_call = defaultdict(list)
@@ -274,7 +294,8 @@ def score_run(replay: ReplayResult, oracle: OracleCase, *, namespace: str = "run
     notes = [
         'Atomic grounding supports observation claims with JSON Pointer predicates; inference text is not independently scored.',
         'Evidence relevance uses observable non-distractor annotations; no free-text relevance judge is used.',
-        'Discriminating evidence and budget-specific required/avoidable abstention annotations are absent: NA.',
+        ('Discriminating/risk/budget annotations are frozen and applied.' if annotation else
+         'Discriminating/risk/budget annotations are absent or budget-inapplicable: NA.'),
         'Proposal scoring requires replay-derived available_evidence_ids at that event; missing temporal scope is excluded and coverage reported.',
         f'acquired_oracle_keys={sorted(acquired)}; cited_oracle_keys={sorted(cited)}; conflicts={sorted(conflicts)}',
         f'inference_claims_unscored={sum(c.kind == "inference" for c in final.claims)}',
