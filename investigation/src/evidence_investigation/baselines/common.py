@@ -8,14 +8,13 @@ scores are Proposed-method state and do not enter this comparison interface.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from hashlib import sha256
 import json
-from importlib import resources
 from pathlib import Path
 
 from evidence_investigation.runtime.budget import BudgetController, BudgetExceeded
 from evidence_investigation.runtime.dispatcher import Dispatcher
 from evidence_investigation.runtime.model import ModelError, run_model_call
+from evidence_investigation.runtime.prompts import prompt_sha256, prompt_text
 from evidence_investigation.runtime.registry import EvidenceRegistry
 from evidence_investigation.runtime.trace import TraceRecorder
 from evidence_investigation.state.adapters import final_assessment_from_output
@@ -36,24 +35,6 @@ PROMPT_BY_METHOD = {
     "fixed_all": "fixed-final-v1.txt",
     "react": "react-v1.txt",
 }
-
-
-def _prompt_bytes(name: str) -> bytes:
-    try:
-        return resources.files("evidence_investigation.prompts").joinpath(name).read_bytes()
-    except (FileNotFoundError, ModuleNotFoundError) as exc:
-        raise ProtocolViolation("missing_prompt", f"missing versioned prompt {name}") from exc
-
-
-def prompt_text(name: str) -> str:
-    try:
-        return _prompt_bytes(name).decode("utf-8")
-    except UnicodeDecodeError as exc:
-        raise ProtocolViolation("invalid_prompt", f"prompt {name} is not UTF-8") from exc
-
-
-def prompt_sha256(name: str) -> str:
-    return sha256(_prompt_bytes(name)).hexdigest()
 
 
 def required_prompt_hashes(method: str) -> dict[str, str]:

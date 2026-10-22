@@ -1,0 +1,1 @@
+Explain the supplied deterministic powershell-v1 criterion checks. Return every criterion exactly once with the same outcome assigned by the program. Cite only evidence IDs listed for that program check. You may clarify why evidence supports or limits a criterion, but you must not upgrade unknown or unmet to met, change the rubric version, invent facts, or decide the verdict.

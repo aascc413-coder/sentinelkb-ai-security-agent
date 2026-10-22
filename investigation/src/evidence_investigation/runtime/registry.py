@@ -81,6 +81,7 @@ class EvidenceRegistry:
         self._alert = deepcopy(alert)
         self._facts: dict[str, _FactEntry] = {}
         self._operational: dict[str, Evidence] = {}
+        self._operational_call_ids: dict[str, tuple[str, ...]] = {}
         self._seen_call_ids: set[str] = set()
         self._counter = 0
         self._version = 0
@@ -128,6 +129,13 @@ class EvidenceRegistry:
         """同一 fact_key 的佐证记录（含镜像日志的 record_id 列表）。"""
         entry = self._facts.get(fact_key)
         return entry.record_ids if entry else ()
+
+    def source_call_ids(self, fact_key: str) -> tuple[str, ...]:
+        """All completed calls that supplied a registered fact/envelope."""
+        entry = self._facts.get(fact_key)
+        if entry is not None:
+            return entry.call_ids
+        return self._operational_call_ids.get(fact_key, ())
 
     def known_entities(self) -> dict[str, frozenset[str]]:
         """Dispatcher 的实体授权台账（全部来自 alert 或已获记录）。"""
@@ -267,6 +275,8 @@ class EvidenceRegistry:
         fact_key, evidence_type, value = spec
         existing = self._operational.get(fact_key)
         if existing is not None:
+            self._operational_call_ids[fact_key] = _append(
+                self._operational_call_ids.get(fact_key, ()), result.call_id)
             return (existing.evidence_id,)
         evidence = validate_evidence(Evidence(
             evidence_id=self._next_id(),
@@ -284,6 +294,7 @@ class EvidenceRegistry:
             independence_group=f"{result.tool}-availability",
         ))
         self._operational[fact_key] = evidence
+        self._operational_call_ids[fact_key] = (result.call_id,)
         self._version += 1
         return (evidence.evidence_id,)
 

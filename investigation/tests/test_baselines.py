@@ -10,7 +10,8 @@ import pytest
 from evidence_investigation.baselines import (
     DirectBaseline, FixedWorkflowBaseline, ReActBaseline,
 )
-from evidence_investigation.baselines.common import prompt_sha256, required_prompt_hashes
+from evidence_investigation.baselines.common import required_prompt_hashes
+from evidence_investigation.runtime.prompts import prompt_sha256
 from evaluation.replay import replay_run
 from evidence_investigation.runtime.model import FakeScriptedModel, ModelError
 from evidence_investigation.runtime.trace import read_trace
