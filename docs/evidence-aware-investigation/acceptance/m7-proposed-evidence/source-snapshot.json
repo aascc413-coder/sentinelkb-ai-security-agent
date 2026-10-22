@@ -1,0 +1,26 @@
+{
+  "milestone": "M7",
+  "implementation_commit": "ea5d1f0003db911144dbec4eefef00c491d5b973",
+  "branch": "codex/m7-proposed",
+  "local_test": {
+    "command": "python -m pytest investigation/tests -q",
+    "result": "680 passed in 7.82s"
+  },
+  "files": {
+    "investigation/src/evidence_investigation/agents/hypothesis.py": "cf5841bbafdd4ad8330d834e6a38967b2c6538efac096c788718b5184f730bb6",
+    "investigation/src/evidence_investigation/agents/sufficiency.py": "18366af009a6139532238f95bc90a8e74efc5c624c5360d4ccef56cb60b1bc65",
+    "investigation/src/evidence_investigation/agents/planner.py": "c676b8c16dcfff06b739e6a3e27430ff9ba149e1994adc81b64d2bace90268c4",
+    "investigation/src/evidence_investigation/agents/investigator.py": "c1aa236be16c7b0a87e53fec7333e00ec9f3a27cd9ab4c5921eaecab36c4a7ca",
+    "investigation/src/evidence_investigation/runtime/registry.py": "1fe99f678052cee5e7cd3aa1c5f9a09bad428998ecddf0af9cc671d46c620bcc",
+    "investigation/tests/test_agents.py": "da751ca961c0b5cac7a1f55cb4a426597134168830b1019e16369a4f578d7108"
+  },
+  "review_scope": [
+    "hypothesis grounding and revision",
+    "powershell-v1 deterministic sufficiency",
+    "multi-record and multi-source counterevidence",
+    "dynamic planning and exact ToolCall deduplication",
+    "budget and failure finalization",
+    "trace state and missing-evidence status"
+  ],
+  "claim_boundary": "Engineering acceptance only; no real-model superiority claim."
+}

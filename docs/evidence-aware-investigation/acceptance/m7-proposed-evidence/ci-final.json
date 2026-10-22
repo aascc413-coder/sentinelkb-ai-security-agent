@@ -1,0 +1,22 @@
+{
+  "workflow_run_id": 39821412776,
+  "workflow_name": "Python tests",
+  "head_sha": "ea5d1f0003db911144dbec4eefef00c491d5b973",
+  "status": "completed",
+  "conclusion": "success",
+  "url": "https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/39821412776",
+  "jobs": [
+    {
+      "name": "test",
+      "job_id": 119973362990,
+      "conclusion": "success",
+      "completed_at": "2026-10-22T17:19:32Z"
+    },
+    {
+      "name": "investigation-tests",
+      "job_id": 119973363358,
+      "conclusion": "success",
+      "completed_at": "2026-10-22T17:18:59Z"
+    }
+  ]
+}
