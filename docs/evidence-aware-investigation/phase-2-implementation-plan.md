@@ -237,8 +237,8 @@ v4 复评（V4-1–V4-3）纳入位置：V4-1→M3 验收（明确覆盖范围+�
 | M5 评测核心 | 已完成（独立复核、冻结标注、持久化 artifact、双 CI）；见 [验收记录](acceptance/m5-integration-acceptance.md) | `0016c80`（集成），`af8028b`（最终标注与 artifact） | 通过（`af8028b`，[run 39759499643](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/39759499643)） |
 | M6 基线层 | 已完成（自检、辅助独立复核、同一提交双 CI） | `7cd8887`（实现） | 通过（`7cd8887`，[run 39817946163](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/39817946163)） |
 | M7 Proposed 层 | 已完成（全量回归、双路独立复核、同一实现提交双 CI）；见 [验收记录](acceptance/m7-proposed-acceptance.md) | `ea5d1f0`（实现） | 通过（`ea5d1f0`，[run 39821412776](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/39821412776)） |
-| M8a 工程验收报告（假模型） | | | |
-| M8b 真实模型探索报告 | | | |
+| M8a 工程验收报告（假模型） | 已完成（175-run 假模型批次、归档重放、双 CI；无策略结论）；见 [验收记录](acceptance/m8a-engineering-acceptance.md) | `d3b8341`（实现） | 通过（`d3b8341`，[run 39823511219](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/39823511219)） |
+| M8b 真实模型探索报告 | 未完成（真实模型调用需单独费用上限授权） | | 未运行 |
 
 ### 7.3 工程验收与实验结论分开判断
 

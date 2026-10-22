@@ -1,0 +1,37 @@
+{
+  "milestone": "M8a",
+  "mode": "deterministic fake model engineering acceptance",
+  "implementation_commit": "d3b8341f8feac4d3c1884d52d77d7342adb3093a",
+  "ci": {
+    "run_id": 39823511219,
+    "url": "https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/39823511219",
+    "test": "success",
+    "investigation-tests": "success"
+  },
+  "local_tests": {
+    "full": "683 passed in 11.27s",
+    "m8a_and_evaluator": "32 passed in 5.07s"
+  },
+  "artifact": {
+    "path": "evals/reports/m8a-fake-d3b8341",
+    "run_count": 175,
+    "valid_runs": 175,
+    "failed_runs": 0,
+    "leakage_findings": 0,
+    "files": 752,
+    "bytes": 14536362,
+    "replay": {
+      "verified_files": 751,
+      "replayed_runs": 175,
+      "reports": 25
+    },
+    "sha256": {
+      "checksums.sha256": "efb514c1646e22b6126f140f293e434c9480337b4c7145d715234f1aa5dc9145",
+      "inventory.json": "1701dad6e67ed12df18602734bf0dc9a456cb468c8c760417a10c0dbd5797ade",
+      "config.json": "d4582b58dbe5398bcd33ddd64615fc4c7c4c45993a19f1464f8b8890ea164b1c",
+      "reports/summary.md": "d6d4be713cbcd18d539dae126cd6760e5dbf961c03101ed6fb131f0699dc2c85"
+    }
+  },
+  "claim_boundary": "Engineering flow only. No method superiority, real-model quality, generalization, production-readiness or real-response claim.",
+  "m8b_status": "not run; paid real-model calls require separate authorization"
+}
