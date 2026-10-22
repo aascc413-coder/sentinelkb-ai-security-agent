@@ -138,3 +138,101 @@ async def test_final_usage_must_include_budget_clock_even_when_trace_started_lat
     final_path.write_text(json.dumps(final), encoding="utf-8")
     with pytest.raises(ProtocolViolation, match="final usage precedes"):
         replay_run(folder)
+
+
+async def make_model_trace(tmp_path, mode="known"):
+    from evidence_investigation.runtime.model import FakeScriptedModel, run_model_call
+    from evidence_investigation.state.contracts import Usage
+    from test_model_adapter import VALID_FINAL, INVALID_FINAL
+
+    class FailingTools:
+        async def siem(self, query, context):
+            raise RuntimeError("unmeasured backend failure")
+
+    dispatcher, registry, budget = make_dispatcher(FailingTools() if mode == "tool_unknown" else build_server())
+    trace = TraceRecorder("run-1", make_manifest(), tmp_path, usage_provider=budget.snapshot)
+    trace.emit("alert_received", {"alert": encode(registry.alert)}, state_version_after=1)
+    if mode == "tool_unknown":
+        dispatcher.trace = trace
+        await dispatcher.dispatch(siem_call())
+    script = [VALID_FINAL]
+    if mode == "repair":
+        script = [INVALID_FINAL, VALID_FINAL]
+    elif mode == "unknown":
+        script = [lambda *args: (VALID_FINAL, None)]
+    elif mode == "partial":
+        script = [lambda *args: (VALID_FINAL, Usage(input_tokens=7, usage_complete=False))]
+    await run_model_call(
+        budget, FakeScriptedModel(script), run_id="run-1", phase="final",
+        messages=({"role": "user", "content": "investigate"},),
+        schema_name="final_assessment.schema.json", max_output_tokens=800,
+        estimated_input_tokens=100, trace=trace,
+    )
+    trace.finalize(make_final())
+    return trace.dir
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("mode,counts,complete", [
+    ("known", (1, 100, 50), True), ("repair", (2, 200, 100), True),
+    ("unknown", (1, 0, 0), False), ("partial", (1, 7, 0), False),
+    ("tool_unknown", (1, 100, 50), False),
+])
+async def test_model_ledger_accepts_measured_repair_and_preserves_unknown(tmp_path, mode, counts, complete):
+    replay = replay_run(await make_model_trace(tmp_path, mode))
+    assert (replay.usage.model_calls, replay.usage.input_tokens, replay.usage.output_tokens) == counts
+    assert replay.usage.usage_complete is complete
+    settlements = [e for e in replay.events if e.event_type == "budget_reconciled"]
+    if mode == "unknown":
+        assert settlements[0].payload["actual_usage"] is None
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("corruption", [
+    "zero_tokens", "calls", "completeness", "missing_settlement", "duplicate_settlement",
+    "missing_reservation", "duplicate_reservation", "settlement_estimate",
+    "settlement_phase", "snapshot_tokens", "actual_negative", "actual_boolean",
+    "duplicate_output", "output_identity", "unknown_marked_complete", "invented_cost",
+])
+async def test_model_ledger_rejects_corrupt_usage_and_lifecycle(tmp_path, corruption):
+    folder = await make_model_trace(tmp_path, "unknown" if corruption == "unknown_marked_complete" else "known")
+    path = folder / "events.jsonl"
+    events = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
+    final_path = folder / "final.json"
+    final = json.loads(final_path.read_text(encoding="utf-8"))
+    settlement = next(e for e in events if e["event_type"] == "budget_reconciled")
+    reservation = next(e for e in events if e["event_type"] == "budget_checked")
+    output = next(e for e in events if e["event_type"] == "model_output_recorded")
+    if corruption == "zero_tokens":
+        final["usage"]["input_tokens"] = final["usage"]["output_tokens"] = 0
+    elif corruption == "calls":
+        final["usage"]["model_calls"] = 0
+    elif corruption in {"completeness", "unknown_marked_complete"}:
+        final["usage"]["usage_complete"] = not final["usage"]["usage_complete"]
+    elif corruption == "invented_cost":
+        final["usage"]["model_cost"], final["usage"]["currency"] = 0.0, "USD"
+    elif corruption.startswith("missing_"):
+        events.remove(settlement if corruption == "missing_settlement" else reservation)
+    elif corruption.startswith("duplicate_"):
+        target = {"duplicate_settlement": settlement, "duplicate_reservation": reservation,
+                  "duplicate_output": output}[corruption]
+        events.insert(events.index(target), json.loads(json.dumps(target)))
+    elif corruption == "settlement_estimate":
+        settlement["payload"]["estimated_input_tokens"] += 1
+    elif corruption == "settlement_phase":
+        settlement["payload"]["phase"] = "plan"
+    elif corruption == "snapshot_tokens":
+        settlement["usage_snapshot"]["output_tokens"] = 0
+    elif corruption == "actual_negative":
+        settlement["payload"]["actual_usage"]["input_tokens"] = -1
+    elif corruption == "actual_boolean":
+        settlement["payload"]["actual_usage"]["input_tokens"] = True
+    elif corruption == "output_identity":
+        output["payload"]["call_id"] = "invented"
+    for index, event in enumerate(events, 1):
+        event["sequence"] = index
+    final["event_count"] = len(events)
+    path.write_text("\n".join(json.dumps(e) for e in events), encoding="utf-8")
+    final_path.write_text(json.dumps(final), encoding="utf-8")
+    with pytest.raises(ProtocolViolation):
+        replay_run(folder)

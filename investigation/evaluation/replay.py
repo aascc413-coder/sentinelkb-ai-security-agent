@@ -37,6 +37,7 @@ class ReplayResult:
     usage: Usage
     tool_results: tuple[ToolResult, ...]
     model_output_revisions: tuple[dict, ...]
+    events: tuple[TraceEvent, ...] = ()
 
 
 def _require(condition, detail):
@@ -59,6 +60,95 @@ def _strict_line(text):
     def invalid_constant(value):
         raise ProtocolViolation("invalid_trace", f"non-finite JSON: {value}")
     return json.loads(text, object_pairs_hook=pairs, parse_constant=invalid_constant)
+
+
+def _verify_model_ledger(events, final_usage):
+    """Verify registry-v1's sequential reservation/settlement protocol offline.
+
+    The request is budget_checked(kind=model_reserve), not model_requested.
+    Settlements lack call IDs: pairing therefore relies on exactly one pending
+    reservation and matching phase/estimates. This checks trace consistency,
+    not provider truth. Unknown actual_usage stays None in the returned events;
+    aggregate tokens represent only known measurements, never estimated cost.
+    """
+    pending = None
+    attempts = {}
+    calls = inputs = outputs = 0
+    complete = cost_complete = True
+    cost = currency = None
+
+    def integer(value):
+        _require(type(value) is int and value >= 0, "invalid model ledger integer")
+
+    def check_snapshot(usage, *, reserved=False):
+        for value in (usage.model_calls, usage.input_tokens, usage.output_tokens):
+            integer(value)
+        _require((usage.model_calls, usage.input_tokens, usage.output_tokens)
+                 == (calls, inputs, outputs), "model ledger token/count mismatch")
+        _require(type(usage.usage_complete) is bool
+                 and usage.usage_complete == (complete and not reserved),
+                 "model ledger completeness mismatch")
+        _require(usage.model_cost == cost and usage.currency == currency,
+                 "model ledger monetary cost mismatch")
+
+    for event in events:
+        body = event.payload
+        if event.event_type == "tool_returned":
+            if body.get("backend_called") and body.get("result") is None:
+                complete = False
+        elif event.event_type == "budget_checked" and body.get("kind") == "model_reserve":
+            _require(pending is None, "overlapping model reservations")
+            call_id, attempt = body["call_id"], body["attempt"]
+            _require(isinstance(call_id, str) and bool(call_id), "missing model call identity")
+            integer(attempt)
+            _require(attempt == attempts.get(call_id, 0) + 1 and attempt <= 2,
+                     "duplicate/noncontiguous model attempt")
+            integer(body["estimated_input_tokens"])
+            integer(body["max_output_tokens"])
+            attempts[call_id] = attempt
+            pending = (body, False)
+            calls += 1
+            check_snapshot(event.usage_snapshot, reserved=True)
+        elif event.event_type == "model_output_recorded":
+            _require(pending is not None and not pending[1], "orphan/duplicate model output")
+            request = pending[0]
+            _require(body["call_id"] == request["call_id"] and body["phase"] == request["phase"],
+                     "model output identity mismatch")
+            pending = (request, True)
+        elif event.event_type == "budget_reconciled":
+            _require(pending is not None and pending[1], "orphan/duplicate model settlement")
+            request = pending[0]
+            _require(body["phase"] == request["phase"]
+                     and body["estimated_input_tokens"] == request["estimated_input_tokens"]
+                     and body["reserved_output_tokens"] == request["max_output_tokens"],
+                     "model settlement reservation mismatch")
+            actual = body["actual_usage"]
+            if actual is None:
+                complete = cost_complete = False
+            else:
+                actual = decode(Usage, actual)
+                integer(actual.input_tokens)
+                integer(actual.output_tokens)
+                _require(type(actual.usage_complete) is bool, "invalid actual completeness")
+                inputs += actual.input_tokens
+                outputs += actual.output_tokens
+                complete = complete and actual.usage_complete
+                if actual.model_cost is None or actual.currency is None:
+                    cost_complete = False
+                elif cost_complete:
+                    _require(type(actual.model_cost) in (int, float)
+                             and actual.model_cost >= 0, "invalid measured model cost")
+                    if currency not in (None, actual.currency):
+                        cost_complete = False
+                    else:
+                        currency = actual.currency
+                        cost = (cost or 0.0) + actual.model_cost
+            if not cost_complete:
+                cost = currency = None
+            pending = None
+            check_snapshot(event.usage_snapshot)
+    _require(pending is None, "missing model settlement")
+    check_snapshot(final_usage)
 
 
 def replay_run(run_dir: str | Path) -> ReplayResult:
@@ -199,9 +289,11 @@ def _replay_run(run_dir: str | Path) -> ReplayResult:
                      "operational IDs mismatch")
             _require(notice.state_version_after == version, "registration version mismatch")
         elif event.event_type == "model_output_recorded":
-            model_revisions.append(body)
+            model_revisions.append({**body, "available_evidence_ids": list(facts),
+                                    "trace_sequence": event.sequence})
     _require(set(requests) == returned and not registrations, "incomplete tool lifecycle")
     _require(usage.tool_attempts == len(requests), "final tool attempt count mismatch")
     _require(usage.elapsed_ms >= max(elapsed, usage_elapsed), "final usage precedes trace events")
+    _verify_model_ledger(events, usage)
     validate_final_assessment(final, facts)
-    return ReplayResult(manifest, alert, facts, final, usage, tuple(results), tuple(model_revisions))
+    return ReplayResult(manifest, alert, facts, final, usage, tuple(results), tuple(model_revisions), events)

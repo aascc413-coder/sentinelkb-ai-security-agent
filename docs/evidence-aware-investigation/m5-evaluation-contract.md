@@ -50,3 +50,19 @@ M4 的 model_output_recorded 是同一逻辑 call_id 的追加状态。原始提
 ## 边界
 
 5 个公开合成案例仅用于工程调试，不据此声称提升准确率或完成校准。当前 M4 的已知事实引用验证不等于语义 grounding，Trace 读写不等于独立评分；这两项必须由 M5 的后续模块补齐。
+
+## 尚缺标注的指标定义（2026-10-22）
+
+以下指标不从最终真值倒推标签，也不将关键证据集合冒充判别证据集合。当前五案缺少相应冻结标注，因此报告明确为 NA。
+
+- Discriminating evidence recall：已获得的、独立标注为可区分竞争假设的可观测事实数 / 全部此类可观测事实数；按 canonical fact 去重。需要 discrimination_fact_keys。
+- Required abstention recall：被预先标注为在本次模型/工具/时间/token预算条件下必须 Abstain 的案例中，实际 Abstain 数 / 此类有效案例数。需要按预算配置冻结 required_abstention 标签；不能仅凭未查询证据判为必须拒判。
+- Avoidable abstention rate：预算内有合法可行充分调查路径的有效案例中，实际 Abstain 数 / 此类案例数。需要可解性标注及可行路径成本证据，不能用 full-observable 可解性替代预算内可解性。
+- Suspicious citable-risk proportion：有效 Suspicious 中至少引用一项独立标注风险线索且语义核验通过的案例数 / 有风险线索标注的有效 Suspicious 数；同时报告标注覆盖率。需要 risk_clue_fact_keys。
+- Calibration：保存 p_attack、世界真值、缺失概率标记；有概率的有效样本计算 Brier 均值，缺失概率不填 0。ECE 与校准曲线留待样本扩充，当前无校准效果声明。
+
+效率原始数据按运行保留，未知 token 为 null。汇总工具可计算均值与 nearest-rank P50/P95，但五案验收只使用逐案计数，不展示小样本分位数作为性能结论。全部尝试保留失败分母；正确 TP/FP 另组，费用货币不得混加。
+
+## 模型请求等价性测试的边界
+
+C4/C5 集成测试使用实际 CapturingModelAdapter 输入，覆盖公共事实和输出 schema。仅规范 source.call_id、相应 /envelope 引用中的调用编号，以及非证据的剩余请求 timeout_seconds；业务 host、user、process_id、任务编号、时间、hash 与事实值不规范。通过 host 差异负控证明不能掩盖业务差异。该测试验证当前工程请求组装；M6 每个基线与 M7 后续请求组装仍需接入同一捕获检查。
