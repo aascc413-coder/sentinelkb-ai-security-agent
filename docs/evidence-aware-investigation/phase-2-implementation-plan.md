@@ -234,7 +234,7 @@ v4 复评（V4-1–V4-3）纳入位置：V4-1→M3 验收（明确覆盖范围+�
 | M2 数据集层与充分性判定表 | 已完成（自检、独立复核及同源码双 job CI）；见 [实现验收](acceptance/m2-m3-acceptance.md) | `751c77d`（源码），后续记录保留该 SHA | 通过（[run 37209746221](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/37209746221)） |
 | M3 工具服务层 | 已完成；M2 门槛通过后确认五案回放、27 组双胞胎查询与独立复验；M4 父依赖已满足 | `751c77d`（五案集成） | 同上，两 job 均通过；PR run 37209748506 也通过 |
 | M4 运行时层与公共 Registry | 已完成（完整链路、独立复核、双 CI） | `3384e72`（实现），`79d0042`（验收记录） | 通过（`79d0042`，[run 39550140454](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/39550140454)） |
-| M5 评测核心 | 本地验收通过，最终远端 CI 待核对；见 [验收记录](acceptance/m5-integration-acceptance.md) | `0016c80`（首批集成），最终标注提交待写回 | 首批通过（[run 39758116477](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/39758116477)）；最终待核对 |
+| M5 评测核心 | 已完成（独立复核、冻结标注、持久化 artifact、双 CI）；见 [验收记录](acceptance/m5-integration-acceptance.md) | `0016c80`（集成），`af8028b`（最终标注与 artifact） | 通过（`af8028b`，[run 39759499643](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/39759499643)） |
 | M6 基线层 | | | |
 | M7 Proposed 层 | | | |
 | M8a 工程验收报告（假模型） | | | |

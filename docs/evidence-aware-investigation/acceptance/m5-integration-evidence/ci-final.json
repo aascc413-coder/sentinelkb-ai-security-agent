@@ -1,0 +1,21 @@
+{
+  "run_id": 39759499643,
+  "head_sha": "af8028b3ec6be33a0b4df30f720b1c68351bf0c1",
+  "status": "completed",
+  "conclusion": "success",
+  "html_url": "https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/39759499643",
+  "jobs": [
+    {
+      "id": 119759846813,
+      "name": "investigation-tests",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119759847268,
+      "name": "test",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ]
+}
