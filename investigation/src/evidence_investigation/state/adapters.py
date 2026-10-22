@@ -17,8 +17,11 @@ from dataclasses import replace
 from typing import Any
 
 from .codec import decode
-from .contracts import Claim, FinalAssessment
-from .schema_loader import FINAL_ASSESSMENT, validate_model_output
+from .contracts import (
+    AssetQuery, AttackQuery, Claim, FinalAssessment, FinishAction, HistoryQuery,
+    SIEMQuery, TIQuery, ToolAction,
+)
+from .schema_loader import ACTION, FINAL_ASSESSMENT, validate_model_output
 
 #: 程序强制字段的值（模型声明被忽略）
 DEFAULT_CONFIDENCE_STATUS = "uncalibrated"
@@ -36,3 +39,22 @@ def codec_claim(raw: dict[str, Any]) -> Claim:
     from .codec import decode
 
     return decode(Claim, raw)
+
+
+_ACTION_ARGUMENTS = {
+    "siem": SIEMQuery,
+    "threat_intel": TIQuery,
+    "asset": AssetQuery,
+    "history": HistoryQuery,
+    "attack": AttackQuery,
+}
+
+
+def action_from_output(payload: dict[str, Any]) -> ToolAction | FinishAction:
+    """Validate the public action union and adapt it to typed runtime objects."""
+    validate_model_output(payload, ACTION)
+    if payload["action"] == "finish":
+        return FinishAction("finish", final_assessment_from_output(payload["final"]))
+    tool = payload["tool"]
+    arguments = decode(_ACTION_ARGUMENTS[tool], payload["arguments"])
+    return ToolAction("tool", tool, arguments)

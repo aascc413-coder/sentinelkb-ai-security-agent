@@ -155,7 +155,11 @@ async def test_model_error_reconciles_with_unknown_usage():
 
 
 def test_openai_compat_adapter_parses_content_and_usage():
+    observed = {}
+
     def handler(request: httpx.Request) -> httpx.Response:
+        import json
+        observed.update(json.loads(request.content))
         return httpx.Response(200, json={
             "choices": [{"message": {"content": "{\"verdict\": \"TP\"}"}}],
             "usage": {"prompt_tokens": 12, "completion_tokens": 34},
@@ -165,11 +169,59 @@ def test_openai_compat_adapter_parses_content_and_usage():
                                   model="test-model", transport=httpx.MockTransport(handler))
 
     async def call():
-        return await adapter.complete([{"role": "user", "content": "hi"}], {}, 100, 5)
+        return await adapter.complete(
+            [{"role": "user", "content": "hi"}], {"type": "object"}, 100, 5
+        )
 
     output, usage = asyncio_run(call())
     assert output == {"verdict": "TP"}
     assert (usage.input_tokens, usage.output_tokens) == (12, 34)
+    assert observed["messages"] == [{"role": "user", "content": "hi"}]
+
+
+@pytest.mark.asyncio
+async def test_run_model_call_sends_self_contained_final_contract_on_wire():
+    import json
+    observed = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        observed.update(json.loads(request.content))
+        return httpx.Response(200, json={
+            "choices": [{"message": {"content": json.dumps(VALID_FINAL)}}],
+            "usage": {"prompt_tokens": 20, "completion_tokens": 10},
+        })
+
+    adapter = OpenAICompatAdapter(
+        api_key="k", base_url="https://api.test/v1", model="m",
+        transport=httpx.MockTransport(handler),
+    )
+    result = await run_model_call(
+        make_budget(), adapter, run_id="wire", phase="final",
+        messages=({"role": "user", "content": "case"},),
+        schema_name="final_assessment.schema.json", max_output_tokens=800,
+    )
+    schema_text = observed["messages"][0]["content"].split("\n", 1)[1]
+    schema = json.loads(schema_text)
+    assert "$ref" not in schema_text
+    assert schema["properties"]["verdict"]["enum"] == [
+        "TP", "FP", "Suspicious", "Abstain"
+    ]
+    assert "final_evidence_ids" in schema["required"]
+    assert result.token_plans[0].estimated_input_tokens >= len(schema_text) // 4
+
+
+@pytest.mark.asyncio
+async def test_run_model_call_maps_native_timeout_to_model_error():
+    budget = make_budget()
+    with pytest.raises(ModelError, match="timed out"):
+        await run_model_call(
+            budget, FakeScriptedModel([TimeoutError("provider stalled")]),
+            run_id="timeout", phase="final",
+            messages=({"role": "user", "content": "x"},),
+            schema_name="final_assessment.schema.json", max_output_tokens=800,
+        )
+    assert budget.snapshot().model_calls == 1
+    assert not budget.snapshot().usage_complete
 
 
 def test_openai_compat_adapter_maps_failures():

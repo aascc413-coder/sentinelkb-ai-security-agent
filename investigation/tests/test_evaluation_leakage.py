@@ -92,7 +92,9 @@ async def test_actual_fake_adapter_inputs_capture_alert_and_tool_canaries(where)
     assert result.output == FINAL
     assert fake.calls == 1 and wrapper.captures[0].forwarded
     captured = wrapper.captures[0]
-    assert captured.request["messages"] == messages
+    assert captured.request["messages"][1:] == messages
+    assert captured.request["messages"][0]["role"] == "system"
+    assert "self-contained JSON Schema" in captured.request["messages"][0]["content"]
     assert captured.request["max_output_tokens"] == 800
     assert captured.request["timeout_seconds"] > 0
     assert captured.request["output_schema"]["type"] == "object"

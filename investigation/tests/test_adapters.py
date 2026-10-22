@@ -3,7 +3,7 @@
 import pytest
 
 from evidence_investigation.state import adapters
-from evidence_investigation.state.contracts import FinalAssessment
+from evidence_investigation.state.contracts import FinalAssessment, FinishAction, ToolAction
 from evidence_investigation.state.errors import ProtocolViolation
 from evidence_investigation.state.schema_loader import (
     FINAL_ASSESSMENT,
@@ -66,3 +66,31 @@ def test_adapter_overrides_model_claimed_confidence_status():
         {**MINIMAL_OUTPUT, "confidence_status": "dev_calibrated"}
     )
     assert fa.confidence_status == "uncalibrated"
+
+
+def test_public_tool_action_maps_to_typed_query_without_proposed_fields():
+    action = adapters.action_from_output({
+        "action": "tool", "tool": "siem", "arguments": {
+            "view": "process_tree",
+            "window": {"start": "2026-09-01T02:10:00+00:00",
+                       "end": "2026-09-01T02:20:00+00:00"},
+            "host": "WS-041", "process_id": "p-101",
+        },
+    })
+    assert isinstance(action, ToolAction)
+    assert action.tool == "siem" and action.arguments.host == "WS-041"
+    assert not hasattr(action, "hypotheses_to_distinguish")
+
+
+def test_public_finish_action_reuses_final_adapter():
+    action = adapters.action_from_output({"action": "finish", "final": MINIMAL_OUTPUT})
+    assert isinstance(action, FinishAction)
+    assert action.final.confidence_status == "uncalibrated"
+
+
+def test_public_action_rejects_tool_argument_mismatch():
+    with pytest.raises(ProtocolViolation, match="schema_violation"):
+        adapters.action_from_output({
+            "action": "tool", "tool": "asset",
+            "arguments": {"snapshot_version": "attack-v1"},
+        })

@@ -192,3 +192,22 @@ def test_unknown_schema_name_rejected():
 def test_schema_contents_returns_action_union():
     contents = sl.schema_contents(sl.ACTION)
     assert "oneOf" in contents
+
+
+def test_model_schema_is_self_contained_and_preserves_public_tool_contract():
+    contents = sl.model_schema_contents(sl.ACTION)
+
+    def refs(value):
+        if isinstance(value, dict):
+            return sum((refs(child) for child in value.values()), []) + (
+                [value["$ref"]] if "$ref" in value else []
+            )
+        if isinstance(value, list):
+            return sum((refs(child) for child in value), [])
+        return []
+
+    assert refs(contents) == []
+    wire = str(contents)
+    for tool in ("siem", "threat_intel", "asset", "history", "attack"):
+        assert tool in wire
+    assert "final_evidence_ids" in wire and "verdict" in wire

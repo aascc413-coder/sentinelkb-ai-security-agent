@@ -9,6 +9,7 @@ ModelOutputRecord.validation_error（V4-3A）。
 from __future__ import annotations
 
 import json
+from copy import deepcopy
 from functools import lru_cache
 from importlib import resources
 from pathlib import Path
@@ -58,6 +59,55 @@ def schema_contents(name: str = ACTION) -> dict[str, Any]:
     if name not in SCHEMA_NAMES:
         raise ProtocolViolation("unknown_schema", f"未知 Schema：{name}")
     return _load_contents(name)
+
+
+@lru_cache(maxsize=None)
+def model_schema_contents(name: str = ACTION) -> dict[str, Any]:
+    """Return a self-contained schema suitable for a provider request.
+
+    Runtime validation keeps the registered multi-document schemas.  A model
+    provider does not have access to those local resources, so every ``$ref``
+    is expanded before the schema crosses the adapter boundary.
+    """
+    if name not in SCHEMA_NAMES:
+        raise ProtocolViolation("unknown_schema", f"未知 Schema：{name}")
+    documents = {contents["$id"]: contents
+                 for item in _REGISTERED
+                 if (contents := _load_contents(item)).get("$id")}
+    root = _load_contents(name)
+
+    def pointer(document, fragment):
+        value = document
+        if fragment:
+            if not fragment.startswith("/"):
+                raise ProtocolViolation("invalid_schema_ref", fragment)
+            for token in fragment[1:].split("/"):
+                token = token.replace("~1", "/").replace("~0", "~")
+                try:
+                    value = value[token]
+                except (KeyError, TypeError) as exc:
+                    raise ProtocolViolation("invalid_schema_ref", fragment) from exc
+        return value
+
+    def expand(value, document):
+        if isinstance(value, list):
+            return [expand(item, document) for item in value]
+        if not isinstance(value, dict):
+            return deepcopy(value)
+        if "$ref" in value:
+            if set(value) != {"$ref"}:
+                raise ProtocolViolation(
+                    "invalid_schema_ref", "$ref siblings are not supported in model schemas"
+                )
+            reference = value["$ref"]
+            base, marker, fragment = reference.partition("#")
+            target_document = document if not base else documents.get(base)
+            if target_document is None:
+                raise ProtocolViolation("invalid_schema_ref", reference)
+            return expand(pointer(target_document, fragment if marker else ""), target_document)
+        return {key: expand(child, document) for key, child in value.items()}
+
+    return expand(root, root)
 
 
 def validate_model_output(instance: Any, name: str = ACTION) -> None:

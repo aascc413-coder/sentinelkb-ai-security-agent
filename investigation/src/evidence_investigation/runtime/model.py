@@ -184,20 +184,29 @@ async def run_model_call(
     Model records are append-only revisions identified by call_id; the last one
     contains the cumulative raw/validation/repaired/accepted states.
     """
-    from evidence_investigation.state.schema_loader import schema_contents
+    from evidence_investigation.state.schema_loader import model_schema_contents
     from .budget import BudgetExceeded
 
-    schema = schema_contents(schema_name)  # Fail before reserving anything.
-    current_messages = tuple(messages)
+    schema = model_schema_contents(schema_name)  # Resolve local refs before provider input.
+    schema_instruction = {
+        "role": "system",
+        "content": (
+            "Return exactly one JSON object matching this self-contained JSON Schema. "
+            "Treat the schema as output syntax, not investigation evidence.\n"
+            + json.dumps(schema, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+        ),
+    }
+    provider_messages = (schema_instruction, *tuple(messages))
+    current_messages = provider_messages
     plans = []
     first_raw = None
     first_error = None
     record_id = None
     for attempt in range(2):
         estimate = (estimated_input_tokens if estimated_input_tokens is not None
-                    else _estimate_input(current_messages, schema_name))
+                    else _estimate_input(current_messages))
         if attempt and estimated_input_tokens is not None:
-            estimate += _estimate_input(current_messages[len(messages):], schema_name)
+            estimate += _estimate_input(current_messages[len(provider_messages):])
         plan = budget.reserve_model(
             estimate, max_output_tokens, finalization=phase == "final",
             estimate_note="caller estimate plus repair prompt" if estimated_input_tokens is not None
@@ -225,6 +234,8 @@ async def run_model_call(
         except ModelFormatError as exc:
             raw, usage = exc.raw_output, exc.usage
             failure = ProtocolViolation("model_output_invalid", str(exc))
+        except TimeoutError:
+            failure = ModelError("model call timed out")
         except BaseException as exc:
             # Includes task cancellation: release pending and retain unknown charge.
             failure = exc
@@ -263,7 +274,7 @@ async def run_model_call(
             raise failure
         if attempt:
             raise ProtocolViolation("model_output_invalid", str(failure)) from failure
-        current_messages = tuple(messages) + (
+        current_messages = provider_messages + (
             {"role": "assistant", "content": json.dumps(raw, ensure_ascii=False)},
             {"role": "user", "content": f"Output validation failed: {first_error}. Return a corrected JSON object using only available evidence."},
         )
@@ -290,9 +301,9 @@ def _emit_model_events(trace, step: int, record: ModelOutputRecord, *plans: Toke
         }, step=step)
 
 
-def _estimate_input(messages, schema_name: str) -> int:
-    """粗估：每条消息内容 chars/4 + Schema 负载 chars/4；无法精确时注明方式。"""
-    total = len(schema_name) // 4
+def _estimate_input(messages) -> int:
+    """Conservative chars/4 estimate over the actual provider messages."""
+    total = 0
     for message in messages:
         content = message.get("content", "") if isinstance(message, dict) else str(message)
         total += len(str(content)) // 4 + 8

@@ -172,6 +172,9 @@ async def test_twin_cases_actual_adapter_requests_equal_except_transport_call_id
         call_ids = {}
         for request in requests:
             for message in request['messages']:
+                if (message['role'] == 'system'
+                        and message['content'].startswith('Return exactly one JSON object')):
+                    continue  # Shared schema instruction is identical across the twin runs.
                 facts = json.loads(message['content'])
                 for fact in facts:
                     cid = fact['source']['call_id']
@@ -193,7 +196,7 @@ async def test_twin_cases_actual_adapter_requests_equal_except_transport_call_id
     assert normalize(left) == normalize(right)
     # Do not hide business identifiers while normalizing transport metadata.
     changed = deepcopy(right)
-    facts = json.loads(changed[0].request['messages'][0]['content'])
+    facts = json.loads(changed[0].request['messages'][1]['content'])
     facts[0]['value']['host'] = 'DIFFERENT-HOST'
-    changed[0].request['messages'][0]['content'] = json.dumps(facts)
+    changed[0].request['messages'][1]['content'] = json.dumps(facts)
     assert normalize(left) != normalize(changed)

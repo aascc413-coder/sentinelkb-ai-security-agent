@@ -200,6 +200,24 @@ def _assessment_error(raw, facts, valid_ids):
                    for claim in final.claims if claim.kind == 'observation'))
 
 
+def _assessment_payload(raw):
+    """Extract the shared FinalAssessment from direct or public finish output."""
+    if not isinstance(raw, dict):
+        return None
+    if 'verdict' in raw:
+        return raw
+    if raw.get('action') == 'finish' and isinstance(raw.get('final'), dict):
+        return raw['final']
+    return None
+
+
+def _is_assessment_attempt(raw):
+    """Recognize intent separately so malformed ReAct finish payloads still count."""
+    return isinstance(raw, dict) and (
+        'verdict' in raw or raw.get('action') == 'finish'
+    )
+
+
 def score_run(replay: ReplayResult, oracle: OracleCase, *, namespace: str = "runtime-v1",
               annotation: CaseEvaluationAnnotation | None = None) -> CaseScore:
     """Score one replay against independent annotations; no hidden data reaches agent.
@@ -275,16 +293,19 @@ def score_run(replay: ReplayResult, oracle: OracleCase, *, namespace: str = "run
     by_call = defaultdict(list)
     for revision in replay.model_output_revisions:
         raw = revision.get('raw_output')
-        if revision.get('phase') == 'final' or isinstance(raw, dict) and 'verdict' in raw:
+        accepted = revision.get('accepted_output')
+        if (revision.get('phase') == 'final' or _is_assessment_attempt(raw)
+                or _is_assessment_attempt(accepted)):
             by_call[revision['call_id']].append(revision)
     scoped = [revisions for revisions in by_call.values()
               if 'available_evidence_ids' in revisions[0]]
-    raw_errors = sum(_assessment_error(revisions[0].get('raw_output'), facts,
+    raw_errors = sum(_assessment_error(_assessment_payload(revisions[0].get('raw_output')), facts,
                                       valid_ids & set(revisions[0]['available_evidence_ids']))
                      for revisions in scoped)
-    accepted = [(revisions[-1]['accepted_output'], valid_ids & set(revisions[-1]['available_evidence_ids']))
+    accepted = [(_assessment_payload(revisions[-1]['accepted_output']),
+                 valid_ids & set(revisions[-1]['available_evidence_ids']))
                 for revisions in by_call.values()
-                if revisions[-1].get('accepted_output') is not None
+                if _assessment_payload(revisions[-1].get('accepted_output')) is not None
                 and 'available_evidence_ids' in revisions[-1]]
     metrics['model_proposal_error_rate'] = _count(raw_errors, len(scoped))
     metrics['model_proposal_scoring_coverage'] = _count(len(scoped), len(by_call))

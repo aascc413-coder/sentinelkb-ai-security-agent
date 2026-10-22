@@ -398,6 +398,24 @@ class FinalAssessment:
     confidence_status: Literal["uncalibrated", "dev_calibrated", "unavailable"] = "uncalibrated"
 
 
+@dataclass(frozen=True)
+class ToolAction:
+    """Shared baseline/proposed adapter output; no hypothesis or scoring fields."""
+
+    action: Literal["tool"]
+    tool: ToolName
+    arguments: ToolArguments
+
+
+@dataclass(frozen=True)
+class FinishAction:
+    action: Literal["finish"]
+    final: FinalAssessment
+
+
+PublicAction: TypeAlias = ToolAction | FinishAction
+
+
 @dataclass
 class InvestigationState:
     run_id: str

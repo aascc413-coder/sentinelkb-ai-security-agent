@@ -197,6 +197,43 @@ def test_unsafe_fp_is_counted_as_false_close_not_dropped_as_protocol_failure():
     assert scored.evidence_sufficient is False
 
 
+def test_react_nested_finish_is_included_in_model_proposal_error_metrics():
+    replay, oracle = sample(1)
+    good = encode(replay.final)
+    bad = {**good, 'final_evidence_ids': ['ev-not-acquired']}
+    available = list(replay.facts)
+    revisions = (
+        {'call_id': 'react-final', 'phase': 'react_action_2',
+         'raw_output': {'action': 'finish', 'final': bad},
+         'accepted_output': None, 'available_evidence_ids': available},
+        {'call_id': 'react-final', 'phase': 'react_action_2',
+         'raw_output': {'action': 'finish', 'final': bad},
+         'accepted_output': {'action': 'finish', 'final': good},
+         'available_evidence_ids': available},
+    )
+    scored = score_run(replace(replay, model_output_revisions=revisions), oracle)
+    assert scored.metrics['model_proposal_error_rate'].value == 1
+    assert scored.metrics['model_proposal_scoring_coverage'].value == 1
+    assert scored.metrics['model_accepted_error_rate'].value == 0
+
+
+def test_malformed_react_finish_attempt_counts_as_proposal_error():
+    replay, oracle = sample(1)
+    available = list(replay.facts)
+    revisions = (
+        {'call_id': 'react-malformed', 'phase': 'react_action_1',
+         'raw_output': {'action': 'finish', 'final': 'bad'},
+         'accepted_output': None, 'available_evidence_ids': available},
+        {'call_id': 'react-malformed', 'phase': 'react_action_1',
+         'raw_output': {'action': 'finish', 'final': 'bad'},
+         'accepted_output': None, 'available_evidence_ids': available},
+    )
+    scored = score_run(replace(replay, model_output_revisions=revisions), oracle)
+    assert scored.metrics['model_proposal_error_rate'].value == 1
+    assert scored.metrics['model_proposal_scoring_coverage'].value == 1
+    assert scored.metrics['model_accepted_error_rate'].value is None
+
+
 @pytest.mark.parametrize('case', [1,2,3,4,5])
 def test_default_runtime_id_remapping_preserves_oracle_mapping(case):
     replay, oracle = sample(case, remap_ids=True)
