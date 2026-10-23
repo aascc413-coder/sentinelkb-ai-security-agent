@@ -301,11 +301,25 @@ class EvidenceRegistry:
     # ── 实体采集 ────────────────────────────────────────────────
 
     def _harvest_entities(self, payload: dict[str, JsonValue]) -> None:
-        for key in ("host", "user", "account", "process_id", "parent_process_id",
-                    "entity", "command_line", "cmdline", "command"):
-            self._harvest_string(key, payload.get(key))
-        for value in payload.values():
-            self._harvest_indicator(value)
+        entity_fields = {
+            "host", "user", "account", "process_id", "parent_process_id",
+            "entity", "command_line", "cmdline", "command",
+        }
+
+        def walk(value: JsonValue) -> None:
+            if isinstance(value, dict):
+                for key, child in value.items():
+                    if key in entity_fields:
+                        self._harvest_string(key, child)
+                    if isinstance(child, str):
+                        self._harvest_indicator(child)
+                    else:
+                        walk(child)
+            elif isinstance(value, list):
+                for child in value:
+                    walk(child)
+
+        walk(payload)
 
     def _harvest_string(self, field_name: str, value: JsonValue) -> None:
         if not isinstance(value, str) or not value.strip():

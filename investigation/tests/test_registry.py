@@ -72,6 +72,20 @@ def test_tool_result_registers_facts_with_provenance():
     assert "203.0.113.66" in registry.known_entities()["indicators"]
 
 
+def test_nested_tool_record_indicators_enter_authorization_ledger():
+    registry = EvidenceRegistry(make_alert())
+    nested = siem_record({
+        "script_observations": [
+            {"operation": "send", "destination": "203.0.113.77"},
+            {"operation": "download", "object": {"domain": "PAYLOAD.EXAMPLE."}},
+        ]
+    })
+    registry.register_tool_result(make_result([nested]))
+    known = registry.known_entities()["indicators"]
+    assert "203.0.113.77" in known
+    assert "payload.example" in known
+
+
 def test_mirror_records_share_fact_key_without_inflating_independence():
     registry = EvidenceRegistry(make_alert())
     first = registry.register_tool_result(make_result([siem_record(record_id="r-1")],
