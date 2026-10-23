@@ -4,6 +4,8 @@
 共用 `environment/shared-pair.json`，公开输入相同，仅 oracle 的不可观察世界不同。
 这五案验证工程机制，不构成统计 benchmark。
 
+`powershell-dev-v2/` 是 M10b 的独立版本化开发集，在不改变本目录五案种子字节的前提下扩展到 12 案。其说明、manifest、public/environment/oracle 文件均在该目录；对应评测标注为 `../evaluation/annotations/powershell-dev-v2.json`。
+
 - `public/`：仅告警，加载后交给 runtime。
 - `environment/`：工具服务持有，不提前交给模型。
 - `oracle/`：评测独占，含完整世界、可观察性和替代充分组合。

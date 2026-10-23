@@ -1,0 +1,180 @@
+{
+  "case_id": "C11",
+  "family_id": "powershell-telemetry-gap-pair-v1",
+  "split": "dev",
+  "ground_truth": "benign",
+  "complete_world_evidence": {
+    "E0": {
+      "source": "alert",
+      "record_ids": [
+        "3dbb4b7cf3b4a3a094d4e034c1e74fcc"
+      ],
+      "observation": "PowerShell detector fired; detector text is not verified behavior."
+    },
+    "E1": {
+      "source": "siem",
+      "record_ids": [
+        "5b86ffc5667571f37d7391397f36c128"
+      ],
+      "observation": {
+        "view": "process_tree",
+        "host": "WS-110",
+        "user": "operator-d",
+        "process_id": "p-1010",
+        "process_guid": "b92f670f1a1ce2cadac5eaf2d7b15109",
+        "event_id": "3faa7898daf04a23a76488f357514133",
+        "occurred_at": "2026-09-01T02:14:00+00:00",
+        "observed_at": "2026-09-01T02:19:00+00:00",
+        "parent_process": "signed-admin.exe",
+        "child_process": [],
+        "job_id": null,
+        "script_hash": null,
+        "parameters": [],
+        "script_observations": []
+      }
+    },
+    "E2": {
+      "source": "siem",
+      "record_ids": [],
+      "operational_status": "unavailable",
+      "reason": "network_retention_unavailable"
+    },
+    "E3": {
+      "source": "asset",
+      "record_ids": [
+        "0d05445904d93851bd8dbbd854d1efb3"
+      ],
+      "observation": {
+        "host": "WS-110",
+        "published_at": "2026-09-01T02:19:00+00:00",
+        "purpose": "managed-workstation",
+        "system_type": "Windows",
+        "critical_asset": false,
+        "department": "synthetic-enterprise",
+        "approval_register_complete": false,
+        "approval_register_window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "approved_jobs": []
+      }
+    },
+    "E4": {
+      "source": "history",
+      "record_ids": [],
+      "operational_status": "unavailable",
+      "reason": "history_retention_unavailable"
+    },
+    "E5": {
+      "source": "attack",
+      "record_ids": [
+        "edd227ea74276504606a6c3d78618a70"
+      ],
+      "observation": {
+        "snapshot_version": "attack-local-v1",
+        "published_at": "2026-08-01T00:00:00+00:00",
+        "technique_id": "T1059.001",
+        "behavior_terms": [
+          "powershell_execution"
+        ],
+        "description": "PowerShell occurs in authorized and unauthorized activity; mapping is not a verdict."
+      }
+    },
+    "E6": {
+      "source": "oracle_only",
+      "record_ids": [],
+      "script_intent": "approved repair"
+    }
+  },
+  "observable_fact_keys": [
+    "E0",
+    "E1",
+    "E2",
+    "E3",
+    "E4",
+    "E5"
+  ],
+  "critical_fact_keys": [
+    "E6"
+  ],
+  "distractor_fact_keys": [
+    "E5"
+  ],
+  "sufficient_sets": {
+    "TP": [],
+    "FP": []
+  },
+  "acceptable_verdicts": [
+    "Abstain"
+  ],
+  "resolvable_with_full_observable_evidence": false,
+  "expected_actions": [
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E1"
+      ],
+      "acceptable_tools": [
+        "siem"
+      ],
+      "argument_constraints": {
+        "view": "process_tree",
+        "host": "WS-110",
+        "process_id": "p-1010"
+      },
+      "evidence_goal": "Inspect grounded current process behavior."
+    },
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E2"
+      ],
+      "acceptable_tools": [
+        "siem"
+      ],
+      "argument_constraints": {
+        "view": "network_events",
+        "host": "WS-110",
+        "process_id": "p-1010"
+      },
+      "evidence_goal": "Inspect same-instance network effects and coverage."
+    },
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E3"
+      ],
+      "acceptable_tools": [
+        "asset"
+      ],
+      "argument_constraints": {
+        "host": "WS-110"
+      },
+      "evidence_goal": "Check execution details against complete approvals."
+    },
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E4"
+      ],
+      "acceptable_tools": [
+        "history"
+      ],
+      "argument_constraints": {
+        "entity_type": "user",
+        "entity": "operator-d"
+      },
+      "evidence_goal": "Check comparable user history."
+    }
+  ],
+  "rubric_version": "powershell-v1",
+  "annotation_rationale": "Counterfactual pair has identical visible alert and tool world; decisive intent is hidden."
+}

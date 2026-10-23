@@ -93,9 +93,16 @@ def test_authoring_reproduction_has_exact_frozen_bytes(tmp_path):
     spec.loader.exec_module(module)
     module.ROOT = tmp_path
     module.main()
-    for source in (LAB / "datasets").rglob("*.json"):
+    seed_root = LAB / "datasets"
+    sources = [seed_root / "manifest.json"] + [
+        path for folder in ("public", "environment", "oracle")
+        for path in (seed_root / folder).glob("*.json")
+    ]
+    for source in sources:
         assert b"\r\n" not in source.read_bytes()
-        assert hashlib.sha256(source.read_bytes()).digest() == hashlib.sha256((tmp_path / source.relative_to(LAB / "datasets")).read_bytes()).digest()
+        assert hashlib.sha256(source.read_bytes()).digest() == hashlib.sha256(
+            (tmp_path / source.relative_to(seed_root)).read_bytes()
+        ).digest()
 
 
 @pytest.mark.parametrize("problem", ["hidden_observable", "source_mismatch", "unused_hash"])

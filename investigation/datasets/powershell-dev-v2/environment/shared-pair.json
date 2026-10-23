@@ -1,0 +1,353 @@
+{
+  "environment_id": "596ba14b3cee23a90c11780c650516c2",
+  "as_of": "2026-09-01T02:20:00+00:00",
+  "records_by_tool": {
+    "siem": [
+      {
+        "record_id": "0c703cc66d2bb2c5869baafddbe2832a",
+        "payload": {
+          "view": "process_tree",
+          "host": "WS-088",
+          "user": "operator-b",
+          "process_id": "p-404",
+          "process_guid": "65695b0e7c0b77b0a89891cf19139ccf",
+          "event_id": "086e89e14051505e440d7e0aaeed3fca",
+          "occurred_at": "2026-09-01T02:14:00+00:00",
+          "observed_at": "2026-09-01T02:19:00+00:00",
+          "parent_process": null,
+          "child_process": null,
+          "command_line": null
+        },
+        "content_sha256": "a85664377c5d641ff673b5bbd75fb965bc7dffbd4c3042e1545b139c74e31946",
+        "source_system": "edr",
+        "independence_group": "edr-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement, not model-generated",
+          "policy_version": "source-policy-v1"
+        }
+      },
+      {
+        "record_id": "71521e74fc0e2b1df8314a6a409ecf86",
+        "payload": {
+          "view": "host_events",
+          "host": "WS-088",
+          "user": "operator-b",
+          "process_id": "p-404",
+          "process_guid": "65695b0e7c0b77b0a89891cf19139ccf",
+          "event_id": "086e89e14051505e440d7e0aaeed3fca",
+          "occurred_at": "2026-09-01T02:14:00+00:00",
+          "observed_at": "2026-09-01T02:19:00+00:00",
+          "parent_process": null,
+          "child_process": null,
+          "command_line": null
+        },
+        "content_sha256": "4a443766d558ff303763a769014dbca7338d9be974d74bb7dab522f84239c8bd",
+        "source_system": "edr",
+        "independence_group": "edr-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement, not model-generated",
+          "policy_version": "source-policy-v1"
+        }
+      },
+      {
+        "record_id": "0e709baf3c416330ecdd52bd14e3f92d",
+        "payload": {
+          "view": "user_events",
+          "host": "WS-088",
+          "user": "operator-b",
+          "process_id": "p-404",
+          "process_guid": "65695b0e7c0b77b0a89891cf19139ccf",
+          "event_id": "086e89e14051505e440d7e0aaeed3fca",
+          "occurred_at": "2026-09-01T02:14:00+00:00",
+          "observed_at": "2026-09-01T02:19:00+00:00",
+          "parent_process": null,
+          "child_process": null,
+          "command_line": null
+        },
+        "content_sha256": "20917b3c5e22ef5736b99fc0e70cd942822e39f5f5e5f428ac42863a19bbee31",
+        "source_system": "edr",
+        "independence_group": "edr-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement, not model-generated",
+          "policy_version": "source-policy-v1"
+        }
+      }
+    ],
+    "threat_intel": [],
+    "asset": [
+      {
+        "record_id": "d284f4a033a8b8f5d8be2e48bbf268cc",
+        "payload": {
+          "host": "WS-088",
+          "published_at": "2026-09-01T02:19:00+00:00",
+          "purpose": "workstation",
+          "system_type": "Windows",
+          "critical_asset": false,
+          "department": "synthetic-operations",
+          "approval_register_complete": false,
+          "approval_register_window": {
+            "start": "2026-09-01T02:10:00+00:00",
+            "end": "2026-09-01T02:20:00+00:00"
+          },
+          "approved_jobs": []
+        },
+        "content_sha256": "7333ea4fe3a5d26f61fa898b3caad1e4ac016ed07df0efa642fa84999aeafa20",
+        "source_system": "change-register",
+        "independence_group": "change-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement, not model-generated",
+          "policy_version": "source-policy-v1"
+        }
+      }
+    ],
+    "history": [],
+    "attack": [
+      {
+        "record_id": "3f033939cc8abd1427f73c42209cfc54",
+        "payload": {
+          "snapshot_version": "attack-local-v1",
+          "published_at": "2026-08-01T00:00:00+00:00",
+          "technique_id": "T1059.001",
+          "behavior_terms": [
+            "PowerShell"
+          ],
+          "description": "PowerShell execution can occur in authorized and unauthorized activity; mapping is not an attack verdict."
+        },
+        "content_sha256": "c64b27e2c71828c213097d3ffbc1ffde8198f824cabcee5dbcaaddd79dc8cd19",
+        "source_system": "local-attack-knowledge",
+        "independence_group": "knowledge-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement, not model-generated",
+          "policy_version": "source-policy-v1"
+        }
+      }
+    ]
+  },
+  "query_rules": [
+    {
+      "tool": "siem",
+      "argument_constraints": {
+        "view": "process_tree",
+        "host": "WS-088"
+      },
+      "record_ids": [
+        "0c703cc66d2bb2c5869baafddbe2832a"
+      ],
+      "status": "partial",
+      "coverage": {
+        "scope": {
+          "view": "process_tree",
+          "host": "WS-088",
+          "user": null,
+          "process_id": null
+        },
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "completeness": "partial",
+        "truncated": false,
+        "missing_sources": [
+          "parent_process",
+          "child_process",
+          "command_line"
+        ]
+      },
+      "retryable": false,
+      "error_code": null
+    },
+    {
+      "tool": "siem",
+      "argument_constraints": {
+        "view": "host_events",
+        "host": "WS-088"
+      },
+      "record_ids": [
+        "71521e74fc0e2b1df8314a6a409ecf86"
+      ],
+      "status": "partial",
+      "coverage": {
+        "scope": {
+          "view": "host_events",
+          "host": "WS-088",
+          "user": "operator-b",
+          "process_id": null
+        },
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "completeness": "partial",
+        "truncated": false,
+        "missing_sources": [
+          "parent_process",
+          "child_process",
+          "command_line"
+        ]
+      },
+      "retryable": false,
+      "error_code": null
+    },
+    {
+      "tool": "siem",
+      "argument_constraints": {
+        "view": "user_events",
+        "user": "operator-b"
+      },
+      "record_ids": [
+        "0e709baf3c416330ecdd52bd14e3f92d"
+      ],
+      "status": "partial",
+      "coverage": {
+        "scope": {
+          "view": "user_events",
+          "host": "WS-088",
+          "user": "operator-b",
+          "process_id": null
+        },
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "completeness": "partial",
+        "truncated": false,
+        "missing_sources": [
+          "parent_process",
+          "child_process",
+          "command_line"
+        ]
+      },
+      "retryable": false,
+      "error_code": null
+    },
+    {
+      "tool": "siem",
+      "argument_constraints": {
+        "view": "network_events",
+        "host": "WS-088"
+      },
+      "record_ids": [],
+      "status": "unavailable",
+      "coverage": {
+        "scope": {
+          "view": "network_events",
+          "host": "WS-088"
+        },
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "completeness": "partial",
+        "truncated": false,
+        "missing_sources": [
+          "network_source_unavailable"
+        ]
+      },
+      "retryable": false,
+      "error_code": "network_source_unavailable"
+    },
+    {
+      "tool": "asset",
+      "argument_constraints": {
+        "host": "WS-088"
+      },
+      "record_ids": [
+        "d284f4a033a8b8f5d8be2e48bbf268cc"
+      ],
+      "status": "partial",
+      "coverage": {
+        "scope": {
+          "host": "WS-088",
+          "as_of": "2026-09-01T02:20:00+00:00"
+        },
+        "window": null,
+        "completeness": "partial",
+        "truncated": false,
+        "missing_sources": [
+          "approval_archive"
+        ]
+      },
+      "retryable": false,
+      "error_code": null
+    },
+    {
+      "tool": "history",
+      "argument_constraints": {
+        "entity_type": "host",
+        "entity": "WS-088"
+      },
+      "record_ids": [],
+      "status": "unavailable",
+      "coverage": {
+        "scope": {
+          "entity_type": "host",
+          "entity": "WS-088"
+        },
+        "window": {
+          "start": "2026-08-31T02:20:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "completeness": "partial",
+        "truncated": false,
+        "missing_sources": [
+          "history_source_unavailable"
+        ]
+      },
+      "retryable": false,
+      "error_code": "history_source_unavailable"
+    },
+    {
+      "tool": "history",
+      "argument_constraints": {
+        "entity_type": "user",
+        "entity": "operator-b"
+      },
+      "record_ids": [],
+      "status": "unavailable",
+      "coverage": {
+        "scope": {
+          "entity_type": "user",
+          "entity": "operator-b"
+        },
+        "window": {
+          "start": "2026-08-31T02:20:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "completeness": "partial",
+        "truncated": false,
+        "missing_sources": [
+          "history_source_unavailable"
+        ]
+      },
+      "retryable": false,
+      "error_code": "history_source_unavailable"
+    },
+    {
+      "tool": "attack",
+      "argument_constraints": {
+        "snapshot_version": "attack-local-v1"
+      },
+      "record_ids": [
+        "3f033939cc8abd1427f73c42209cfc54"
+      ],
+      "status": "ok",
+      "coverage": {
+        "scope": {
+          "snapshot_version": "attack-local-v1"
+        },
+        "window": null,
+        "completeness": "complete",
+        "truncated": false,
+        "missing_sources": []
+      },
+      "retryable": false,
+      "error_code": null
+    }
+  ],
+  "fixture_version": "synthetic-v1"
+}

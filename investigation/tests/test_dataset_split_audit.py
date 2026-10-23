@@ -125,6 +125,25 @@ def test_correctly_hashed_orphan_file_is_rejected(tmp_path):
         _module().audit_dataset(root)
 
 
+def test_file_byte_tampering_is_rejected_before_loading(tmp_path):
+    root = _copy_dataset(tmp_path)
+    path = root / "oracle/c1.json"
+    path.write_bytes(path.read_bytes() + b" ")
+    with pytest.raises(ProtocolViolation, match="dataset_hash_mismatch"):
+        _module().audit_dataset(root)
+
+
+def test_dangling_oracle_record_reference_is_rejected(tmp_path):
+    root = _copy_dataset(tmp_path)
+
+    def mutate(value):
+        value["complete_world_evidence"]["E1"]["record_ids"] = ["missing-record"]
+
+    _rewrite_oracle(root, "oracle/c1.json", mutate)
+    with pytest.raises(ProtocolViolation, match="dangling_annotation"):
+        _module().audit_dataset(root)
+
+
 def test_case_mapping_cannot_escape_declared_partition(tmp_path):
     root = _copy_dataset(tmp_path)
     manifest_path = root / "manifest.json"

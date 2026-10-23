@@ -168,6 +168,14 @@ M0 脚手架（设计稿冻结入库 + 包骨架 + 独立 CI job + 依赖锁定�
 - **验收**：当前五案不改字节并通过审计；构造 family 跨 split、等价可见输入跨组、孤儿文件和路径分区错误时必须拒绝；仅 envelope ID 不同的输入仍归入同一等价组；完整 investigation 测试通过。
 - **边界**：M10a 不生成新增案例、不运行模型、不产生研究结论；M10b–M10d 分批扩写，M11 才运行多次采样、消融和统计分析。
 
+### M10b 开发集扩展到 12 案（父：M10a）[P5.2b]
+
+- 将开发集保存为独立版本 `datasets/powershell-dev-v2/`，复制并冻结原五案语义，再新增 C6–C12；原 `synthetic-v1` 数据和 M8/M9 Artifact 不变。
+- 先修复案例扩展阻塞：原充分性实现只识别固定 credential-store/backup 文本。M10b 改为对结构化实际行为与批准中的 `expected_observations` 做封闭集合匹配，并以有限确定性词表识别直接凭据外传或批量破坏效果；未知行为仍为 unknown。
+- 新增场景覆盖：Office 凭据外传、批准的 Office 报表、匹配/不匹配远程运维、第二组遥测缺口双胞胎、直接文件加密。
+- **验收**：12 案、7 family、两个静态等价双胞胎组；新增案例预期为 `TP/FP/FP/Suspicious/Abstain/Abstain/TP`；构建器可逐字节重建数据与评测标注；旧五案与完整回归不变。
+- **边界**：全部仍为公开 synthetic dev 案例，只验证编写与评测流程；不得声称 blind 泛化、生产效果或统计优势。
+
 ## 3. 关键技术决定
 
 1. **隔离口径（R3）**：MVP 为**逻辑隔离**——三边界契约分区、包布局、导入守卫测试、数据不交叉引用、实际模型输入泄漏检查；明确其保证范围，不宣称进程/文件级隔离；子进程沙箱延后。
@@ -260,6 +268,7 @@ v4 复评（V4-1–V4-3）纳入位置：V4-1→M3 验收（明确覆盖范围+�
 | M9a 调查循环效率修订 | 已完成（实现、自检、辅助独立复核及分支/主分支双 CI）；见 [工程记录](acceptance/m9a-efficiency-acceptance.md)与[独立复核](acceptance/m9a-independent-review.md) | `5d59ecf`（核心实现），`186b7cc`（验收 head） | 通过（`186b7cc`，[run 40002378447](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/40002378447)） |
 | M9b 同条件真实模型复验 | 未开始；需单独费用授权 | — | — |
 | M10a 数据扩展协议与切分审计 | 已完成（实现、主实现自检、辅助独立复核与同一实现提交双 CI）；见 [验收记录](acceptance/m10a-dataset-protocol-acceptance.md)与[独立复核](acceptance/m10a-independent-review.md) | `4520815` | 通过（`4520815`，[run 40010997694](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/40010997694)） |
+| M10b 开发集扩展到 12 案 | 实现、主实现自检与辅助独立复核已通过，待提交及同一提交双 CI；见 [验收记录](acceptance/m10b-dev-dataset-acceptance.md)与[独立复核](acceptance/m10b-independent-review.md) | 待提交 | 待运行 |
 
 ### 7.3 工程验收与实验结论分开判断
 

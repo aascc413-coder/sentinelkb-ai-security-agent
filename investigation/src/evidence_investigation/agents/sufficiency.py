@@ -90,6 +90,66 @@ def _network_destinations(rows):
     return destinations
 
 
+def _observation_signatures(values):
+    """Compare structured behavior as an order-independent closed set.
+
+    Source records may describe operations with JSON objects.  The approval
+    record must repeat the complete expected operation objects; unknown or
+    malformed values fail closed instead of being coerced to strings.
+    """
+    if not isinstance(values, list) or not all(isinstance(item, (str, dict)) for item in values):
+        return None
+    return tuple(sorted(canonical_hash(item) for item in values))
+
+
+def _has_direct_attack_behavior(observations, network_destinations):
+    """Recognize a small frozen vocabulary of directly observed harmful effects."""
+    structured = [item for item in observations if isinstance(item, dict)]
+    sensitive_objects = {
+        "credential-store", "browser-credential-store", "private-key-store",
+        "security-account-manager", "lsass-memory",
+    }
+    reads = [item for item in structured
+             if item.get("operation") in {"read", "dump", "export"}
+             and item.get("object") in sensitive_objects
+             and item.get("authorized") is False]
+    outbound = [item for item in structured
+                if item.get("operation") in {"send", "upload"}
+                and isinstance(item.get("destination"), str)
+                and item.get("destination") in network_destinations]
+    exfiltration = any(
+        (isinstance(read.get("produces"), str) and bool(read["produces"])
+         and sent.get("object") == read["produces"])
+        or (read.get("object") == "credential-store"
+            and sent.get("object") == "credential-bytes")
+        for read in reads for sent in outbound
+    )
+    destructive = any(
+        item.get("operation") in {"encrypt", "delete"}
+        and item.get("authorized") is False
+        and isinstance(item.get("affected_count"), int)
+        and not isinstance(item.get("affected_count"), bool)
+        and item["affected_count"] >= 10
+        for item in structured
+    )
+    return exfiltration or destructive
+
+
+def _behavior_matches_approval(observations, matching_job):
+    if not observations or not isinstance(matching_job, dict):
+        return False
+    expected = matching_job.get("expected_observations")
+    if expected is None:
+        return tuple(observations) == (
+            "read approved backup source", "validate backup checksum",
+            "write approved backup destination",
+        )
+    observed_signatures = _observation_signatures(observations)
+    expected_signatures = _observation_signatures(expected)
+    return bool(observed_signatures and expected_signatures
+                and observed_signatures == expected_signatures)
+
+
 def _dt(value):
     try:
         parsed = datetime.fromisoformat(value) if isinstance(value, str) else None
@@ -221,21 +281,25 @@ def evaluate_sufficiency(alert: Alert, registry: EvidenceRegistry,
     same_instance = False
     known_conflict = False
     process_payloads = [row[0] for row in process_rows]
-    if process_payloads and network_rows:
+    if process_payloads:
         pg = pp.get("process_guid")
-        comparisons = [row[0] for row in network_rows]
         process_consistent = bool(pg and all(
             item.get("process_guid") == pg
             and item.get("host") == pp.get("host") == alert.host
             and item.get("process_id") == pp.get("process_id") == alert.process_id
             for item in process_payloads
         ))
-        same_instance = bool(process_consistent and all(
+        comparisons = [row[0] for row in network_rows]
+        network_consistent = bool(comparisons) and all(
             item.get("process_guid") == pg
             and pp.get("host") == item.get("host") == alert.host
             and pp.get("process_id") == item.get("process_id") == alert.process_id
             for item in comparisons
-        ))
+        )
+        complete_empty_network = bool(
+            network_acq and not network_rows and _complete(network_acq.result)
+        )
+        same_instance = process_consistent and (network_consistent or complete_empty_network)
         known_conflict = any(
             (item.get("process_guid") and pg and item.get("process_guid") != pg)
             or (item.get("host") and item.get("host") != pp.get("host"))
@@ -250,11 +314,12 @@ def evaluate_sufficiency(alert: Alert, registry: EvidenceRegistry,
     activity_start = alert.as_of - timedelta(minutes=10)
     process_times = [_dt(row[0].get("occurred_at")) for row in process_rows]
     network_times = [_dt(row[0].get("occurred_at")) for row in network_rows]
-    times_ok = bool(process_rows and network_rows
+    times_ok = bool(process_rows
                     and all(value and activity_start <= value < alert.as_of
                             for value in process_times)
-                    and all(value and activity_start <= value < alert.as_of
-                            for value in network_times))
+                    and (all(value and activity_start <= value < alert.as_of
+                             for value in network_times) if network_rows
+                         else network_acq and _complete(network_acq.result)))
     g1_out = "met" if same_instance and times_ok else "unmet" if known_conflict else "unknown"
     g1 = _check("G1", g1_out, (peid, neid),
                 "Process and network observations share a stable instance and valid timestamps."
@@ -298,21 +363,14 @@ def evaluate_sufficiency(alert: Alert, registry: EvidenceRegistry,
                     for item in value]
     observations_known = bool(observation_fields) and all(
         isinstance(value, list) for value in observation_fields)
-    malicious_chain = False
-    if observations_known:
-        structured_observations = [item for item in observations if isinstance(item, dict)]
-        reads = [x for x in structured_observations if x.get("operation") == "read"
-                 and x.get("object") == "credential-store" and x.get("authorized") is False]
-        sends = [x for x in structured_observations if x.get("operation") == "send"
-                 and x.get("object") == "credential-bytes"]
-        network_destinations = _network_destinations(network_rows)
-        malicious_chain = bool(reads and sends and network_rows and
-                               any(x.get("destination") in network_destinations for x in sends)
-                               and same_instance)
+    malicious_chain = bool(
+        observations_known and same_instance
+        and _has_direct_attack_behavior(observations, _network_destinations(network_rows))
+    )
     g2_out = "met" if malicious_chain and approval_state in {"none", "mismatch"} else \
         "unmet" if approval_state == "match" else "unknown"
     g2 = _check("G2", g2_out, (peid, neid, *approval_ids),
-                "Grounded unauthorized credential read and same-instance transfer form the attack chain."
+                "Grounded same-instance observations establish a recognized unauthorized harmful effect."
                 if g2_out == "met" else "No verified unauthorized malicious behavior chain is available.")
 
     g3_out = "met" if approval_state in {"none", "mismatch"} else \
@@ -328,7 +386,7 @@ def evaluate_sufficiency(alert: Alert, registry: EvidenceRegistry,
                      for row in process_rows + network_rows) and all(
                          record.reliability.level in {"high", "medium"}
                          for record in approval_records) and bool(
-                             process_rows and network_rows and approval_records)
+                             process_rows and approval_records)
     g4_out = "met" if coverage_ok and quality_ok else "unknown"
     g4 = _check("G4", g4_out, (peid, neid, *approval_ids),
                 "Material process, network and approval scopes have complete reliable coverage."
@@ -340,18 +398,19 @@ def evaluate_sufficiency(alert: Alert, registry: EvidenceRegistry,
                 "Actual host, account, time, job, script and parameters match an approved operation."
                 if b1_out == "met" else "No fully matching approved operation was verified.")
 
-    benign_vocabulary = (
-        "read approved backup source", "validate backup checksum",
-        "write approved backup destination",
+    behavior_match = bool(
+        observations_known and _behavior_matches_approval(observations, matching_job)
     )
-    behavior_match = observations_known and tuple(observations) == benign_vocabulary
     destinations = _network_destinations(network_rows)
     allowed_values = matching_job.get("allowed_destinations") if matching_job else None
     allowed = (set(allowed_values) if isinstance(allowed_values, list)
                and all(isinstance(item, str) for item in allowed_values) else None)
-    network_complete = bool(network_rows and all(
-        row[0].get("all_connections_captured") is True for row in network_rows)
-        and _complete(network_acq.result))
+    network_complete = bool(
+        network_acq and _complete(network_acq.result)
+        and (not network_rows or all(
+            row[0].get("all_connections_captured") is True for row in network_rows
+        ))
+    )
     b2_met = (b1_out == "met" and behavior_match and same_instance and network_complete
               and allowed is not None and destinations <= allowed)
     b2_known_bad = b1_out == "unmet" or (b1_out == "met" and (

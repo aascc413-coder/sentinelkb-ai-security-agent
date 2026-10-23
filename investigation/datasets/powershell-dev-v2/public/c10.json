@@ -1,0 +1,27 @@
+{
+  "alert": {
+    "alert_id": "161af5059fa8515878ee63428326fb30",
+    "alert_type": "powershell_execution",
+    "occurred_at": "2026-09-01T02:14:00+00:00",
+    "as_of": "2026-09-01T02:20:00+00:00",
+    "host": "WS-110",
+    "user": "operator-d",
+    "process_id": "p-1010",
+    "command_line": "powershell.exe -EncodedCommand [body retained by EDR fields]",
+    "raw": {
+      "rule_name": "Suspicious PowerShell execution",
+      "process_name": "powershell.exe",
+      "detector_claim": "possible encoded or policy-sensitive execution",
+      "command_body_retained": false,
+      "host": "WS-110",
+      "user": "operator-d",
+      "process_id": "p-1010",
+      "occurred_at": "2026-09-01T02:14:00+00:00"
+    },
+    "raw_reference": {
+      "record_id": "3dbb4b7cf3b4a3a094d4e034c1e74fcc",
+      "json_pointer": "",
+      "content_sha256": "78cba62eef5016650e118bbc7a872f2c177bfe4ffbade650d4680d7289773705"
+    }
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "dataset_version": "powershell-dev-v2",
+  "purpose": "M10 development dataset; not blind test",
+  "rubric_version": "powershell-v1",
+  "cases": [
+    {
+      "case_id": "C1",
+      "public": "public/c1.json",
+      "environment": "environment/world-1.json",
+      "oracle": "oracle/c1.json"
+    },
+    {
+      "case_id": "C2",
+      "public": "public/c2.json",
+      "environment": "environment/world-2.json",
+      "oracle": "oracle/c2.json"
+    },
+    {
+      "case_id": "C3",
+      "public": "public/c3.json",
+      "environment": "environment/world-3.json",
+      "oracle": "oracle/c3.json"
+    },
+    {
+      "case_id": "C4",
+      "public": "public/c4.json",
+      "environment": "environment/shared-pair.json",
+      "oracle": "oracle/c4.json"
+    },
+    {
+      "case_id": "C5",
+      "public": "public/c5.json",
+      "environment": "environment/shared-pair.json",
+      "oracle": "oracle/c5.json"
+    },
+    {
+      "case_id": "C6",
+      "public": "public/c6.json",
+      "environment": "environment/world-6.json",
+      "oracle": "oracle/c6.json"
+    },
+    {
+      "case_id": "C7",
+      "public": "public/c7.json",
+      "environment": "environment/world-7.json",
+      "oracle": "oracle/c7.json"
+    },
+    {
+      "case_id": "C8",
+      "public": "public/c8.json",
+      "environment": "environment/world-8.json",
+      "oracle": "oracle/c8.json"
+    },
+    {
+      "case_id": "C9",
+      "public": "public/c9.json",
+      "environment": "environment/world-9.json",
+      "oracle": "oracle/c9.json"
+    },
+    {
+      "case_id": "C10",
+      "public": "public/c10.json",
+      "environment": "environment/shared-10-11.json",
+      "oracle": "oracle/c10.json"
+    },
+    {
+      "case_id": "C11",
+      "public": "public/c11.json",
+      "environment": "environment/shared-10-11.json",
+      "oracle": "oracle/c11.json"
+    },
+    {
+      "case_id": "C12",
+      "public": "public/c12.json",
+      "environment": "environment/world-12.json",
+      "oracle": "oracle/c12.json"
+    }
+  ],
+  "file_sha256": {
+    "public/c1.json": "c59fd65cf8b9defb621eaaffb77f152549fa928a558ad2b49e19ba03c65159f8",
+    "public/c10.json": "2c831d65074feaa2333d4ea32d84b0c5ad4889356b31ae0fd9bde0be7f09cd65",
+    "public/c11.json": "2c831d65074feaa2333d4ea32d84b0c5ad4889356b31ae0fd9bde0be7f09cd65",
+    "public/c12.json": "9411b9ba15b4fd5181ac28ea3f320d85e39995cec5b42e8ea00e1eb41dd6af9c",
+    "public/c2.json": "fd1f05115c69c892fe04fdeb6c2b896ce6ae55e5ac8491a2d53717d3022b974e",
+    "public/c3.json": "9f9ba1e7991f57eed105954df48698c1728a7e10ed5b87cbb45191aca14f4ece",
+    "public/c4.json": "b01ae24fe00954df4fba3764f897fcce66f5cb33d67ca63f555637e22178a522",
+    "public/c5.json": "b01ae24fe00954df4fba3764f897fcce66f5cb33d67ca63f555637e22178a522",
+    "public/c6.json": "27a768b00669e7847153cfa39ad2efbed9403b96234cb36a816dddf428dfd411",
+    "public/c7.json": "686b8e1cc96940090a0ac18197b55ab54d2ee42986e5c58ed766b5dc5508c5de",
+    "public/c8.json": "4eb9e774ba97ffd5bdeb82c78241215db7ebfe5f5955819385d7575a70ab771d",
+    "public/c9.json": "bd68f59a85a5ec9f9506b3eb20cebd80b97ccec74f4033b8d5066b37bbceb5ba",
+    "environment/shared-10-11.json": "08f7409cf2cf5e73e6241b3aa5e23ce539c2bf5682b7230740b3ea0808bb22da",
+    "environment/shared-pair.json": "f1547bbfe259f77d6fcbfd6711b63eb103c6d82eddf10c4742acd6952507d6bc",
+    "environment/world-1.json": "8925ab0d9498ed05a995f44c5f6fbbf0146da49a14c457ad78a33003b43cfc0e",
+    "environment/world-12.json": "5cd5cbadf7d719b9f362bf8156e3d8db85e461e90b4a97aedb0e290c28d3da5c",
+    "environment/world-2.json": "f10c3c003c7e6a61dd7f85d63ef74b6dcb170fef247ef1998e00d093d5a861db",
+    "environment/world-3.json": "959263d39d2d96e95bc2dfcf3291d4604051a31828601b258f2d8c3c2bfa123f",
+    "environment/world-6.json": "b6fe5980de2d6033e59449687d07d444848d16ace55d9761f54f2a730a5f3523",
+    "environment/world-7.json": "a4fff51e629cc588bf0e7ca5a302f52bf972a390a1bd1dc9effa41e3fc700bc8",
+    "environment/world-8.json": "ad581e5f88fa04fd17eaacc298c9e40b86e052e2cca441c673555f7423940328",
+    "environment/world-9.json": "ad333d1b9875cf411965c4e7aad6fd5d520771448d5695e327347939705497a8",
+    "oracle/c1.json": "b2d007167a7e650d0988814a64895f8264806377fecdce49d35f15abe0c33a85",
+    "oracle/c10.json": "80e75841b01453673084621aae76a319a3d6ecceb1381bb6e94510de3f12758a",
+    "oracle/c11.json": "08cd217851c6ee874fc7d496a77930a83ed56ea9971d8d30ed611631e9be744c",
+    "oracle/c12.json": "e528e2e40d6ac16431012a6ab3094695e1ed904c4c0796bdb6f0fa3c97674407",
+    "oracle/c2.json": "a42e2e471236fb53b2fab6a9113264535cb6a86800faa5bacf9d42a5f6959874",
+    "oracle/c3.json": "61c0206e70693a8bd89eaac208dcfd1edfc8178df532b3552b19e8b37ad4ae48",
+    "oracle/c4.json": "6bc97dea9dc0424223e60468504fd5f2860e1b6f6ead5914a9f8fa5f9e468dd7",
+    "oracle/c5.json": "5be9132a91fe9f1ff78801d9da13bc3bd5701ae8b9e8340134de1a64f7c8b6c6",
+    "oracle/c6.json": "4cba7b0992ac199131198cfd635ddf6dcbd2d752877c5539f31573de3ec76661",
+    "oracle/c7.json": "901bbbbe79dee5f9e35de96fb8a25f6f7d1c48699c23948087626311fec1ccdc",
+    "oracle/c8.json": "3cf22c305ab032a0fb6f06b2d1b3976eb2c2b2c4d2fdad9b0597f467ef5a55eb",
+    "oracle/c9.json": "f718d4af592d17d71f7baf1bb523ca833df5fdfba4d733066e70e7f2a0574910"
+  },
+  "boundary": "Authoring/evaluation only. Twelve dev cases; no statistical or blind-test claim."
+}

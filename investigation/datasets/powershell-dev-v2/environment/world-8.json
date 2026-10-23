@@ -1,0 +1,310 @@
+{
+  "environment_id": "a49dece75d096adf5a407fd4fb60797e",
+  "as_of": "2026-09-01T02:20:00+00:00",
+  "records_by_tool": {
+    "siem": [
+      {
+        "record_id": "29b256b15fd7fa16d3e4f11e4827e842",
+        "payload": {
+          "view": "process_tree",
+          "host": "OPS-108",
+          "user": "svc-rmm",
+          "process_id": "p-808",
+          "process_guid": "74254c91d18bbda71469a8f477ca8e29",
+          "event_id": "cf4b2dda376beeb66892444606475373",
+          "occurred_at": "2026-09-01T02:14:00+00:00",
+          "observed_at": "2026-09-01T02:19:00+00:00",
+          "parent_process": "rmm-agent.exe",
+          "child_process": [],
+          "job_id": "RMM-88",
+          "script_hash": "h-rmm-88",
+          "parameters": [
+            "patch",
+            "validate"
+          ],
+          "script_observations": [
+            {
+              "operation": "read",
+              "object": "approved-update-package",
+              "authorized": true
+            },
+            {
+              "operation": "write",
+              "object": "approved-service-config",
+              "authorized": true
+            }
+          ]
+        },
+        "content_sha256": "ecc69a91ae7f22c540312b7db9d53e6018c15e7418d73b7bbf0597e699e4b023",
+        "source_system": "edr",
+        "independence_group": "edr-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement",
+          "policy_version": "source-policy-v1"
+        }
+      },
+      {
+        "record_id": "7415bb5202fa5dd9f1fba9b1f2d49a72",
+        "payload": {
+          "view": "network_events",
+          "host": "OPS-108",
+          "user": "svc-rmm",
+          "process_id": "p-808",
+          "process_guid": "74254c91d18bbda71469a8f477ca8e29",
+          "event_id": "adcd15db61953173ef7fee36fb99fcbb",
+          "occurred_at": "2026-09-01T02:14:00+00:00",
+          "observed_at": "2026-09-01T02:19:00+00:00",
+          "observed_destinations": [
+            "10.30.0.18"
+          ],
+          "all_connections_captured": true,
+          "destination_ip": "10.30.0.18",
+          "destination_port": 443
+        },
+        "content_sha256": "b6f0d199a5fac70c4c57153a69066de69065214bff031b17585fe594688ae981",
+        "source_system": "network-sensor",
+        "independence_group": "network-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement",
+          "policy_version": "source-policy-v1"
+        }
+      }
+    ],
+    "threat_intel": [],
+    "asset": [
+      {
+        "record_id": "eab64ab1107ddb973b44bdcad111ffb9",
+        "payload": {
+          "host": "OPS-108",
+          "published_at": "2026-09-01T02:19:00+00:00",
+          "purpose": "managed-workstation",
+          "system_type": "Windows",
+          "critical_asset": false,
+          "department": "synthetic-enterprise",
+          "approval_register_complete": true,
+          "approval_register_window": {
+            "start": "2026-09-01T02:10:00+00:00",
+            "end": "2026-09-01T02:20:00+00:00"
+          },
+          "approved_jobs": [
+            {
+              "host": "OPS-108",
+              "user": "svc-rmm",
+              "job_id": "RMM-88",
+              "script_hash": "h-rmm-88",
+              "parameters": [
+                "patch",
+                "validate"
+              ],
+              "window": {
+                "start": "2026-09-01T02:00:00+00:00",
+                "end": "2026-09-01T03:00:00+00:00"
+              },
+              "allowed_destinations": [
+                "10.30.0.18"
+              ],
+              "expected_observations": [
+                {
+                  "operation": "read",
+                  "object": "approved-update-package",
+                  "authorized": true
+                },
+                {
+                  "operation": "write",
+                  "object": "approved-service-config",
+                  "authorized": true
+                }
+              ]
+            }
+          ]
+        },
+        "content_sha256": "715eb19e9714ac3fa17b2f05f0f7ec8a858be6c07819880128f9a829fe8e3f42",
+        "source_system": "change-register",
+        "independence_group": "change-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement",
+          "policy_version": "source-policy-v1"
+        }
+      }
+    ],
+    "history": [
+      {
+        "record_id": "91cac9ef0e05c85c217d0f6ec788acab",
+        "payload": {
+          "entity_type": "user",
+          "entity": "svc-rmm",
+          "host": "OPS-108",
+          "user": "svc-rmm",
+          "occurred_at": "2026-08-31T12:00:00+00:00",
+          "observed_at": "2026-09-01T02:19:00+00:00",
+          "job_id": "RMM-88",
+          "periodic": true
+        },
+        "content_sha256": "abd19cd1b4829a38204fe41376b4e39deb6858a681244cd719cbbceef7eccfa9",
+        "source_system": "history-store",
+        "independence_group": "history-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement",
+          "policy_version": "source-policy-v1"
+        }
+      }
+    ],
+    "attack": [
+      {
+        "record_id": "291b52dc4e572ef56055cbd835449e5d",
+        "payload": {
+          "snapshot_version": "attack-local-v1",
+          "published_at": "2026-08-01T00:00:00+00:00",
+          "technique_id": "T1059.001",
+          "behavior_terms": [
+            "powershell_execution"
+          ],
+          "description": "PowerShell occurs in authorized and unauthorized activity; mapping is not a verdict."
+        },
+        "content_sha256": "c56136a6f89da61baacc8e4f086f261ee6347feeb5d7d8735b90c8e822aca2e6",
+        "source_system": "local-attack-knowledge",
+        "independence_group": "knowledge-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement",
+          "policy_version": "source-policy-v1"
+        }
+      }
+    ]
+  },
+  "query_rules": [
+    {
+      "tool": "siem",
+      "argument_constraints": {
+        "view": "process_tree",
+        "host": "OPS-108"
+      },
+      "record_ids": [
+        "29b256b15fd7fa16d3e4f11e4827e842"
+      ],
+      "status": "ok",
+      "coverage": {
+        "scope": {
+          "view": "process_tree",
+          "host": "OPS-108",
+          "user": null,
+          "process_id": null
+        },
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "completeness": "complete",
+        "truncated": false,
+        "missing_sources": []
+      },
+      "retryable": false,
+      "error_code": null
+    },
+    {
+      "tool": "siem",
+      "argument_constraints": {
+        "view": "network_events",
+        "host": "OPS-108"
+      },
+      "record_ids": [
+        "7415bb5202fa5dd9f1fba9b1f2d49a72"
+      ],
+      "status": "ok",
+      "coverage": {
+        "scope": {
+          "view": "network_events",
+          "host": "OPS-108",
+          "user": null,
+          "process_id": null
+        },
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "completeness": "complete",
+        "truncated": false,
+        "missing_sources": []
+      },
+      "retryable": false,
+      "error_code": null
+    },
+    {
+      "tool": "asset",
+      "argument_constraints": {
+        "host": "OPS-108"
+      },
+      "record_ids": [
+        "eab64ab1107ddb973b44bdcad111ffb9"
+      ],
+      "status": "ok",
+      "coverage": {
+        "scope": {
+          "host": "OPS-108",
+          "as_of": "2026-09-01T02:20:00+00:00"
+        },
+        "window": null,
+        "completeness": "complete",
+        "truncated": false,
+        "missing_sources": []
+      },
+      "retryable": false,
+      "error_code": null
+    },
+    {
+      "tool": "history",
+      "argument_constraints": {
+        "entity_type": "user",
+        "entity": "svc-rmm"
+      },
+      "record_ids": [
+        "91cac9ef0e05c85c217d0f6ec788acab"
+      ],
+      "status": "ok",
+      "coverage": {
+        "scope": {
+          "entity_type": "user",
+          "entity": "svc-rmm",
+          "host": "OPS-108",
+          "user": "svc-rmm",
+          "command_line": null
+        },
+        "window": {
+          "start": "2026-08-31T02:20:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "completeness": "complete",
+        "truncated": false,
+        "missing_sources": []
+      },
+      "retryable": false,
+      "error_code": null
+    },
+    {
+      "tool": "attack",
+      "argument_constraints": {
+        "snapshot_version": "attack-local-v1"
+      },
+      "record_ids": [
+        "291b52dc4e572ef56055cbd835449e5d"
+      ],
+      "status": "ok",
+      "coverage": {
+        "scope": {
+          "snapshot_version": "attack-local-v1"
+        },
+        "window": null,
+        "completeness": "complete",
+        "truncated": false,
+        "missing_sources": []
+      },
+      "retryable": false,
+      "error_code": null
+    }
+  ],
+  "fixture_version": "powershell-dev-v2"
+}

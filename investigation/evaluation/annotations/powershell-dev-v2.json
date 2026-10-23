@@ -1,0 +1,171 @@
+{
+  "annotation_version": "powershell-dev-eval-v2",
+  "rubric_version": "powershell-v1",
+  "budget_profile": {
+    "max_tool_calls": 6,
+    "max_tokens": 16000,
+    "max_investigation_steps": 8,
+    "max_time_seconds": 90.0,
+    "finalization_token_reserve": 2500
+  },
+  "cases": [
+    {
+      "case_id": "C1",
+      "discriminating_fact_keys": [
+        "E1",
+        "E2",
+        "E4"
+      ],
+      "risk_clue_fact_keys": [
+        "E1",
+        "E2",
+        "E3"
+      ],
+      "required_abstention": false,
+      "avoidable_abstention": true,
+      "required_human_review": false,
+      "rationale": "Behavior, corroborating network activity and complete absence of matching approval distinguish malicious execution; the frozen six-call budget can obtain a TP sufficient set."
+    },
+    {
+      "case_id": "C2",
+      "discriminating_fact_keys": [
+        "E1",
+        "E2",
+        "E3"
+      ],
+      "risk_clue_fact_keys": [],
+      "required_abstention": false,
+      "avoidable_abstention": true,
+      "required_human_review": false,
+      "rationale": "Exact process/job parameters, matched authorization and network scope distinguish approved maintenance; the frozen six-call budget can obtain an FP sufficient set."
+    },
+    {
+      "case_id": "C3",
+      "discriminating_fact_keys": [
+        "E1",
+        "E2",
+        "E3"
+      ],
+      "risk_clue_fact_keys": [
+        "E2",
+        "E3"
+      ],
+      "required_abstention": false,
+      "avoidable_abstention": false,
+      "required_human_review": true,
+      "rationale": "Approval mismatch and new external destination justify escalation but hidden script content prevents TP/FP; Suspicious or Abstain are both allowed, so this case is not labeled required-Abstain."
+    },
+    {
+      "case_id": "C4",
+      "discriminating_fact_keys": [],
+      "risk_clue_fact_keys": [],
+      "required_abstention": true,
+      "avoidable_abstention": false,
+      "required_human_review": true,
+      "rationale": "No observable fact distinguishes this case from C5 under the frozen environment and budget; only hidden script truth differs."
+    },
+    {
+      "case_id": "C5",
+      "discriminating_fact_keys": [],
+      "risk_clue_fact_keys": [],
+      "required_abstention": true,
+      "avoidable_abstention": false,
+      "required_human_review": true,
+      "rationale": "No observable fact distinguishes this case from C4 under the frozen environment and budget; only hidden script truth differs."
+    },
+    {
+      "case_id": "C6",
+      "discriminating_fact_keys": [
+        "E1",
+        "E2",
+        "E3"
+      ],
+      "risk_clue_fact_keys": [
+        "E1",
+        "E2"
+      ],
+      "required_abstention": false,
+      "avoidable_abstention": true,
+      "required_human_review": false,
+      "rationale": "Direct exfiltration chain and complete approval coverage support determinate TP."
+    },
+    {
+      "case_id": "C7",
+      "discriminating_fact_keys": [
+        "E1",
+        "E2",
+        "E3"
+      ],
+      "risk_clue_fact_keys": [],
+      "required_abstention": false,
+      "avoidable_abstention": true,
+      "required_human_review": false,
+      "rationale": "Structured behavior and zero-network scope match a concrete approval."
+    },
+    {
+      "case_id": "C8",
+      "discriminating_fact_keys": [
+        "E1",
+        "E2",
+        "E3"
+      ],
+      "risk_clue_fact_keys": [],
+      "required_abstention": false,
+      "avoidable_abstention": true,
+      "required_human_review": false,
+      "rationale": "Remote administration behavior and destination match a concrete approval."
+    },
+    {
+      "case_id": "C9",
+      "discriminating_fact_keys": [
+        "E1",
+        "E2",
+        "E3",
+        "E4"
+      ],
+      "risk_clue_fact_keys": [
+        "E1",
+        "E2",
+        "E3",
+        "E4"
+      ],
+      "required_abstention": false,
+      "avoidable_abstention": false,
+      "required_human_review": true,
+      "rationale": "Approval mismatch and new external target justify escalation without direct attack proof."
+    },
+    {
+      "case_id": "C10",
+      "discriminating_fact_keys": [],
+      "risk_clue_fact_keys": [],
+      "required_abstention": true,
+      "avoidable_abstention": false,
+      "required_human_review": true,
+      "rationale": "Visible evidence is indistinguishable from benign C11; decisive intent is hidden."
+    },
+    {
+      "case_id": "C11",
+      "discriminating_fact_keys": [],
+      "risk_clue_fact_keys": [],
+      "required_abstention": true,
+      "avoidable_abstention": false,
+      "required_human_review": true,
+      "rationale": "Visible evidence is indistinguishable from malicious C10; decisive intent is hidden."
+    },
+    {
+      "case_id": "C12",
+      "discriminating_fact_keys": [
+        "E1",
+        "E2",
+        "E3"
+      ],
+      "risk_clue_fact_keys": [
+        "E1"
+      ],
+      "required_abstention": false,
+      "avoidable_abstention": true,
+      "required_human_review": false,
+      "rationale": "Direct unauthorized destructive effect plus complete scopes supports determinate TP."
+    }
+  ]
+}

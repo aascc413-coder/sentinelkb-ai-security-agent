@@ -112,6 +112,51 @@ def audit_dataset(root: Path = LAB / "datasets") -> dict:
         if public.alert.as_of != environment.as_of:
             raise ProtocolViolation("dataset_mapping_mismatch", f"as_of mismatch for {case_id}")
 
+        record_tools = {
+            record.record_id: tool
+            for tool, records in environment.records_by_tool.items()
+            for record in records
+        }
+        record_tools[public.alert.raw_reference.record_id] = "alert"
+        known_record_ids = set(record_tools)
+        for fact_key, fact in oracle.complete_world_evidence.items():
+            if type(fact) is not dict:
+                raise ProtocolViolation(
+                    "invalid_annotation", f"{case_id}/{fact_key}: structured annotation required"
+                )
+            references = fact.get("record_ids", [])
+            if type(references) is not list or any(type(item) is not str for item in references):
+                raise ProtocolViolation(
+                    "invalid_annotation", f"{case_id}/{fact_key}: record_ids must be strings"
+                )
+            if set(references) - known_record_ids:
+                raise ProtocolViolation("dangling_annotation", f"{case_id}/{fact_key}")
+            source = fact.get("source")
+            if source == "oracle_only":
+                if references or fact_key in oracle.observable_fact_keys:
+                    raise ProtocolViolation("hidden_fact_leak", f"{case_id}/{fact_key}")
+                continue
+            source_tools = fact.get("source_tools") if source == "tool" else [source]
+            if (type(source_tools) is not list or not source_tools
+                    or any(type(tool) is not str
+                           or tool not in {*environment.records_by_tool, "alert"}
+                           for tool in source_tools)
+                    or len(set(source_tools)) != len(source_tools)
+                    or any(record_tools[item] not in source_tools for item in references)):
+                raise ProtocolViolation("annotation_source_mismatch", f"{case_id}/{fact_key}")
+            if source == "tool" and set(source_tools) != {record_tools[item] for item in references}:
+                raise ProtocolViolation(
+                    "annotation_source_mismatch",
+                    f"{case_id}/{fact_key}: tools must match actual references",
+                )
+            if fact_key in oracle.observable_fact_keys and not references:
+                if fact.get("operational_status") != "unavailable" or not any(
+                    rule.tool == source and rule.status == "unavailable"
+                    and rule.error_code == fact.get("reason")
+                    for rule in environment.query_rules
+                ):
+                    raise ProtocolViolation("ungrounded_annotation", f"{case_id}/{fact_key}")
+
         family_splits[oracle.family_id].add(oracle.split)
         split_counts[oracle.split] += 1
         family_counts[oracle.family_id] += 1
@@ -207,6 +252,7 @@ def audit_dataset(root: Path = LAB / "datasets") -> dict:
         "checks": {
             "manifest_and_hashes": "passed",
             "typed_case_mappings": "passed",
+            "oracle_fact_references": "passed",
             "family_group_split": "passed",
             "identical_visible_input_grouping": "passed",
         },

@@ -15,7 +15,8 @@ from evidence_investigation.agents.investigator import (
 )
 from evidence_investigation.agents.planner import DeterministicPlanner
 from evidence_investigation.agents.sufficiency import (
-    AcquiredResult, SufficiencyEvaluation, evaluate_sufficiency,
+    AcquiredResult, SufficiencyEvaluation, _behavior_matches_approval,
+    _has_direct_attack_behavior, evaluate_sufficiency,
 )
 from evidence_investigation.agents.sufficiency import _approval
 from evidence_investigation.runtime.trace import read_trace
@@ -322,6 +323,18 @@ def test_malformed_approval_payloads_remain_unknown_instead_of_crashing():
                for item in malformed)
 
 
+def test_structured_behavior_matching_fails_closed_on_empty_or_partial_links():
+    assert not _behavior_matches_approval([], {"expected_observations": []})
+    assert not _behavior_matches_approval(
+        [{"operation": "read", "object": "approved-source", "authorized": True}],
+        {"expected_observations": []},
+    )
+    assert not _has_direct_attack_behavior([
+        {"operation": "read", "object": "browser-credential-store", "authorized": False},
+        {"operation": "send", "destination": "203.0.113.9"},
+    ], {"203.0.113.9"})
+
+
 def _mutated_world2_with_extra_connection():
     fixture = load_environment(DATA / "environment/world-2.json", remap_ids=False)
     records = dict(fixture.records_by_tool)
@@ -390,6 +403,52 @@ def _world2_with_conflicting_approval_register():
     return replace(fixture, records_by_tool=records, query_rules=rules)
 
 
+def _world2_with_structured_approved_behavior():
+    fixture = load_environment(DATA / "environment/world-2.json", remap_ids=False)
+    expected = [
+        {"operation": "read", "object": "approved-update-package", "authorized": True},
+        {"operation": "write", "object": "approved-target", "authorized": True},
+    ]
+    records = dict(fixture.records_by_tool)
+    changed_siem = []
+    for record in records["siem"]:
+        if record.payload.get("view") == "process_tree":
+            payload = {**record.payload, "script_observations": expected}
+            record = replace(record, payload=payload, content_sha256=content_hash(payload))
+        changed_siem.append(record)
+    records["siem"] = tuple(changed_siem)
+    changed_asset = []
+    for record in records["asset"]:
+        jobs = [{**job, "expected_observations": expected}
+                for job in record.payload["approved_jobs"]]
+        payload = {**record.payload, "approved_jobs": jobs}
+        changed_asset.append(replace(record, payload=payload,
+                                     content_sha256=content_hash(payload)))
+    records["asset"] = tuple(changed_asset)
+    return replace(fixture, records_by_tool=records)
+
+
+def _world1_with_direct_destructive_behavior_and_no_network():
+    fixture = load_environment(DATA / "environment/world-1.json", remap_ids=False)
+    records = dict(fixture.records_by_tool)
+    changed = []
+    for record in records["siem"]:
+        if record.payload.get("view") == "process_tree":
+            payload = {**record.payload, "script_observations": [{
+                "operation": "encrypt", "object": "user-documents",
+                "authorized": False, "affected_count": 250,
+            }]}
+            record = replace(record, payload=payload, content_sha256=content_hash(payload))
+        changed.append(record)
+    records["siem"] = tuple(changed)
+    rules = tuple(
+        replace(rule, record_ids=(), status="empty")
+        if rule.tool == "siem" and rule.argument_constraints.get("view") == "network_events"
+        else rule for rule in fixture.query_rules
+    )
+    return replace(fixture, records_by_tool=records, query_rules=rules)
+
+
 @pytest.mark.asyncio
 async def test_additional_out_of_scope_connection_blocks_false_close(tmp_path):
     case = load_public(DATA / "public/c2.json")
@@ -421,6 +480,30 @@ async def test_counterevidence_in_later_process_or_multi_target_field_blocks_fp(
         output_dir=tmp_path, rubric=RUBRIC,
     ).run(case, tools, BUDGET)
     assert final.verdict != "FP"
+
+
+@pytest.mark.asyncio
+async def test_structured_approved_behavior_can_close_false_positive(tmp_path):
+    case = load_public(DATA / "public/c2.json")
+    tools = MockToolServer(_world2_with_structured_approved_behavior(), simulate_latency=False)
+    final = await EvidenceAwareInvestigator(
+        adapter=SchemaAwareModel(), manifest=manifest("m10-structured-approved"),
+        output_dir=tmp_path, rubric=RUBRIC,
+    ).run(case, tools, BUDGET)
+    assert final.verdict == "FP"
+
+
+@pytest.mark.asyncio
+async def test_direct_destructive_behavior_can_close_without_network_records(tmp_path):
+    case = load_public(DATA / "public/c1.json")
+    tools = MockToolServer(
+        _world1_with_direct_destructive_behavior_and_no_network(), simulate_latency=False
+    )
+    final = await EvidenceAwareInvestigator(
+        adapter=SchemaAwareModel(), manifest=manifest("m10-direct-destructive"),
+        output_dir=tmp_path, rubric=RUBRIC,
+    ).run(case, tools, BUDGET)
+    assert final.verdict == "TP"
 
 
 @pytest.mark.asyncio
