@@ -259,7 +259,7 @@ v4 复评（V4-1–V4-3）纳入位置：V4-1→M3 验收（明确覆盖范围+�
 | M8b 真实模型探索报告 | 已完成（DeepSeek 官方模型 25-run 正式批次、费用保护、失败 Trace 保留、归档重放）；见 [验收记录](acceptance/m8b-real-model-acceptance.md) | `36e6c8c`（正式运行代码），`913e22b`（验收 head） | 通过（`913e22b`，[run 39994398083](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/39994398083)） |
 | M9a 调查循环效率修订 | 已完成（实现、自检、辅助独立复核及分支/主分支双 CI）；见 [工程记录](acceptance/m9a-efficiency-acceptance.md)与[独立复核](acceptance/m9a-independent-review.md) | `5d59ecf`（核心实现），`186b7cc`（验收 head） | 通过（`186b7cc`，[run 40002378447](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/40002378447)） |
 | M9b 同条件真实模型复验 | 未开始；需单独费用授权 | — | — |
-| M10a 数据扩展协议与切分审计 | 实现、主实现自检与辅助独立复核通过，待提交和同一提交双 CI；见 [验收记录](acceptance/m10a-dataset-protocol-acceptance.md)与[独立复核](acceptance/m10a-independent-review.md) | — | — |
+| M10a 数据扩展协议与切分审计 | 已完成（实现、主实现自检、辅助独立复核与同一实现提交双 CI）；见 [验收记录](acceptance/m10a-dataset-protocol-acceptance.md)与[独立复核](acceptance/m10a-independent-review.md) | `4520815` | 通过（`4520815`，[run 40010997694](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/40010997694)） |
 
 ### 7.3 工程验收与实验结论分开判断
 

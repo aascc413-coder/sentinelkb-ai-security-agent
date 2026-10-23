@@ -1,6 +1,6 @@
 # M10a 数据扩展协议与切分审计验收记录
 
-里程碑 / 状态：M10a；主实现自检与辅助 AI 独立复核通过，待提交与同一提交 CI。
+里程碑 / 状态：M10a；已完成，主实现自检、辅助 AI 独立复核与同一实现提交双 CI 均通过。
 
 提验日期：2026-10-24。
 
@@ -62,9 +62,12 @@ cd D:\project\Agent\sentinelkb\investigation
 - 当前五案全在 dev，尚无 blind test 数据；本里程碑不形成泛化或策略优越性结论。
 - 60 案例的类别比例是实验设计，不代表生产环境基率。
 
-## 待完成门槛
+## 提交与远端 CI
 
-1. 提交、推送已复核实现与验收记录。
-2. 核对同一提交的 `test` 与 `investigation-tests` 两个 CI job。
+- 实现与验收提交：`4520815654cf60576f6fb2c1e50f37b0dd13bf8f`。
+- GitHub Actions：[run 40010997694](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/40010997694)。
+- head SHA 已核对为上述完整提交。
+- `test`：success。
+- `investigation-tests`：success。
 
-只有两项完成后才将 M10a 标为已完成并开始 M10b 案例扩写。
+M10a 技术门槛全部完成，可以开始 M10b 案例扩写。M10a 只验证数据协议与审计机制，不构成盲测或策略优越性结论。
