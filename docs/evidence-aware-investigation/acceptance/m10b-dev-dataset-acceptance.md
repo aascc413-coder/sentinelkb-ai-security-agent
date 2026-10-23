@@ -1,6 +1,6 @@
 # M10b 十二案开发集验收记录
 
-里程碑 / 状态：M10b；实现、主实现自检与辅助 AI 独立复核通过，待提交与同一提交双 CI。
+里程碑 / 状态：M10b 已完成；实现、主实现自检、辅助 AI 独立复核与同一提交双 CI 均通过。
 
 提验日期：2026-10-24。
 
@@ -86,7 +86,7 @@ cd D:\project\Agent\sentinelkb\investigation
 - 有限直接攻击词表有意保持窄小。新增攻击类别必须增加明确规则、正反例和复核，不能依赖自由文本或 LLM 自评扩张。
 - 数据审计使用 O(n²) 静态比较，12/60 案规模可接受；数百案例后再优化。
 
-## 6. 待完成门槛
+## 6. 独立复核与远端验收
 
 辅助 AI 独立复核已通过，详见 [M10b 独立技术复核](m10b-independent-review.md)：
 
@@ -95,6 +95,12 @@ cd D:\project\Agent\sentinelkb\investigation
 - 构建器逐字节复现，种子数据未改变，Oracle 引用校验兼容旧数据。
 - 两项兼容性观察和一项 M10c 数据设计提示均不阻断 M10b。
 
-剩余门槛：提交、推送并核对同一提交的 `test` 与 `investigation-tests`。
+实现提交：`bbc3e86`。首次远端 run `40013801967` 暴露了 Windows 检出时评测标注由 LF 转为 CRLF、构建器仍生成 LF 的跨平台逐字节差异；测试因此正确失败，没有放宽断言。
 
-门槛完成后才将 M10b 标记为完成并开始 M10c（dev 20）。
+修复提交 `2b1aaca` 将确定性生成的评测标注纳入 `.gitattributes` 的 `eol=lf` 契约。本地专项 12 项、完整 investigation 721 项再次通过。随后同一提交的远端 [run 40014244342](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/40014244342) 完成：
+
+- `test`：success。
+- `investigation-tests`：success。
+- `head_sha`：`2b1aaca0aa172525a1e8e11f93294b5eb32b79ea`。
+
+M10b 所有门槛已完成，可以开始 M10c（dev 20）。
