@@ -249,7 +249,7 @@ v4 复评（V4-1–V4-3）纳入位置：V4-1→M3 验收（明确覆盖范围+�
 | M7 Proposed 层 | 已完成（全量回归、双路独立复核、同一实现提交双 CI）；见 [验收记录](acceptance/m7-proposed-acceptance.md) | `ea5d1f0`（实现） | 通过（`ea5d1f0`，[run 39821412776](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/39821412776)） |
 | M8a 工程验收报告（假模型） | 已完成（175-run 假模型批次、归档重放、双 CI；无策略结论）；见 [验收记录](acceptance/m8a-engineering-acceptance.md) | `d3b8341`（实现） | 通过（`d3b8341`，[run 39823511219](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/39823511219)） |
 | M8b 真实模型探索报告 | 已完成（DeepSeek 官方模型 25-run 正式批次、费用保护、失败 Trace 保留、归档重放）；见 [验收记录](acceptance/m8b-real-model-acceptance.md) | `36e6c8c`（正式运行代码），`913e22b`（验收 head） | 通过（`913e22b`，[run 39994398083](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/39994398083)） |
-| M9a 调查循环效率修订 | 本地实现与自检完成，待提交、独立复核和远端 CI；见 [工程记录](acceptance/m9a-efficiency-acceptance.md) | 待提交 | 待运行 |
+| M9a 调查循环效率修订 | 实现与本地自检完成，待独立复核和远端 CI；见 [工程记录](acceptance/m9a-efficiency-acceptance.md) | `5d59ecf`（实现），验收 head 待定 | 待运行 |
 | M9b 同条件真实模型复验 | 未开始；需单独费用授权 | — | — |
 
 ### 7.3 工程验收与实验结论分开判断
