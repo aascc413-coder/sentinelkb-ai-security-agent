@@ -71,7 +71,7 @@ async def propose_hypotheses(*, controller, adapter, run_id, alert, evidence, tr
             {"role": "system", "content": prompt_text("hypothesis-v1.txt")},
             {"role": "user", "content": context},
         ),
-        schema_name=HYPOTHESIS_PROPOSAL, max_output_tokens=1000,
+        schema_name=HYPOTHESIS_PROPOSAL, max_output_tokens=1400,
         trace=trace, step=step, output_validator=validator,
     )
     return validate_hypothesis_output(result.output, known, previous_hypotheses)

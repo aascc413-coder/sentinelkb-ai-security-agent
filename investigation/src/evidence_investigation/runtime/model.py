@@ -15,7 +15,9 @@
 from __future__ import annotations
 
 import asyncio
+from copy import deepcopy
 import json
+import math
 from dataclasses import dataclass
 from typing import Any, Callable, Sequence
 
@@ -63,7 +65,7 @@ def _extract_content(response_json: dict) -> dict[str, JsonValue]:
     return parsed
 
 
-def _usage_of(response_json: dict) -> Usage | None:
+def _usage_of(response_json: dict, usage_pricer=None) -> Usage | None:
     usage = response_json.get("usage")
     if not isinstance(usage, dict):
         return None
@@ -71,7 +73,24 @@ def _usage_of(response_json: dict) -> Usage | None:
     completion = usage.get("completion_tokens")
     if type(prompt) is not int or type(completion) is not int or min(prompt, completion) < 0:
         return None
-    return Usage(input_tokens=prompt, output_tokens=completion, usage_complete=True)
+    model_cost = currency = None
+    if usage_pricer is not None:
+        priced = usage_pricer(deepcopy(usage))
+        if priced is not None:
+            if (not isinstance(priced, tuple) or len(priced) != 2
+                    or isinstance(priced[0], bool)
+                    or not isinstance(priced[0], (int, float))
+                    or not math.isfinite(priced[0]) or priced[0] < 0
+                    or not isinstance(priced[1], str) or not priced[1].strip()):
+                raise ModelError("usage pricer returned invalid cost")
+            model_cost, currency = float(priced[0]), priced[1]
+    return Usage(
+        input_tokens=prompt,
+        output_tokens=completion,
+        usage_complete=True,
+        model_cost=model_cost,
+        currency=currency,
+    )
 
 
 class FakeScriptedModel:
@@ -109,14 +128,24 @@ class FakeScriptedModel:
 
 
 class OpenAICompatAdapter:
-    """OpenAI 兼容适配器；base_url 形如 https://host/v1。"""
+    """OpenAI-compatible adapter with optional provider parameters and pricing."""
 
     def __init__(self, *, api_key: str, base_url: str, model: str,
-                 timeout_seconds: float = 60.0, transport: httpx.AsyncBaseTransport | None = None):
+                 timeout_seconds: float = 60.0, transport: httpx.AsyncBaseTransport | None = None,
+                 request_parameters: dict[str, JsonValue] | None = None,
+                 usage_pricer: Callable[[dict[str, Any]], tuple[float, str] | None] | None = None):
         if not api_key or not base_url or not model:
             raise ValueError("api_key/base_url/model are required")
+        parameters = deepcopy(request_parameters or {})
+        reserved = {"model", "messages", "temperature", "max_tokens", "response_format"}
+        if not isinstance(parameters, dict) or reserved.intersection(parameters):
+            raise ValueError("request_parameters must be an object without reserved fields")
+        if usage_pricer is not None and not callable(usage_pricer):
+            raise ValueError("usage_pricer must be callable")
         self._api_key, self._base_url, self._model = api_key, base_url.rstrip("/"), model
         self._timeout = timeout_seconds
+        self._request_parameters = parameters
+        self._usage_pricer = usage_pricer
         self._client = httpx.AsyncClient(
             base_url=self._base_url, timeout=timeout_seconds,
             headers={"Authorization": f"Bearer {api_key}"},
@@ -131,6 +160,7 @@ class OpenAICompatAdapter:
             "max_tokens": max_output_tokens,
             "response_format": {"type": "json_object"},
         }
+        body.update(deepcopy(self._request_parameters))
         try:
             response = await self._client.post(
                 "/chat/completions", json=body,
@@ -144,7 +174,8 @@ class OpenAICompatAdapter:
             response_json = response.json()
         except ValueError as exc:
             raise ModelError("model service returned non-JSON body") from exc
-        usage = _usage_of(response_json) if isinstance(response_json, dict) else None
+        usage = (_usage_of(response_json, self._usage_pricer)
+                 if isinstance(response_json, dict) else None)
         try:
             output = _extract_content(response_json)
         except ModelError as exc:
@@ -276,7 +307,11 @@ async def run_model_call(
             raise ProtocolViolation("model_output_invalid", str(failure)) from failure
         current_messages = provider_messages + (
             {"role": "assistant", "content": json.dumps(raw, ensure_ascii=False)},
-            {"role": "user", "content": f"Output validation failed: {first_error}. Return a corrected JSON object using only available evidence."},
+            {"role": "user", "content": (
+                f"Output validation failed: {first_error}. Do not repeat the invalid output. "
+                "Return one corrected, complete and concise JSON object within the output limit, "
+                "using only available evidence."
+            )},
         )
     raise AssertionError("unreachable")
 

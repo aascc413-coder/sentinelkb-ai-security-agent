@@ -179,6 +179,48 @@ def test_openai_compat_adapter_parses_content_and_usage():
     assert observed["messages"] == [{"role": "user", "content": "hi"}]
 
 
+def test_openai_compat_adapter_applies_provider_parameters_and_usage_pricing():
+    observed = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        import json
+        observed.update(json.loads(request.content))
+        return httpx.Response(200, json={
+            "choices": [{"message": {"content": "{\"ok\": true}"}}],
+            "usage": {
+                "prompt_tokens": 12,
+                "completion_tokens": 4,
+                "prompt_cache_hit_tokens": 7,
+                "prompt_cache_miss_tokens": 5,
+            },
+        })
+
+    def pricer(raw):
+        assert raw["prompt_cache_hit_tokens"] == 7
+        return 0.0123, "USD"
+
+    adapter = OpenAICompatAdapter(
+        api_key="k", base_url="https://api.test", model="test-model",
+        transport=httpx.MockTransport(handler),
+        request_parameters={"thinking": {"type": "disabled"}},
+        usage_pricer=pricer,
+    )
+    output, usage = asyncio_run(adapter.complete(
+        [{"role": "user", "content": "hi"}], {"type": "object"}, 100, 5
+    ))
+    assert output == {"ok": True}
+    assert (usage.model_cost, usage.currency) == (0.0123, "USD")
+    assert observed["thinking"] == {"type": "disabled"}
+
+
+def test_openai_compat_adapter_rejects_reserved_parameter_override():
+    with pytest.raises(ValueError, match="reserved"):
+        OpenAICompatAdapter(
+            api_key="k", base_url="https://api.test", model="test-model",
+            request_parameters={"model": "other"},
+        )
+
+
 @pytest.mark.asyncio
 async def test_run_model_call_sends_self_contained_final_contract_on_wire():
     import json
