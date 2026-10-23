@@ -89,6 +89,7 @@ Proposed 的逐案结果：
 - `python -m benchmark.m8b replay --artifact evals/reports/m8b-deepseek-20261024-v5`：131 个文件校验通过，25 个 run 与 5 份报告重放一致。
 - 正式批次：25 runs，48 priced calls，0 unpriced calls，0 leakage findings。
 - 失败 Trace：`evals/reports/m8b-deepseek-20261024-v5/runs/main/run-0023-212a4d34fc60/`。
+- 远端 CI：提交 `913e22b` 的 [run 39994398083](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/39994398083) 中 `test` 与 `investigation-tests` 均通过。
 
 ## 8. 结论边界
 

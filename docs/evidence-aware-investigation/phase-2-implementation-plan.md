@@ -238,7 +238,7 @@ v4 复评（V4-1–V4-3）纳入位置：V4-1→M3 验收（明确覆盖范围+�
 | M6 基线层 | 已完成（自检、辅助独立复核、同一提交双 CI） | `7cd8887`（实现） | 通过（`7cd8887`，[run 39817946163](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/39817946163)） |
 | M7 Proposed 层 | 已完成（全量回归、双路独立复核、同一实现提交双 CI）；见 [验收记录](acceptance/m7-proposed-acceptance.md) | `ea5d1f0`（实现） | 通过（`ea5d1f0`，[run 39821412776](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/39821412776)） |
 | M8a 工程验收报告（假模型） | 已完成（175-run 假模型批次、归档重放、双 CI；无策略结论）；见 [验收记录](acceptance/m8a-engineering-acceptance.md) | `d3b8341`（实现） | 通过（`d3b8341`，[run 39823511219](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/39823511219)） |
-| M8b 真实模型探索报告 | 已完成（DeepSeek 官方模型 25-run 正式批次、费用保护、失败 Trace 保留、归档重放）；见 [验收记录](acceptance/m8b-real-model-acceptance.md) | `36e6c8c`（正式运行代码） | 待本提交推送后核对 |
+| M8b 真实模型探索报告 | 已完成（DeepSeek 官方模型 25-run 正式批次、费用保护、失败 Trace 保留、归档重放）；见 [验收记录](acceptance/m8b-real-model-acceptance.md) | `36e6c8c`（正式运行代码），`913e22b`（验收 head） | 通过（`913e22b`，[run 39994398083](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/39994398083)） |
 
 ### 7.3 工程验收与实验结论分开判断
 
