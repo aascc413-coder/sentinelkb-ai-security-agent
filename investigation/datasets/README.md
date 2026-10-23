@@ -14,8 +14,14 @@
 
 ```powershell
 investigation/.venv/Scripts/python.exe investigation/scripts/dataset_summary.py
+investigation/.venv/Scripts/python.exe investigation/scripts/dataset_split_audit.py
 investigation/.venv/Scripts/python.exe investigation/scripts/replay_seed_tools.py
 ```
+
+`dataset_split_audit.py` 是作者/评测侧命令，会读取 oracle。它验证 manifest、
+文件哈希、映射、family 分组与 dev/test 切分，并使用冻结规范化规则阻止静态
+等价的模型可见输入跨 family 或 split；禁止在 Agent 运行时导入。当前五案审计
+结果应为 5 个 dev 案例、2 个 family，且只识别出 C4/C5 一个等价可见输入组。
 
 作者标识在加载时一致重映射为 opaque ID；host/user/process、时间、payload
 和内容哈希保持不变。镜像记录共享 event_id 与 independence_group；备用批准

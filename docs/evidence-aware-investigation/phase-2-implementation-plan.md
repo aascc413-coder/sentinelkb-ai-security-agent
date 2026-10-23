@@ -1,12 +1,14 @@
-# Evidence-Aware 调查 Agent 实施计划 — Phase 2–5.1（v7 修订版）
+# Evidence-Aware 调查 Agent 实施计划 — Phase 2–5.2a（v8 修订版）
 
-状态：v7。2026-10-24 根据 M8b 真实模型失败模式增加 M9 效率修订；工程范围、证据边界和实验诚实性要求沿用 v6。
+状态：v8。2026-10-24 在 M9 后启动 M10a 数据集扩展协议与盲测分组审计；证据边界和实验诚实性要求沿用 v7。
 
 **当前授权**：技术验收由主实现与辅助 AI 完成，所测提交的必需 CI 全通过后自动推进；已授权提交并推送本项目开发变更。发布、付费资源、真实安全处置仍单独征求用户同意。用户不需要逐阶段运行命令或回复“通过”。
 
 v6 修订：以第 7 节技术验收流程替代逐里程碑人工暂停；保留独立复核、版本快照、双 CI 和阶段依赖；阶段结果以简短摘要告知用户。下方 v3–v5 说明为历史修订记录，其人工门槛由 v6 替代，历史验收事实保留。
 
 v7 修订：M8b 发现 Proposed 在每次 Tool Call 后完整重写假设，且同一关联由 `links` 与假设证据数组重复生成，造成格式修复和 token 预算耗尽。新增 M9a 离线效率修订与 M9b 同条件真实模型复验；旧 M8b Artifact 保留，复验使用新 run_id，收费调用仍需单独授权。
+
+v8 修订：将 P5.2 拆成先协议、后数据。M10a 先冻结 `family_id` 分组语义、dev/test 防泄漏规则和自动审计；M10b–M10d 再分批扩写 dev 20/test 40。M10a 不依赖 M9b 收费复验，可并行推进；新增案例与统计实验仍需通过各自验收。
 
 修订摘要：M8 拆分为 M8a（假模型工程验收）/ M8b（真实模型探索），实验结论边界最高优先；公共 Evidence Registry 提前至 M4 四方法共用；契约按访问边界分区，"物理隔离"改为"逻辑隔离"并补实际模型输入泄漏检查；M2 新增充分性判定表（R4，最高优先）；M1 新增公共动作 Schema；M0 改为独立 CI job 与依赖锁定；删除文件数/测试数承诺与小样本统计推断。
 
@@ -18,7 +20,7 @@ v5：按 v4 复评（V4-1–V4-3）作局部修正，计划主体不变——M3 
 
 ## 0. 范围决定
 
-- **范围**：全闭环 P2–P5.1 —— 基础设施 → 三基线 → Proposed 方法 → 5 案例四方法对照（M8a 工程验收 + M8b 真实模型探索）。
+- **范围**：P2–P5.2a —— 基础设施 → 三基线 → Proposed 方法 → 5 案例四方法对照 → M9 效率修订 → M10a 数据扩展协议与切分审计。
 - **位置**：仓库根目录新建独立包 `investigation/`（按 `phase-1-design.md` 3.3 节布局）。不改动 SentinelKB 产品代码，CI 新建独立 job。
 - **排序原则**：先底层再高层、先父依赖再子依赖 —— 每一层只依赖已完成的下层，每层独立可测、独立可验收。
 - **验收方式**：主实现自检 → 辅助 AI 独立技术复核 → 提交并推送 → 核对所测提交的必需 CI → 自动进入下一里程碑。技术检查或 CI 未过则修复复验。用户参与产品选择与保留事项审批，不作为每阶段工程通过的默认门槛（详见第 7 节）。
@@ -40,7 +42,9 @@ M0 脚手架（设计稿冻结入库 + 包骨架 + 独立 CI job + 依赖锁定�
                          └─ M7 Proposed 层（父：M1–M6）[P4.1–P4.3 + R4]
                              ├─ M8a 工程验收报告（父：M1–M7）[R1/R6] 假模型
                              └─ M8b 真实模型探索报告（父：M8a）[R1/R6]
-                                 └─ 后续（本轮不做）：扩充盲测、消融、接入真实工具
+                                 ├─ M9a/M9b 调查循环效率修订与复验
+                                 └─ M10a 数据扩展协议与切分审计
+                                     └─ 后续：M10b–M10d 案例扩写 → M11 消融与统计实验
 ```
 
 隔离口径统一为**逻辑隔离**：评测代码（M5）位于包外 `investigation/evaluation/`，oracle/评测契约与运行时/环境契约分文件存放，import 方向单向（agents → runtime/tools/state，evaluation → state+trace 产物），并以守卫测试验证。这是代码组织与数据引用约束，**不是**进程或文件系统隔离；子进程加固延后（见第 4 节）。
@@ -156,9 +160,13 @@ M0 脚手架（设计稿冻结入库 + 包骨架 + 独立 CI job + 依赖锁定�
 - **M9b 真实模型复验**：使用与 M8b 相同数据、模型、参数和预算创建新 Artifact，比较完成率、修复率、token、费用与 Verdict；不得覆盖 M8b 结果，也不得仅凭五个开发案例声称策略优越。
 - **授权边界**：M9a 不调用付费 API。M9b 在执行前另行取得费用上限授权。
 
-### 后续（本轮不做）
+### M10a 数据扩展协议与切分审计（父：M2+M5，可与 M9b 并行）[P5.2a]
 
-扩充盲测（30–100 案例）、消融实验、统计推断与显著性、子进程沙箱、P6 接入真实工具与其他告警族。
+- 冻结 60 案例目标（dev 20/test 40）、案例作者清单与覆盖矩阵，详细规则见 [M10 数据集扩展契约](m10-dataset-expansion-contract.md)。
+- 以 `OracleCase.family_id` 作为不可拆分的分组单位；counterfactual 双胞胎、同模板改写和同源变体不得跨 dev/test。
+- `dataset_split_audit.py` 验证 manifest/哈希/类型映射、family split 和按冻结规范化规则静态等价的模型可见输入分组；语义改写仍由独立内容复核覆盖。
+- **验收**：当前五案不改字节并通过审计；构造 family 跨 split、等价可见输入跨组、孤儿文件和路径分区错误时必须拒绝；仅 envelope ID 不同的输入仍归入同一等价组；完整 investigation 测试通过。
+- **边界**：M10a 不生成新增案例、不运行模型、不产生研究结论；M10b–M10d 分批扩写，M11 才运行多次采样、消融和统计分析。
 
 ## 3. 关键技术决定
 
@@ -172,7 +180,7 @@ M0 脚手架（设计稿冻结入库 + 包骨架 + 独立 CI job + 依赖锁定�
 
 ## 4. 明确不做（本轮）
 
-- P5.2（30–100 案例扩充、消融）、P6（SentinelKB 检索接入为工具、真实 SIEM、其他告警族）、Web UI、API 集成、MCP。
+- M10b–M10d 的案例内容扩写、M11 消融与统计实验、P6（SentinelKB 检索接入为工具、真实 SIEM、其他告警族）、Web UI、API 集成、MCP。
 - bootstrap 置信区间、零事件上界、Risk-Coverage 曲线与 ECE 展示（先固定指标定义、保存所需数据）。
 - 子进程级隔离加固（逻辑隔离已声明的保证范围之外）。
 - 文件数/测试数等数量承诺（改用风险验收清单）。
@@ -249,8 +257,9 @@ v4 复评（V4-1–V4-3）纳入位置：V4-1→M3 验收（明确覆盖范围+�
 | M7 Proposed 层 | 已完成（全量回归、双路独立复核、同一实现提交双 CI）；见 [验收记录](acceptance/m7-proposed-acceptance.md) | `ea5d1f0`（实现） | 通过（`ea5d1f0`，[run 39821412776](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/39821412776)） |
 | M8a 工程验收报告（假模型） | 已完成（175-run 假模型批次、归档重放、双 CI；无策略结论）；见 [验收记录](acceptance/m8a-engineering-acceptance.md) | `d3b8341`（实现） | 通过（`d3b8341`，[run 39823511219](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/39823511219)） |
 | M8b 真实模型探索报告 | 已完成（DeepSeek 官方模型 25-run 正式批次、费用保护、失败 Trace 保留、归档重放）；见 [验收记录](acceptance/m8b-real-model-acceptance.md) | `36e6c8c`（正式运行代码），`913e22b`（验收 head） | 通过（`913e22b`，[run 39994398083](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/39994398083)） |
-| M9a 调查循环效率修订 | 实现、自检及分支/主分支双 CI 通过，待辅助 AI 独立复核；见 [工程记录](acceptance/m9a-efficiency-acceptance.md) | `5d59ecf`（核心实现），`186b7cc`（验收 head） | 通过（`186b7cc`，[run 40002378447](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/40002378447)） |
+| M9a 调查循环效率修订 | 已完成（实现、自检、辅助独立复核及分支/主分支双 CI）；见 [工程记录](acceptance/m9a-efficiency-acceptance.md)与[独立复核](acceptance/m9a-independent-review.md) | `5d59ecf`（核心实现），`186b7cc`（验收 head） | 通过（`186b7cc`，[run 40002378447](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/40002378447)） |
 | M9b 同条件真实模型复验 | 未开始；需单独费用授权 | — | — |
+| M10a 数据扩展协议与切分审计 | 实现、主实现自检与辅助独立复核通过，待提交和同一提交双 CI；见 [验收记录](acceptance/m10a-dataset-protocol-acceptance.md)与[独立复核](acceptance/m10a-independent-review.md) | — | — |
 
 ### 7.3 工程验收与实验结论分开判断
 

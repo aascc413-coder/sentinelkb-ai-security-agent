@@ -1,7 +1,7 @@
 # M9a 调查循环效率修订工程记录
 
 日期：2026-10-24
-状态：实现、本地自检与分支/主分支双 CI 通过；待辅助 AI 独立复核
+状态：已完成；实现、本地自检、辅助 AI 独立复核与分支/主分支双 CI 均通过
 
 实现 commit：`5d59ecf5ace3a84dbe965dc62e84582aa604c29a`
 
@@ -57,14 +57,11 @@ Proposed 五案均为有效 run，Verdict 仍为 `TP / FP / Suspicious / Abstain
 
 输入数字是预算控制器的 `chars/4` 预估，输出数字是最大 token 预留；它们不是供应商实际计费 token。假模型实测 token 是固定合成值，不能作为真实模型效率证据。
 
-## 4. 结论边界与剩余验收
+## 4. 结论边界与后续实验
 
 M9a 已验证调用拓扑缩减且五案确定性行为不变。真实模型是否减少格式修复、预算耗尽、实际 token 和费用仍需 M9b 同条件复验。
 
-剩余步骤：
-
-1. 独立技术复核受影响的 Hypothesis Schema、预算硬停和五案 Trace。
-2. 获得新的付费额度授权后才执行 M9b。
+辅助 AI 已独立复核 Hypothesis Schema、预算硬停、五案 Trace、归档重放和 M9b compare，结论为建议通过；见 [M9a 独立技术复核](m9a-independent-review.md)。后续获得新的付费额度授权后才执行 M9b。
 
 ## 5. 远端 CI
 
