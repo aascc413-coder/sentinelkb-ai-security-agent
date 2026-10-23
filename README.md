@@ -94,6 +94,16 @@ DISABLE_LOCAL_EMBEDDINGS=1
 
 修改 `code/python/.env` 后必须重启项目。详细说明见 [国内模型服务配置指南](docs/国内模型服务配置指南.md)。任何真实 API Key 都不能写入 README、截图、代码或 Git 提交。
 
+使用 DeepSeek 官方 API 时，推荐配置为：
+
+```env
+OPENAI_API_KEY=请填写 DeepSeek 官方密钥
+OPENAI_BASE_URL=https://api.deepseek.com
+OPENAI_MODEL=deepseek-flash
+ENABLE_LLM=1
+DISABLE_LOCAL_EMBEDDINGS=1
+```
+
 ### 最短验收流程
 
 1. 在“文档入库”上传 `code/samples/rag_test.txt`。
