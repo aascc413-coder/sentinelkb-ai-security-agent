@@ -49,6 +49,9 @@ class SchemaAwareModel:
             hypothesis_context = json.loads(messages[-1]["content"])
             previous = {item["hypothesis_id"]: item
                         for item in hypothesis_context["previous_hypotheses"]}
+            assert all("supporting_evidence" not in item
+                       and "disconfirming_evidence" not in item
+                       for item in previous.values())
             revision = max((item["version"] for item in previous.values()), default=0) + 1
             output = {
                 "hypotheses": [
@@ -56,13 +59,11 @@ class SchemaAwareModel:
                      "explanation": "Unauthorized PowerShell activity.", "kind": "malicious",
                      "status": "open", "expected_observations": ["unauthorized behavior"],
                      "falsifying_observations": ["matching approved operation"],
-                     "supporting_evidence": [], "disconfirming_evidence": [],
                      "supersedes": "malicious" if previous else None},
                     {"hypothesis_id": "benign", "version": revision,
                      "explanation": "Authorized administrative activity.", "kind": "benign",
                      "status": "open", "expected_observations": ["matching approval"],
                      "falsifying_observations": ["unauthorized effects"],
-                     "supporting_evidence": [], "disconfirming_evidence": [],
                      "supersedes": "benign" if previous else None},
                 ],
                 "links": [],
@@ -118,20 +119,48 @@ def test_hypothesis_semantics_reject_single_kind_and_dangling_links():
     one = {"hypotheses": [{
         "hypothesis_id": "h1", "version": 1, "explanation": "only one",
         "kind": "malicious", "status": "open", "expected_observations": [],
-        "falsifying_observations": [], "supporting_evidence": [],
-        "disconfirming_evidence": [],
+        "falsifying_observations": [], "supersedes": None,
     }], "links": []}
     with pytest.raises(ProtocolViolation, match="competing"):
         validate_hypothesis_output(one, ("ev-1",))
     two = {"hypotheses": one["hypotheses"] + [{
         "hypothesis_id": "h2", "version": 1, "explanation": "benign",
         "kind": "benign", "status": "open", "expected_observations": [],
-        "falsifying_observations": [], "supporting_evidence": [],
-        "disconfirming_evidence": [],
+        "falsifying_observations": [], "supersedes": None,
     }], "links": [{"evidence_id": "ev-x", "hypothesis_id": "h2",
                     "stance": "support", "interpretation": "invented"}]}
     with pytest.raises(ProtocolViolation, match="grounded"):
         validate_hypothesis_output(two, ("ev-1",))
+
+
+def test_hypothesis_links_are_projected_once_and_conflicts_are_rejected():
+    payload = {"hypotheses": [
+        {"hypothesis_id": "malicious", "version": 1, "explanation": "malicious",
+         "kind": "malicious", "status": "open", "expected_observations": [],
+         "falsifying_observations": [], "supersedes": None},
+        {"hypothesis_id": "benign", "version": 1, "explanation": "benign",
+         "kind": "benign", "status": "open", "expected_observations": [],
+         "falsifying_observations": [], "supersedes": None},
+    ], "links": [
+        {"evidence_id": "ev-1", "hypothesis_id": "malicious",
+         "stance": "support", "interpretation": "supports",
+         "related_evidence_ids": []},
+        {"evidence_id": "ev-1", "hypothesis_id": "benign",
+         "stance": "contradict", "interpretation": "contradicts",
+         "related_evidence_ids": []},
+    ]}
+    hypotheses, _ = validate_hypothesis_output(payload, ("ev-1",))
+    by_id = {item.hypothesis_id: item for item in hypotheses}
+    assert by_id["malicious"].supporting_evidence == ("ev-1",)
+    assert by_id["benign"].disconfirming_evidence == ("ev-1",)
+
+    payload["links"].append({
+        "evidence_id": "ev-1", "hypothesis_id": "malicious",
+        "stance": "contradict", "interpretation": "conflicts",
+        "related_evidence_ids": [],
+    })
+    with pytest.raises(ProtocolViolation, match="both support and contradict"):
+        validate_hypothesis_output(payload, ("ev-1",))
 
 
 def test_planner_initial_action_is_process_and_window_is_frozen():
@@ -158,13 +187,16 @@ def test_planner_initial_action_is_process_and_window_is_frozen():
 async def test_proposed_five_case_behavior_and_trace(tmp_path, index, expected):
     case, tools = case_tools(index)
     run_id = f"m7-c{index}"
+    model = SchemaAwareModel()
     final = await EvidenceAwareInvestigator(
-        adapter=SchemaAwareModel(), manifest=manifest(run_id),
+        adapter=model, manifest=manifest(run_id),
         output_dir=tmp_path, rubric=RUBRIC,
     ).run(case, tools, BUDGET)
     bundle = read_trace(tmp_path, run_id)
     assert final.verdict == expected
     assert bundle.final == final
+    assert model.calls == 3
+    assert [event.event_type for event in bundle.events].count("hypotheses_revised") == 1
     assert [event.event_type for event in bundle.events].count("sufficiency_checked") >= 2
     assert tool_views(bundle) == (["process_tree", "network_events", "asset"]
                                   if index == 1 else
@@ -199,8 +231,8 @@ async def test_last_tool_budget_forces_abstain_without_post_tool_model(tmp_path)
     ).run(case, tools, budget)
     assert final.verdict == "Abstain"
     assert final.stop_reason == "tool_budget"
-    # Initial hypothesis plus revisions after only the first two tools.
-    assert model.calls == 3
+    # A hard stop cannot spend tokens on the optional final consolidation.
+    assert model.calls == 1
 
 
 @pytest.mark.asyncio
@@ -230,7 +262,7 @@ async def test_last_tool_can_close_only_when_program_gates_are_already_sufficien
     ).run(case, tools, budget)
     assert final.verdict == expected
     assert final.stop_reason == "tool_budget"
-    assert model.calls == 3
+    assert model.calls == 1
 
 
 @pytest.mark.asyncio

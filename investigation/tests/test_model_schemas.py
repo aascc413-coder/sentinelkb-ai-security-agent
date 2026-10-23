@@ -95,6 +95,17 @@ def test_hypothesis_proposal_valid():
                     "status": "open",
                     "expected_observations": ["进程树含 WINWORD 父进程"],
                     "falsifying_observations": ["存在匹配的批准任务"],
+                    "supersedes": None,
+                },
+                {
+                    "hypothesis_id": "h-2",
+                    "version": 1,
+                    "explanation": "approved administration",
+                    "kind": "benign",
+                    "status": "open",
+                    "expected_observations": ["matching approval"],
+                    "falsifying_observations": ["unauthorized effect"],
+                    "supersedes": None,
                 }
             ],
             "links": [],
@@ -112,7 +123,33 @@ def test_hypothesis_kind_restricted():
                         "hypothesis_id": "h-1", "version": 1, "explanation": "x",
                         "kind": "unknown-world", "status": "open",
                         "expected_observations": [], "falsifying_observations": [],
+                        "supersedes": None,
                     }
+                ],
+                "links": [],
+            },
+            sl.HYPOTHESIS_PROPOSAL,
+        )
+
+
+def test_hypothesis_v2_rejects_duplicate_evidence_arrays():
+    with pytest.raises(ProtocolViolation, match="schema_violation"):
+        sl.validate_model_output(
+            {
+                "hypotheses": [
+                    {
+                        "hypothesis_id": "malicious", "version": 1,
+                        "explanation": "malicious", "kind": "malicious",
+                        "status": "open", "expected_observations": [],
+                        "falsifying_observations": [], "supersedes": None,
+                        "supporting_evidence": [],
+                    },
+                    {
+                        "hypothesis_id": "benign", "version": 1,
+                        "explanation": "benign", "kind": "benign",
+                        "status": "open", "expected_observations": [],
+                        "falsifying_observations": [], "supersedes": None,
+                    },
                 ],
                 "links": [],
             },

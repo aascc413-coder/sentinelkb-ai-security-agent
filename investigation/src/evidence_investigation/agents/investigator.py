@@ -24,13 +24,13 @@ from evidence_investigation.state.schema_loader import SUFFICIENCY_EXPLANATION
 from evidence_investigation.state.validation import validate_final_assessment
 
 from .hypothesis import propose_hypotheses
-from .planner import DeterministicPlanner, selected_tool_action
+from .planner import DeterministicPlanner
 from .sufficiency import AcquiredResult, SufficiencyEvaluation, evaluate_sufficiency
 
 
 def required_prompt_hashes() -> dict[str, str]:
     return {name: prompt_sha256(name) for name in
-            ("hypothesis-v1.txt", "sufficiency-v1.txt")}
+            ("hypothesis-v2.txt", "sufficiency-v1.txt")}
 
 
 class EvidenceAwareInvestigator:
@@ -105,6 +105,31 @@ class EvidenceAwareInvestigator:
                            state_version_before=registry.version,
                            state_version_after=registry.version)
                 if plan.action == "finalize":
+                    if ledger:
+                        revision += 1
+                        hypotheses, links = await propose_hypotheses(
+                            controller=controller, adapter=self.adapter,
+                            run_id=self.manifest.run_id, alert=case.alert,
+                            evidence=registry.facts() + registry.operational_facts(),
+                            trace=trace, step=controller.snapshot().steps,
+                            revision=revision,
+                            previous_hypotheses=tuple(state.hypotheses),
+                        )
+                        state.hypotheses = list(hypotheses)
+                        state.evidence.links = list(links)
+                        trace.emit(EventType.HYPOTHESES_REVISED,
+                                   {"hypotheses": encode(hypotheses),
+                                    "links": encode(links),
+                                    "other_hypotheses_possible": True,
+                                    "reason": "final_evidence_consolidation"},
+                                   step=controller.snapshot().steps,
+                                   state_version_before=registry.version,
+                                   state_version_after=registry.version)
+                        state.usage = controller.snapshot()
+                        trace.emit(EventType.STATE_SNAPSHOT, {"state": encode(state)},
+                                   step=controller.snapshot().steps,
+                                   state_version_before=registry.version,
+                                   state_version_after=registry.version)
                     await self._explain_sufficiency(controller, trace, evaluation,
                                                     controller.snapshot().steps)
                     unavailable = any(item.result.status in {"unavailable", "timeout", "error"}
@@ -116,7 +141,6 @@ class EvidenceAwareInvestigator:
                     )
 
                 step = controller.begin_step()
-                public_action = selected_tool_action(plan)
                 selected = next(item for item in plan.candidates
                                 if item.action_id == plan.selected_action_id)
                 outcome = await dispatcher.dispatch(selected.call, step=step)
@@ -132,22 +156,6 @@ class EvidenceAwareInvestigator:
                     # The last admitted tool closes model admission. Re-evaluate in
                     # the next iteration and finalize deterministically.
                     continue
-                revision += 1
-                hypotheses, links = await propose_hypotheses(
-                    controller=controller, adapter=self.adapter,
-                    run_id=self.manifest.run_id, alert=case.alert,
-                    evidence=registry.facts() + registry.operational_facts(),
-                    trace=trace, step=step, revision=revision,
-                    previous_hypotheses=tuple(state.hypotheses),
-                )
-                state.hypotheses = list(hypotheses)
-                state.evidence.links = list(links)
-                trace.emit(EventType.HYPOTHESES_REVISED,
-                           {"hypotheses": encode(hypotheses), "links": encode(links),
-                            "other_hypotheses_possible": True,
-                            "public_action": encode(public_action)}, step=step,
-                           state_version_before=registry.version,
-                           state_version_after=registry.version)
         except (BudgetExceeded, ProtocolViolation, ModelError) as exc:
             if isinstance(exc, BudgetExceeded):
                 reason = exc.reason

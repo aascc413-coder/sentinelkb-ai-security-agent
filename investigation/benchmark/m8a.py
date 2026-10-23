@@ -138,7 +138,6 @@ class EngineeringFakeModel(FakeScriptedModel):
                         "kind": "malicious", "status": "open",
                         "expected_observations": ["unauthorized behavior or harmful effects"],
                         "falsifying_observations": ["complete matching authorization"],
-                        "supporting_evidence": [], "disconfirming_evidence": [],
                         "supersedes": "malicious" if previous else None,
                     },
                     {
@@ -147,7 +146,6 @@ class EngineeringFakeModel(FakeScriptedModel):
                         "kind": "benign", "status": "open",
                         "expected_observations": ["matching approval and scoped effects"],
                         "falsifying_observations": ["unauthorized or harmful effects"],
-                        "supporting_evidence": [], "disconfirming_evidence": [],
                         "supersedes": "benign" if previous else None,
                     },
                 ],

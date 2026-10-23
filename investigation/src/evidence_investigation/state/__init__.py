@@ -64,6 +64,7 @@ from .schema_loader import (
     ACTION,
     FINAL_ASSESSMENT,
     HYPOTHESIS_PROPOSAL,
+    HYPOTHESIS_PROPOSAL_V1,
     PLAN,
     SUFFICIENCY_EXPLANATION,
     SCHEMA_NAMES,
@@ -84,7 +85,7 @@ __all__ = [
     "TimeWindow", "TokenPlan", "ToolCall", "ToolContext", "ToolName",
     "ToolRecord", "ToolResult", "ToolArguments", "ToolAction", "TraceEvent", "Usage",
     "Verdict", "EventType", "JsonValue", "ProtocolViolation",
-    "ACTION", "FINAL_ASSESSMENT", "HYPOTHESIS_PROPOSAL", "PLAN",
+    "ACTION", "FINAL_ASSESSMENT", "HYPOTHESIS_PROPOSAL", "HYPOTHESIS_PROPOSAL_V1", "PLAN",
     "SUFFICIENCY_EXPLANATION", "SCHEMA_NAMES", "schema_contents", "model_schema_contents",
     "validate_model_output",
 ]

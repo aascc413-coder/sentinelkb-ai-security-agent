@@ -24,7 +24,8 @@ from .errors import ProtocolViolation
 SCHEMA_DIR = Path(resources.files("evidence_investigation.state")) / "schemas"
 
 COMMON = "common.schema.json"
-HYPOTHESIS_PROPOSAL = "hypothesis_proposal.schema.json"
+HYPOTHESIS_PROPOSAL_V1 = "hypothesis_proposal.schema.json"
+HYPOTHESIS_PROPOSAL = "hypothesis_proposal_v2.schema.json"
 PLAN = "plan.schema.json"
 SUFFICIENCY_EXPLANATION = "sufficiency_explanation.schema.json"
 FINAL_ASSESSMENT = "final_assessment.schema.json"
@@ -32,7 +33,8 @@ ACTION = "action.schema.json"
 
 #: 可用于校验模型输出的 Schema（common 只是共享 $defs 载体，不单独校验输出）
 SCHEMA_NAMES = (
-    HYPOTHESIS_PROPOSAL, PLAN, SUFFICIENCY_EXPLANATION, FINAL_ASSESSMENT, ACTION,
+    HYPOTHESIS_PROPOSAL_V1, HYPOTHESIS_PROPOSAL, PLAN,
+    SUFFICIENCY_EXPLANATION, FINAL_ASSESSMENT, ACTION,
 )
 #: 需要注册进 referencing Registry 的全部资源
 _REGISTERED = (COMMON,) + SCHEMA_NAMES
