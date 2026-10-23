@@ -70,13 +70,16 @@ def test_comparison_rows_use_only_paired_complete_usage():
                      verdict="TP", stop="sufficient"),
         "C2": _record("C2", calls=3, inputs=500, outputs=250, cost=0.05),
     }
-    rows, totals = _comparison_rows(before, after, {"C1": 1, "C2": 0},
-                                    {"C1": 0, "C2": 0})
+    rows, all_totals, totals = _comparison_rows(before, after, {"C1": 1, "C2": 0},
+                                                {"C1": 0, "C2": 0})
     assert rows[0]["delta_candidate_minus_baseline"] == {
         "model_calls": -2, "repair_count": -1, "input_tokens": -400,
         "output_tokens": -200, "model_cost_usd": pytest.approx(-0.04),
     }
     assert rows[1]["delta_candidate_minus_baseline"]["input_tokens"] is None
+    assert all_totals["model_calls"] == {
+        "baseline": 9, "candidate": 6, "delta_candidate_minus_baseline": -3,
+    }
     assert totals["complete_usage_case_count"] == 1
     assert totals["priced_case_count"] == 1
     assert totals["input_tokens"] == {

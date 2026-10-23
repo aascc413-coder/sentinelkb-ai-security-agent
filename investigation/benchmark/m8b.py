@@ -521,8 +521,9 @@ def _comparison_rows(baseline: dict[str, dict], candidate: dict[str, dict],
     if set(baseline) != set(candidate):
         raise ValueError("baseline and candidate proposed case sets differ")
     rows = []
-    paired = {"model_calls": [0, 0], "input_tokens": [0, 0],
-              "output_tokens": [0, 0], "model_cost_usd": [0.0, 0.0],
+    all_cases = {"model_calls": [0, 0], "repair_count": [0, 0]}
+    paired = {"input_tokens": [0, 0], "output_tokens": [0, 0],
+              "model_cost_usd": [0.0, 0.0],
               "cases": 0, "priced_cases": 0}
     for case_id in sorted(baseline):
         before, after = baseline[case_id], candidate[case_id]
@@ -557,11 +558,14 @@ def _comparison_rows(baseline: dict[str, dict], candidate: dict[str, dict],
             "output_tokens": None,
             "model_cost_usd": None,
         }
+        for key in ("model_calls", "repair_count"):
+            all_cases[key][0] += before_view[key]
+            all_cases[key][1] += after_view[key]
         if complete:
             delta["input_tokens"] = after_view["input_tokens"] - before_view["input_tokens"]
             delta["output_tokens"] = after_view["output_tokens"] - before_view["output_tokens"]
             paired["cases"] += 1
-            for key in ("model_calls", "input_tokens", "output_tokens"):
+            for key in ("input_tokens", "output_tokens"):
                 paired[key][0] += before_view[key]
                 paired[key][1] += after_view[key]
             if before_cost is not None and after_cost is not None:
@@ -587,7 +591,12 @@ def _comparison_rows(baseline: dict[str, dict], candidate: dict[str, dict],
                  "delta_candidate_minus_baseline": values[1] - values[0]}
            for key, values in paired.items()},
     }
-    return rows, paired_totals
+    all_totals = {
+        key: {"baseline": values[0], "candidate": values[1],
+              "delta_candidate_minus_baseline": values[1] - values[0]}
+        for key, values in all_cases.items()
+    }
+    return rows, all_totals, paired_totals
 
 
 def compare_artifacts(baseline: str | Path, candidate: str | Path) -> dict:
@@ -613,7 +622,9 @@ def compare_artifacts(baseline: str | Path, candidate: str | Path) -> dict:
     repairs = tuple({case_id: _repair_count(root, record)
                      for case_id, record in records.items()}
                     for root, records in zip(roots, proposed))
-    rows, totals = _comparison_rows(proposed[0], proposed[1], repairs[0], repairs[1])
+    rows, all_totals, paired_totals = _comparison_rows(
+        proposed[0], proposed[1], repairs[0], repairs[1]
+    )
     return {
         "format_version": COMPARISON_FORMAT_VERSION,
         "statement": (
@@ -625,7 +636,8 @@ def compare_artifacts(baseline: str | Path, candidate: str | Path) -> dict:
         "candidate": {"path": str(roots[1]), "code_revision": configs[1]["code_revision"],
                       "replay": replayed[1]},
         "rows": rows,
-        "paired_complete_usage_totals": totals,
+        "all_case_totals": all_totals,
+        "paired_complete_usage_totals": paired_totals,
     }
 
 
