@@ -37,7 +37,7 @@ reports=5
 
 归档位置：`evals/reports/m9a-fake-5d59ecf`（本地忽略目录，不提交 Git）。归档配置绑定上述实现 commit。
 
-Proposed 五案均为有效 run，Verdict 仍为 `TP / FP / Suspicious / Abstain / Abstain`，工具调用仍为 `3 / 3 / 4 / 4 / 4`。
+Proposed 五案均为有效 run，Verdict 仍为 `TP / FP / Suspicious / Abstain / Abstain`，工具调用仍为 `3 / 3 / 4 / 4 / 4`。该假模型每阶段首轮输出均合法，因此每案为 3 个实际模型请求；真实模型若触发修复，会额外计费并进入 M9b 对比。
 
 ### 真实模型归档对比预检
 

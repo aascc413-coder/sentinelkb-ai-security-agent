@@ -163,6 +163,27 @@ def test_hypothesis_links_are_projected_once_and_conflicts_are_rejected():
         validate_hypothesis_output(payload, ("ev-1",))
 
 
+def test_hypothesis_revision_preserves_ids_and_kinds():
+    initial_payload = {"hypotheses": [
+        {"hypothesis_id": "malicious", "version": 1, "explanation": "malicious",
+         "kind": "malicious", "status": "open", "expected_observations": [],
+         "falsifying_observations": [], "supersedes": None},
+        {"hypothesis_id": "benign", "version": 1, "explanation": "benign",
+         "kind": "benign", "status": "open", "expected_observations": [],
+         "falsifying_observations": [], "supersedes": None},
+    ], "links": []}
+    previous, _ = validate_hypothesis_output(initial_payload, ())
+    revised = {"hypotheses": [dict(item) for item in initial_payload["hypotheses"]],
+               "links": []}
+    for item in revised["hypotheses"]:
+        item["version"] = 2
+        item["supersedes"] = item["hypothesis_id"]
+    revised["hypotheses"][0]["kind"] = "benign"
+    revised["hypotheses"][1]["kind"] = "malicious"
+    with pytest.raises(ProtocolViolation, match="supersede"):
+        validate_hypothesis_output(revised, (), previous)
+
+
 def test_planner_initial_action_is_process_and_window_is_frozen():
     case, _ = case_tools(1)
     checks = tuple(CriterionCheck(cid, "unknown", (), "missing")
