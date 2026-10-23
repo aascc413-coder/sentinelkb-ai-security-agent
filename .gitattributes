@@ -1,3 +1,5 @@
 # Dataset manifests hash physical bytes. Keep them identical on Windows/Linux.
 investigation/datasets/*.json text eol=lf
 investigation/datasets/**/*.json text eol=lf
+# Evaluation annotations are also deterministically generated and byte-compared.
+investigation/evaluation/annotations/*.json text eol=lf
