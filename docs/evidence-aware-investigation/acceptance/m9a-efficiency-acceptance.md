@@ -12,6 +12,7 @@
 - 调查循环从每次工具调用后修订，改为开始生成一次、正常停止前集中修订一次。
 - v1 Prompt 与 Schema 保留，供历史版本和 Artifact 追溯。
 - 更新 M8a 假模型适配器和相关单元测试。
+- 增加 M9b Artifact 离线对比命令；对比前强制重放两侧归档并校验实验条件。
 
 设计理由及不变量见 [M9 效率修订契约](../m9-efficiency-contract.md)。
 
@@ -37,6 +38,10 @@ reports=5
 归档位置：`evals/reports/m9a-fake-5d59ecf`（本地忽略目录，不提交 Git）。归档配置绑定上述实现 commit。
 
 Proposed 五案均为有效 run，Verdict 仍为 `TP / FP / Suspicious / Abstain / Abstain`，工具调用仍为 `3 / 3 / 4 / 4 / 4`。
+
+### 真实模型归档对比预检
+
+使用 M8b v5 正式 Artifact 同自身执行离线 compare，得到 5 个 Proposed 配对 Case；其中 4 个 Case 两侧 usage 完整，模型调用和 input token 差值均为 0。该检查验证 compare 管道，不产生新模型或工具调用。
 
 ## 3. 调用数量与预算预留对比
 

@@ -47,3 +47,5 @@ Tool Call 之间由确定性 Planner、Evidence Registry 和 Sufficiency Evaluat
 M9a 只证明工程行为：五案结果与工具路径不变、正常运行每案 3 次模型调用、预算硬停不追加模型调用、完整测试通过、统一假模型 Artifact 可离线重放。
 
 M9b 才能回答真实模型是否减少修复、预算耗尽、token 和费用。M9b 必须新建 Artifact 并获得单独费用授权；五个公开开发案例仍不支持泛化或优越性结论。
+
+复验前提供离线 `benchmark.m8b compare`：先对基线与候选 Artifact 分别做 checksum 和指标重放，再校验模型、参数、预算、数据、Rubric、标注与价格快照一致，最后按 Case 输出 Verdict、停止原因、修复次数、模型调用、token 与费用差异。任一侧 usage 不完整时，对应 token/费用差异保持空值，不把未知成本当作零。

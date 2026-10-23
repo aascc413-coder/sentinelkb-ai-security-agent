@@ -51,6 +51,7 @@ from benchmark.m8a import (
 
 
 FORMAT_VERSION = "m8b-real-model-exploration-v1"
+COMPARISON_FORMAT_VERSION = "m9b-real-model-comparison-v1"
 DEFAULT_ENV = LAB.parent / "code" / "python" / ".env"
 DEFAULT_CAP_CNY = 7.0
 CAP_FX_CNY_PER_USD = 8.0
@@ -495,6 +496,139 @@ def replay_artifact(artifact: str | Path) -> dict:
     }
 
 
+def _repair_count(root: Path, record: dict) -> int:
+    trace = Path(record["trace_dir"])
+    bundle = read_trace(root / trace.parent, trace.name)
+    repaired = {
+        event.payload.get("call_id")
+        for event in bundle.events
+        if (event.event_type == "model_output_recorded"
+            and event.payload.get("repaired_output") is not None)
+    }
+    return len(repaired)
+
+
+def _proposed_records(inventory: dict) -> dict[str, dict]:
+    rows = [item for item in inventory["runs"] if item["method"] == "proposed"]
+    indexed = {item["case_id"]: item for item in rows}
+    if len(indexed) != len(rows):
+        raise ValueError("duplicate proposed case in artifact")
+    return indexed
+
+
+def _comparison_rows(baseline: dict[str, dict], candidate: dict[str, dict],
+                     baseline_repairs: dict[str, int], candidate_repairs: dict[str, int]):
+    if set(baseline) != set(candidate):
+        raise ValueError("baseline and candidate proposed case sets differ")
+    rows = []
+    paired = {"model_calls": [0, 0], "input_tokens": [0, 0],
+              "output_tokens": [0, 0], "model_cost_usd": [0.0, 0.0],
+              "cases": 0, "priced_cases": 0}
+    for case_id in sorted(baseline):
+        before, after = baseline[case_id], candidate[case_id]
+        before_usage, after_usage = before["usage"], after["usage"]
+        complete = bool(before_usage["usage_complete"] and after_usage["usage_complete"])
+        before_cost = (before_usage["model_cost"]
+                       if before_usage.get("currency") == "USD" else None)
+        after_cost = (after_usage["model_cost"]
+                      if after_usage.get("currency") == "USD" else None)
+        before_view = {
+            "status": before["status"], "verdict": before["verdict"],
+            "stop_reason": before["stop_reason"],
+            "model_calls": before_usage["model_calls"],
+            "input_tokens": before_usage["input_tokens"] if before_usage["usage_complete"] else None,
+            "output_tokens": before_usage["output_tokens"] if before_usage["usage_complete"] else None,
+            "model_cost_usd": before_cost,
+            "repair_count": baseline_repairs[case_id],
+        }
+        after_view = {
+            "status": after["status"], "verdict": after["verdict"],
+            "stop_reason": after["stop_reason"],
+            "model_calls": after_usage["model_calls"],
+            "input_tokens": after_usage["input_tokens"] if after_usage["usage_complete"] else None,
+            "output_tokens": after_usage["output_tokens"] if after_usage["usage_complete"] else None,
+            "model_cost_usd": after_cost,
+            "repair_count": candidate_repairs[case_id],
+        }
+        delta = {
+            "model_calls": after_view["model_calls"] - before_view["model_calls"],
+            "repair_count": after_view["repair_count"] - before_view["repair_count"],
+            "input_tokens": None,
+            "output_tokens": None,
+            "model_cost_usd": None,
+        }
+        if complete:
+            delta["input_tokens"] = after_view["input_tokens"] - before_view["input_tokens"]
+            delta["output_tokens"] = after_view["output_tokens"] - before_view["output_tokens"]
+            paired["cases"] += 1
+            for key in ("model_calls", "input_tokens", "output_tokens"):
+                paired[key][0] += before_view[key]
+                paired[key][1] += after_view[key]
+            if before_cost is not None and after_cost is not None:
+                delta["model_cost_usd"] = after_cost - before_cost
+                paired["model_cost_usd"][0] += before_cost
+                paired["model_cost_usd"][1] += after_cost
+                paired["priced_cases"] += 1
+        rows.append({
+            "case_id": case_id,
+            "baseline": before_view,
+            "candidate": after_view,
+            "delta_candidate_minus_baseline": delta,
+            "outcome_changed": (
+                before_view["status"], before_view["verdict"], before_view["stop_reason"]
+            ) != (
+                after_view["status"], after_view["verdict"], after_view["stop_reason"]
+            ),
+        })
+    paired_totals = {
+        "complete_usage_case_count": paired.pop("cases"),
+        "priced_case_count": paired.pop("priced_cases"),
+        **{key: {"baseline": values[0], "candidate": values[1],
+                 "delta_candidate_minus_baseline": values[1] - values[0]}
+           for key, values in paired.items()},
+    }
+    return rows, paired_totals
+
+
+def compare_artifacts(baseline: str | Path, candidate: str | Path) -> dict:
+    """Verify and compare Proposed runs without calling a model or tool."""
+    roots = (Path(baseline).resolve(), Path(candidate).resolve())
+    replayed = tuple(replay_artifact(root) for root in roots)
+    inventories = tuple(load_json(root / "inventory.json") for root in roots)
+    configs = tuple(load_json(root / "config.json") for root in roots)
+    comparable_fields = (
+        "provider", "base_url", "model", "model_parameters", "dataset_version",
+        "rubric_version", "annotation_version", "cases", "budget", "billing_tier",
+        "price_snapshot_date", "prices_usd_per_million_tokens",
+    )
+    mismatches = [name for name in comparable_fields if configs[0].get(name) != configs[1].get(name)]
+    frozen_prefixes = ("datasets/", "annotations/", "rubrics/")
+    frozen_hashes = tuple({key: value for key, value in config["input_hashes"].items()
+                           if key.startswith(frozen_prefixes)} for config in configs)
+    if frozen_hashes[0] != frozen_hashes[1]:
+        mismatches.append("frozen_input_hashes")
+    if mismatches:
+        raise ValueError("artifacts are not comparable: " + ", ".join(mismatches))
+    proposed = tuple(_proposed_records(item) for item in inventories)
+    repairs = tuple({case_id: _repair_count(root, record)
+                     for case_id, record in records.items()}
+                    for root, records in zip(roots, proposed))
+    rows, totals = _comparison_rows(proposed[0], proposed[1], repairs[0], repairs[1])
+    return {
+        "format_version": COMPARISON_FORMAT_VERSION,
+        "statement": (
+            "paired exploratory comparison on public development fixtures; "
+            "no generalization or superiority claim"
+        ),
+        "baseline": {"path": str(roots[0]), "code_revision": configs[0]["code_revision"],
+                     "replay": replayed[0]},
+        "candidate": {"path": str(roots[1]), "code_revision": configs[1]["code_revision"],
+                      "replay": replayed[1]},
+        "rows": rows,
+        "paired_complete_usage_totals": totals,
+    }
+
+
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
@@ -507,6 +641,10 @@ def _parser() -> argparse.ArgumentParser:
     run.add_argument("--cases", default="")
     replay = commands.add_parser("replay", help="verify and re-evaluate an existing batch")
     replay.add_argument("--artifact", required=True)
+    compare = commands.add_parser("compare", help="verify and compare two real-model batches")
+    compare.add_argument("--baseline", required=True)
+    compare.add_argument("--candidate", required=True)
+    compare.add_argument("--output")
     return parser
 
 
@@ -524,8 +662,19 @@ def main(argv=None) -> int:
             "runs": result["run_count"],
             "spend": result["spend"],
         }, ensure_ascii=False))
-    else:
+    elif args.command == "replay":
         print(json.dumps(replay_artifact(args.artifact), ensure_ascii=False))
+    else:
+        comparison = compare_artifacts(args.baseline, args.candidate)
+        rendered = json.dumps(comparison, ensure_ascii=False, indent=1)
+        if args.output:
+            target = Path(args.output)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(rendered + "\n", encoding="utf-8")
+            print(json.dumps({"output": str(target.resolve()),
+                              "paired_cases": len(comparison["rows"])}, ensure_ascii=False))
+        else:
+            print(rendered)
     return 0
 
 

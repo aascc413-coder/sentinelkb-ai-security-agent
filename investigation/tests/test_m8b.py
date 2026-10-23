@@ -2,7 +2,7 @@
 
 import pytest
 
-from benchmark.m8b import SpendLedger, price_deepseek_usage
+from benchmark.m8b import SpendLedger, _comparison_rows, price_deepseek_usage
 from evidence_investigation.runtime.model import ModelError
 from evidence_investigation.state.contracts import Usage
 
@@ -45,3 +45,46 @@ def test_spend_ledger_marks_usage_without_price():
     ledger.record(Usage(input_tokens=10, output_tokens=5))
     assert ledger.unpriced_calls == 1
     assert ledger.spent_usd == 0
+
+
+def _record(case_id, *, calls, inputs, outputs, cost, verdict="Abstain",
+            stop="token_budget", complete=True):
+    return {
+        "case_id": case_id, "method": "proposed", "status": "valid",
+        "verdict": verdict, "stop_reason": stop,
+        "usage": {"model_calls": calls, "input_tokens": inputs,
+                  "output_tokens": outputs, "usage_complete": complete,
+                  "model_cost": cost, "currency": "USD" if cost is not None else None},
+    }
+
+
+def test_comparison_rows_use_only_paired_complete_usage():
+    before = {
+        "C1": _record("C1", calls=5, inputs=1000, outputs=500, cost=0.1,
+                      verdict="TP", stop="sufficient"),
+        "C2": _record("C2", calls=4, inputs=800, outputs=400, cost=None,
+                      complete=False),
+    }
+    after = {
+        "C1": _record("C1", calls=3, inputs=600, outputs=300, cost=0.06,
+                     verdict="TP", stop="sufficient"),
+        "C2": _record("C2", calls=3, inputs=500, outputs=250, cost=0.05),
+    }
+    rows, totals = _comparison_rows(before, after, {"C1": 1, "C2": 0},
+                                    {"C1": 0, "C2": 0})
+    assert rows[0]["delta_candidate_minus_baseline"] == {
+        "model_calls": -2, "repair_count": -1, "input_tokens": -400,
+        "output_tokens": -200, "model_cost_usd": pytest.approx(-0.04),
+    }
+    assert rows[1]["delta_candidate_minus_baseline"]["input_tokens"] is None
+    assert totals["complete_usage_case_count"] == 1
+    assert totals["priced_case_count"] == 1
+    assert totals["input_tokens"] == {
+        "baseline": 1000, "candidate": 600, "delta_candidate_minus_baseline": -400,
+    }
+
+
+def test_comparison_rows_reject_different_case_sets():
+    row = _record("C1", calls=1, inputs=1, outputs=1, cost=0.0)
+    with pytest.raises(ValueError, match="case sets differ"):
+        _comparison_rows({"C1": row}, {}, {"C1": 0}, {})
