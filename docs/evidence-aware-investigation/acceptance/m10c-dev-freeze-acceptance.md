@@ -1,6 +1,6 @@
 # M10c 二十案开发集与协议冻结验收记录
 
-里程碑 / 状态：M10c；首次独立复核未通过，所提 P0/P1/P2 已修复；辅助 AI 独立复验通过，待提交和同一提交双 CI。
+里程碑 / 状态：M10c 已完成；首次独立复核未通过，所提 P0/P1/P2 已修复；辅助 AI 独立复验通过，实现提交的同一 SHA 双 CI 通过。
 
 提验日期：2026-10-26。
 
@@ -104,7 +104,13 @@ Prompt、rubric 和作者指南属于按字节绑定的协议资产。此前 Win
 
 ## 6. 待完成门槛
 
-1. 提交、推送并核对同一提交的 `test` 与 `investigation-tests`。
-2. 双 CI 通过后更新里程碑状态；M10d 开始前落实复验报告中的两项非阻断审计加固。
+实现提交：`1dcb4c7`（`feat(investigation): freeze 20-case M10c dev dataset`）。
+
+远端验证：[GitHub Actions run 40323395528](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/40323395528)，head SHA `1dcb4c7b931fed3a3316bfb6bad9ac288048a06e`：
+
+- `test`：success；
+- `investigation-tests`：success。
+
+M10c 所有门槛已完成。M10d 开始前落实复验报告中的两项非阻断审计加固。
 
 门槛完成后才将 M10c 标记为完成并开始 M10d 的独立 blind test 编写。

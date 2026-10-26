@@ -278,7 +278,7 @@ v4 复评（V4-1–V4-3）纳入位置：V4-1→M3 验收（明确覆盖范围+�
 | M9b 同条件真实模型复验 | 未开始；需单独费用授权 | — | — |
 | M10a 数据扩展协议与切分审计 | 已完成（实现、主实现自检、辅助独立复核与同一实现提交双 CI）；见 [验收记录](acceptance/m10a-dataset-protocol-acceptance.md)与[独立复核](acceptance/m10a-independent-review.md) | `4520815` | 通过（`4520815`，[run 40010997694](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/40010997694)） |
 | M10b 开发集扩展到 12 案 | 已完成（实现、主实现自检、辅助独立复核及跨平台换行修复后的同一提交双 CI）；见 [验收记录](acceptance/m10b-dev-dataset-acceptance.md)与[独立复核](acceptance/m10b-independent-review.md) | `bbc3e86`（实现），`2b1aaca`（CI 修复与验收 head） | 通过（`2b1aaca`，[run 40014244342](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/40014244342)） |
-| M10c 开发集冻结到 20 案 | 实现、自检与辅助独立复验已通过；待提交与同一提交双 CI；见 [验收记录](acceptance/m10c-dev-freeze-acceptance.md)、[首次复核](acceptance/m10c-independent-review.md)与[修复后复验](acceptance/m10c-independent-rereview.md) | 待提交 | 待运行 |
+| M10c 开发集冻结到 20 案 | 已完成（实现、自检、首次独立复核发现问题、修复后独立复验与同一实现提交双 CI）；见 [验收记录](acceptance/m10c-dev-freeze-acceptance.md)、[首次复核](acceptance/m10c-independent-review.md)与[修复后复验](acceptance/m10c-independent-rereview.md) | `1dcb4c7` | 通过（`1dcb4c7`，[run 40323395528](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/40323395528)） |
 
 ### 7.3 工程验收与实验结论分开判断
 
