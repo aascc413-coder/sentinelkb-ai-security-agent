@@ -173,6 +173,61 @@ def test_recordless_operational_fact_requires_exact_envelope_scope(
         _load_script("dataset_split_audit").audit_dataset(copied)
 
 
+def test_record_fact_cannot_silently_become_an_operational_annotation(tmp_path):
+    copied = tmp_path / "powershell-dev-v3"
+    shutil.copytree(DATA, copied)
+    oracle_path = copied / "oracle/c16.json"
+    oracle = json.loads(oracle_path.read_text(encoding="utf-8"))
+    oracle["complete_world_evidence"]["E1"].update({
+        "operational_status": "partial",
+        "arguments": {"view": "process_tree", "host": "WS-116"},
+    })
+    oracle_path.write_text(json.dumps(oracle, ensure_ascii=False, indent=2) + "\n",
+                           encoding="utf-8", newline="\n")
+    manifest_path = copied / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["file_sha256"]["oracle/c16.json"] = hashlib.sha256(
+        oracle_path.read_bytes()
+    ).hexdigest()
+    manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
+                             encoding="utf-8", newline="\n")
+    with pytest.raises(ProtocolViolation, match="mixed_annotation"):
+        _load_script("dataset_split_audit").audit_dataset(copied)
+
+
+def test_scoped_unavailable_arguments_cannot_match_a_different_rule(tmp_path):
+    copied = tmp_path / "powershell-dev-v3"
+    shutil.copytree(DATA, copied)
+    oracle_path = copied / "oracle/c16.json"
+    oracle = json.loads(oracle_path.read_text(encoding="utf-8"))
+    oracle["complete_world_evidence"]["E4"]["arguments"] = {
+        "entity_type": "host", "entity": "WS-116",
+    }
+    oracle_path.write_text(json.dumps(oracle, ensure_ascii=False, indent=2) + "\n",
+                           encoding="utf-8", newline="\n")
+    manifest_path = copied / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["file_sha256"]["oracle/c16.json"] = hashlib.sha256(
+        oracle_path.read_bytes()
+    ).hexdigest()
+    manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
+                             encoding="utf-8", newline="\n")
+    with pytest.raises(ProtocolViolation, match="ungrounded_annotation"):
+        _load_script("dataset_split_audit").audit_dataset(copied)
+
+
+def test_future_dataset_versions_require_scope_for_unavailable_facts(tmp_path):
+    copied = tmp_path / "powershell-dev-v3"
+    shutil.copytree(DATA, copied)
+    manifest_path = copied / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["dataset_version"] = "powershell-test-v1"
+    manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
+                             encoding="utf-8", newline="\n")
+    with pytest.raises(ProtocolViolation, match="ungrounded_annotation"):
+        _load_script("dataset_split_audit").audit_dataset(copied)
+
+
 @pytest.mark.asyncio
 @pytest.mark.parametrize("case_id,expected", [
     ("C13", "TP"),

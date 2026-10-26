@@ -32,6 +32,10 @@ _MANIFEST_KEYS = {
 }
 _CASE_KEYS = {"case_id", "public", "environment", "oracle"}
 _DATA_FOLDERS = ("public", "environment", "oracle")
+_LEGACY_UNSCOPED_UNAVAILABLE_VERSIONS = {
+    "synthetic-v1", "powershell-dev-v2", "powershell-dev-v3",
+}
+_OPERATIONAL_FIELDS = {"operational_status", "arguments", "reason", "retryable"}
 
 
 def audit_dataset(root: Path = LAB / "datasets") -> dict:
@@ -131,6 +135,11 @@ def audit_dataset(root: Path = LAB / "datasets") -> dict:
                 )
             if set(references) - known_record_ids:
                 raise ProtocolViolation("dangling_annotation", f"{case_id}/{fact_key}")
+            if references and _OPERATIONAL_FIELDS & set(fact):
+                raise ProtocolViolation(
+                    "mixed_annotation",
+                    f"{case_id}/{fact_key}: record facts cannot carry operational fields",
+                )
             source = fact.get("source")
             if source == "oracle_only":
                 if references or fact_key in oracle.observable_fact_keys:
@@ -160,13 +169,17 @@ def audit_dataset(root: Path = LAB / "datasets") -> dict:
                     if rule.tool == source and rule.status == operational_status
                 ]
                 arguments = fact.get("arguments")
-                if operational_status != "unavailable":
+                if arguments is not None:
                     if type(arguments) is not dict:
                         raise ProtocolViolation("ungrounded_annotation", f"{case_id}/{fact_key}")
                     matching_rules = [
                         rule for rule in matching_rules
                         if rule.argument_constraints == arguments
                     ]
+                elif (operational_status != "unavailable"
+                      or manifest["dataset_version"]
+                      not in _LEGACY_UNSCOPED_UNAVAILABLE_VERSIONS):
+                    raise ProtocolViolation("ungrounded_annotation", f"{case_id}/{fact_key}")
                 if operational_status in {"unavailable", "timeout", "error"}:
                     matching_rules = [
                         rule for rule in matching_rules

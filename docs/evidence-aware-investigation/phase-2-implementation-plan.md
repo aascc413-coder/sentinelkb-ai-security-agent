@@ -184,6 +184,7 @@ M0 脚手架（设计稿冻结入库 + 包骨架 + 独立 CI job + 依赖锁定�
 - 冻结 [数据作者指南](m10c-authoring-guide.md)，并由 `evaluation/freeze/powershell-dev-v3.json` 绑定五个实际 Prompt、rubric、默认预算、数据 manifest、标注和作者指南的 SHA256；相关文本统一 LF，避免平台相关哈希。
 - **验收**：构建器逐字节复现；数据审计通过；三组静态等价双胞胎同 family/同 split；C13–C20 预期为 `TP/FP/Suspicious/Abstain/Abstain/Abstain/Abstain/TP`；冻结漂移测试、完整回归、独立内容复核和同一提交双 CI 通过。
 - **边界**：M10c 仍是公开 dev 数据，只能冻结开发协议；M10d 的 40 个 blind test 必须由独立作者在不改冻结协议的条件下编写。
+- **M10d 作者前置审计**：Oracle record fact 禁止同时携带 operational 字段；M10d 新增的 `unavailable` 事实必须保存与 fixture rule 精确一致的 `arguments`。`synthetic-v1`、`powershell-dev-v2/v3` 只为不可改写的既有冻结 unavailable 标注保留兼容豁免，带 arguments 时仍强制精确匹配。
 
 ## 3. 关键技术决定
 
