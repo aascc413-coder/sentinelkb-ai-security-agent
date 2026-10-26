@@ -1,0 +1,206 @@
+{
+  "case_id": "C19",
+  "family_id": "powershell-ti-distractor-v1",
+  "split": "dev",
+  "ground_truth": "benign",
+  "complete_world_evidence": {
+    "E0": {
+      "source": "alert",
+      "record_ids": [
+        "02d38849db75ce361a5628aa217040cf"
+      ],
+      "observation": "PowerShell detector fired; detector text is not verified behavior."
+    },
+    "E1": {
+      "source": "siem",
+      "record_ids": [
+        "40a7315a048e0015ad734988f28ff974"
+      ],
+      "observation": {
+        "view": "process_tree",
+        "host": "WS-119",
+        "user": "analyst-i",
+        "process_id": "p-1919",
+        "process_guid": "806ab1e3ae360ed1fd29c87452fa6525",
+        "event_id": "e7e7a80756e36fc47bf9860f2e9fb9a4",
+        "occurred_at": "2026-09-01T02:14:00+00:00",
+        "observed_at": "2026-09-01T02:19:00+00:00",
+        "parent_process": "terminal.exe",
+        "child_process": [],
+        "job_id": "NONE",
+        "script_hash": "h-query-19",
+        "parameters": [
+          "query"
+        ],
+        "script_observations": [
+          {
+            "operation": "query",
+            "object": "security-settings",
+            "authorized": null
+          }
+        ]
+      }
+    },
+    "E2": {
+      "source": "siem",
+      "record_ids": [],
+      "arguments": {
+        "view": "network_events",
+        "host": "WS-119"
+      },
+      "operational_status": "empty",
+      "observation": "Complete network scope returned zero matching events."
+    },
+    "E3": {
+      "source": "asset",
+      "record_ids": [
+        "fd38798ed71eb80827aab07c834f56ea"
+      ],
+      "observation": {
+        "host": "WS-119",
+        "published_at": "2026-09-01T02:19:00+00:00",
+        "purpose": "managed-workstation",
+        "system_type": "Windows",
+        "critical_asset": false,
+        "department": "synthetic-enterprise",
+        "approval_register_complete": true,
+        "approval_register_window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "approved_jobs": []
+      }
+    },
+    "E4": {
+      "source": "history",
+      "record_ids": [],
+      "arguments": {
+        "entity_type": "user",
+        "entity": "analyst-i"
+      },
+      "operational_status": "error",
+      "reason": "history_backend_error",
+      "retryable": false
+    },
+    "E7": {
+      "source": "threat_intel",
+      "record_ids": [
+        "372bed31ad9b74363d77d9908fe5bf9b"
+      ],
+      "observation": {
+        "indicator_type": "ip",
+        "value": "203.0.113.250",
+        "published_at": "2026-09-01T02:19:00+00:00",
+        "reputation": "malicious",
+        "provider": "local-mock",
+        "not_a_real_ioc_assessment": true
+      }
+    },
+    "E5": {
+      "source": "attack",
+      "record_ids": [
+        "6dc4063f5919f206e4179710b2c71b13"
+      ],
+      "observation": {
+        "snapshot_version": "attack-local-v1",
+        "published_at": "2026-08-01T00:00:00+00:00",
+        "technique_id": "T1059.001",
+        "behavior_terms": [
+          "powershell_execution"
+        ],
+        "description": "PowerShell occurs in authorized and unauthorized activity; mapping is not a verdict."
+      }
+    }
+  },
+  "observable_fact_keys": [
+    "E0",
+    "E1",
+    "E2",
+    "E3",
+    "E4",
+    "E7",
+    "E5"
+  ],
+  "critical_fact_keys": [],
+  "distractor_fact_keys": [
+    "E5",
+    "E7"
+  ],
+  "sufficient_sets": {
+    "TP": [],
+    "FP": []
+  },
+  "acceptable_verdicts": [
+    "Abstain"
+  ],
+  "resolvable_with_full_observable_evidence": false,
+  "expected_actions": [
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E1"
+      ],
+      "acceptable_tools": [
+        "siem"
+      ],
+      "argument_constraints": {
+        "view": "process_tree",
+        "host": "WS-119",
+        "process_id": "p-1919"
+      },
+      "evidence_goal": "Inspect grounded current process behavior."
+    },
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E2"
+      ],
+      "acceptable_tools": [
+        "siem"
+      ],
+      "argument_constraints": {
+        "view": "network_events",
+        "host": "WS-119",
+        "process_id": "p-1919"
+      },
+      "evidence_goal": "Inspect same-instance network effects and coverage."
+    },
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E3"
+      ],
+      "acceptable_tools": [
+        "asset"
+      ],
+      "argument_constraints": {
+        "host": "WS-119"
+      },
+      "evidence_goal": "Check execution details against complete approvals."
+    },
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E4"
+      ],
+      "acceptable_tools": [
+        "history"
+      ],
+      "argument_constraints": {
+        "entity_type": "user",
+        "entity": "analyst-i"
+      },
+      "evidence_goal": "Check comparable user history."
+    }
+  ],
+  "rubric_version": "powershell-v1",
+  "annotation_rationale": "Unlinked malicious TI and a permanent history failure cannot determine current behavior."
+}

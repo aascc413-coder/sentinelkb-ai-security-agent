@@ -176,6 +176,15 @@ M0 脚手架（设计稿冻结入库 + 包骨架 + 独立 CI job + 依赖锁定�
 - **验收**：12 案、7 family、两个静态等价双胞胎组；新增案例预期为 `TP/FP/FP/Suspicious/Abstain/Abstain/TP`；构建器可逐字节重建数据与评测标注；旧五案与完整回归不变。
 - **边界**：全部仍为公开 synthetic dev 案例，只验证编写与评测流程；不得声称 blind 泛化、生产效果或统计优势。
 
+### M10c 开发集冻结到 20 案（父：M10b）[P5.2c]
+
+- 新建 `datasets/powershell-dev-v3/`，保留 M10b 的前 12 案并新增 C13–C20；目标为 20 案、12 family、17 个物理环境和三组 counterfactual family。C13/C6 与 C20/C12 分别按同源语义合并 family。
+- 新案例覆盖：私钥外传、批准的软件盘点、批准不匹配伴随 retryable timeout、部分进程覆盖、批准源冲突双胞胎、成功空网络结果、永久 history error、未关联 TI 干扰和直接批量删除。
+- 修正冻结前发现的 Planner 历史实体选择：有 user 时查询 user history，否则查询 host history，使 Planner、fixture rule 和 Oracle expected action 一致。
+- 冻结 [数据作者指南](m10c-authoring-guide.md)，并由 `evaluation/freeze/powershell-dev-v3.json` 绑定五个实际 Prompt、rubric、默认预算、数据 manifest、标注和作者指南的 SHA256；相关文本统一 LF，避免平台相关哈希。
+- **验收**：构建器逐字节复现；数据审计通过；三组静态等价双胞胎同 family/同 split；C13–C20 预期为 `TP/FP/Suspicious/Abstain/Abstain/Abstain/Abstain/TP`；冻结漂移测试、完整回归、独立内容复核和同一提交双 CI 通过。
+- **边界**：M10c 仍是公开 dev 数据，只能冻结开发协议；M10d 的 40 个 blind test 必须由独立作者在不改冻结协议的条件下编写。
+
 ## 3. 关键技术决定
 
 1. **隔离口径（R3）**：MVP 为**逻辑隔离**——三边界契约分区、包布局、导入守卫测试、数据不交叉引用、实际模型输入泄漏检查；明确其保证范围，不宣称进程/文件级隔离；子进程沙箱延后。
@@ -269,6 +278,7 @@ v4 复评（V4-1–V4-3）纳入位置：V4-1→M3 验收（明确覆盖范围+�
 | M9b 同条件真实模型复验 | 未开始；需单独费用授权 | — | — |
 | M10a 数据扩展协议与切分审计 | 已完成（实现、主实现自检、辅助独立复核与同一实现提交双 CI）；见 [验收记录](acceptance/m10a-dataset-protocol-acceptance.md)与[独立复核](acceptance/m10a-independent-review.md) | `4520815` | 通过（`4520815`，[run 40010997694](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/40010997694)） |
 | M10b 开发集扩展到 12 案 | 已完成（实现、主实现自检、辅助独立复核及跨平台换行修复后的同一提交双 CI）；见 [验收记录](acceptance/m10b-dev-dataset-acceptance.md)与[独立复核](acceptance/m10b-independent-review.md) | `bbc3e86`（实现），`2b1aaca`（CI 修复与验收 head） | 通过（`2b1aaca`，[run 40014244342](https://github.com/aascc413-coder/sentinelkb-ai-security-agent/actions/runs/40014244342)） |
+| M10c 开发集冻结到 20 案 | 实现、自检与辅助独立复验已通过；待提交与同一提交双 CI；见 [验收记录](acceptance/m10c-dev-freeze-acceptance.md)、[首次复核](acceptance/m10c-independent-review.md)与[修复后复验](acceptance/m10c-independent-rereview.md) | 待提交 | 待运行 |
 
 ### 7.3 工程验收与实验结论分开判断
 

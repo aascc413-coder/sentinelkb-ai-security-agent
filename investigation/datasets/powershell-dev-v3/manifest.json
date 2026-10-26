@@ -1,0 +1,187 @@
+{
+  "dataset_version": "powershell-dev-v3",
+  "purpose": "Frozen M10 development dataset; not blind test",
+  "rubric_version": "powershell-v1",
+  "cases": [
+    {
+      "case_id": "C1",
+      "public": "public/c1.json",
+      "environment": "environment/world-1.json",
+      "oracle": "oracle/c1.json"
+    },
+    {
+      "case_id": "C2",
+      "public": "public/c2.json",
+      "environment": "environment/world-2.json",
+      "oracle": "oracle/c2.json"
+    },
+    {
+      "case_id": "C3",
+      "public": "public/c3.json",
+      "environment": "environment/world-3.json",
+      "oracle": "oracle/c3.json"
+    },
+    {
+      "case_id": "C4",
+      "public": "public/c4.json",
+      "environment": "environment/shared-pair.json",
+      "oracle": "oracle/c4.json"
+    },
+    {
+      "case_id": "C5",
+      "public": "public/c5.json",
+      "environment": "environment/shared-pair.json",
+      "oracle": "oracle/c5.json"
+    },
+    {
+      "case_id": "C6",
+      "public": "public/c6.json",
+      "environment": "environment/world-6.json",
+      "oracle": "oracle/c6.json"
+    },
+    {
+      "case_id": "C7",
+      "public": "public/c7.json",
+      "environment": "environment/world-7.json",
+      "oracle": "oracle/c7.json"
+    },
+    {
+      "case_id": "C8",
+      "public": "public/c8.json",
+      "environment": "environment/world-8.json",
+      "oracle": "oracle/c8.json"
+    },
+    {
+      "case_id": "C9",
+      "public": "public/c9.json",
+      "environment": "environment/world-9.json",
+      "oracle": "oracle/c9.json"
+    },
+    {
+      "case_id": "C10",
+      "public": "public/c10.json",
+      "environment": "environment/shared-10-11.json",
+      "oracle": "oracle/c10.json"
+    },
+    {
+      "case_id": "C11",
+      "public": "public/c11.json",
+      "environment": "environment/shared-10-11.json",
+      "oracle": "oracle/c11.json"
+    },
+    {
+      "case_id": "C12",
+      "public": "public/c12.json",
+      "environment": "environment/world-12.json",
+      "oracle": "oracle/c12.json"
+    },
+    {
+      "case_id": "C13",
+      "public": "public/c13.json",
+      "environment": "environment/world-13.json",
+      "oracle": "oracle/c13.json"
+    },
+    {
+      "case_id": "C14",
+      "public": "public/c14.json",
+      "environment": "environment/world-14.json",
+      "oracle": "oracle/c14.json"
+    },
+    {
+      "case_id": "C15",
+      "public": "public/c15.json",
+      "environment": "environment/world-15.json",
+      "oracle": "oracle/c15.json"
+    },
+    {
+      "case_id": "C16",
+      "public": "public/c16.json",
+      "environment": "environment/world-16.json",
+      "oracle": "oracle/c16.json"
+    },
+    {
+      "case_id": "C17",
+      "public": "public/c17.json",
+      "environment": "environment/shared-17-18.json",
+      "oracle": "oracle/c17.json"
+    },
+    {
+      "case_id": "C18",
+      "public": "public/c18.json",
+      "environment": "environment/shared-17-18.json",
+      "oracle": "oracle/c18.json"
+    },
+    {
+      "case_id": "C19",
+      "public": "public/c19.json",
+      "environment": "environment/world-19.json",
+      "oracle": "oracle/c19.json"
+    },
+    {
+      "case_id": "C20",
+      "public": "public/c20.json",
+      "environment": "environment/world-20.json",
+      "oracle": "oracle/c20.json"
+    }
+  ],
+  "file_sha256": {
+    "public/c1.json": "c59fd65cf8b9defb621eaaffb77f152549fa928a558ad2b49e19ba03c65159f8",
+    "public/c10.json": "2c831d65074feaa2333d4ea32d84b0c5ad4889356b31ae0fd9bde0be7f09cd65",
+    "public/c11.json": "2c831d65074feaa2333d4ea32d84b0c5ad4889356b31ae0fd9bde0be7f09cd65",
+    "public/c12.json": "9411b9ba15b4fd5181ac28ea3f320d85e39995cec5b42e8ea00e1eb41dd6af9c",
+    "public/c13.json": "4db4623f9b6a6d4233df99f2db100578f5e50d32a513ba415943ae15bc1458c4",
+    "public/c14.json": "c8fce244370eb00d894a7448b768d3caae49ff514d07952f6e147d973224a90a",
+    "public/c15.json": "51641b4f1807b214963bd081451581614af0563b7dc25ea8689596bc23ba87b8",
+    "public/c16.json": "0f85b0ffe4d6646e270cba21f2c23fc37594955b54d91d033d765d08a7157f76",
+    "public/c17.json": "3442dcf43b3271aa57254273fff2efeb6bdf8c0e6bfdae1c60e90105edf1cbac",
+    "public/c18.json": "3442dcf43b3271aa57254273fff2efeb6bdf8c0e6bfdae1c60e90105edf1cbac",
+    "public/c19.json": "c553db0b483765d8b385ba02e6641996f9398d3335221c49987720a720a22188",
+    "public/c2.json": "fd1f05115c69c892fe04fdeb6c2b896ce6ae55e5ac8491a2d53717d3022b974e",
+    "public/c20.json": "db3df2c28b5a25e6ca27cd67c9ef1c428b0f9cb7f9c1069b39778bb2326ef66a",
+    "public/c3.json": "9f9ba1e7991f57eed105954df48698c1728a7e10ed5b87cbb45191aca14f4ece",
+    "public/c4.json": "b01ae24fe00954df4fba3764f897fcce66f5cb33d67ca63f555637e22178a522",
+    "public/c5.json": "b01ae24fe00954df4fba3764f897fcce66f5cb33d67ca63f555637e22178a522",
+    "public/c6.json": "27a768b00669e7847153cfa39ad2efbed9403b96234cb36a816dddf428dfd411",
+    "public/c7.json": "686b8e1cc96940090a0ac18197b55ab54d2ee42986e5c58ed766b5dc5508c5de",
+    "public/c8.json": "4eb9e774ba97ffd5bdeb82c78241215db7ebfe5f5955819385d7575a70ab771d",
+    "public/c9.json": "bd68f59a85a5ec9f9506b3eb20cebd80b97ccec74f4033b8d5066b37bbceb5ba",
+    "environment/shared-10-11.json": "08f7409cf2cf5e73e6241b3aa5e23ce539c2bf5682b7230740b3ea0808bb22da",
+    "environment/shared-17-18.json": "581eec4504a89d537056c8d49052fcc2c10ab8c58103aa9553dc8923e261928a",
+    "environment/shared-pair.json": "f1547bbfe259f77d6fcbfd6711b63eb103c6d82eddf10c4742acd6952507d6bc",
+    "environment/world-1.json": "8925ab0d9498ed05a995f44c5f6fbbf0146da49a14c457ad78a33003b43cfc0e",
+    "environment/world-12.json": "5cd5cbadf7d719b9f362bf8156e3d8db85e461e90b4a97aedb0e290c28d3da5c",
+    "environment/world-13.json": "e042286c9fa3ab5ebc0deadda1e9e3d8667df544a21d38d58dd74909a1693463",
+    "environment/world-14.json": "83ded6ca5f714c2089e939d302cd7a998eb50e022f6e1faa8d441005aa95e332",
+    "environment/world-15.json": "56aad8bcf5bff625444c27d51f55ec7eaf1fec80e29eb4ac383fab492e28e105",
+    "environment/world-16.json": "e462e2a69db53f1bf657af2bd3f8de7a7f7171e36fffb0daf54bd55b7d4d259d",
+    "environment/world-19.json": "962658b3b28e083ca4f1f481864a8811a5ed773bd1f5814106e8c1119ab98427",
+    "environment/world-2.json": "f10c3c003c7e6a61dd7f85d63ef74b6dcb170fef247ef1998e00d093d5a861db",
+    "environment/world-20.json": "ed310c617358bb5001415cb68df1f22d5be3f76cf2c8d4478895919f7cdfeefb",
+    "environment/world-3.json": "959263d39d2d96e95bc2dfcf3291d4604051a31828601b258f2d8c3c2bfa123f",
+    "environment/world-6.json": "b6fe5980de2d6033e59449687d07d444848d16ace55d9761f54f2a730a5f3523",
+    "environment/world-7.json": "a4fff51e629cc588bf0e7ca5a302f52bf972a390a1bd1dc9effa41e3fc700bc8",
+    "environment/world-8.json": "ad581e5f88fa04fd17eaacc298c9e40b86e052e2cca441c673555f7423940328",
+    "environment/world-9.json": "ad333d1b9875cf411965c4e7aad6fd5d520771448d5695e327347939705497a8",
+    "oracle/c1.json": "b2d007167a7e650d0988814a64895f8264806377fecdce49d35f15abe0c33a85",
+    "oracle/c10.json": "80e75841b01453673084621aae76a319a3d6ecceb1381bb6e94510de3f12758a",
+    "oracle/c11.json": "08cd217851c6ee874fc7d496a77930a83ed56ea9971d8d30ed611631e9be744c",
+    "oracle/c12.json": "e528e2e40d6ac16431012a6ab3094695e1ed904c4c0796bdb6f0fa3c97674407",
+    "oracle/c13.json": "661319b966c4681f7b638f023e4dac19335daa2c0aa473143b05c801fa808f16",
+    "oracle/c14.json": "33e2efa3aa102daa914e27799c922c1dee85eb1448377ab14e8142ee19db2882",
+    "oracle/c15.json": "0eb9dc6d001780e4af6c70e9aec45009e5a3b437deaa01d83d6cf9423c10404f",
+    "oracle/c16.json": "ca581e0fe993dd354908f588dc1d2025f1eeff878fed626ca7111c7f04c3f6a9",
+    "oracle/c17.json": "b37138f18b3654f5c1d7d1b025472ab5a6d6e5e08b93ce327c31592cb8437cb2",
+    "oracle/c18.json": "3523e37ca6b16941d02a73e1b71d43d86d34f8a95da46d7439f3b0d1489f5bbc",
+    "oracle/c19.json": "6224ad059a8f52812cd165664209f528e923249d2ce6d263b89bdf3eba8dc694",
+    "oracle/c2.json": "a42e2e471236fb53b2fab6a9113264535cb6a86800faa5bacf9d42a5f6959874",
+    "oracle/c20.json": "0b3f6ed9d3d60be4acb4d43940d65bf93f8c36e5e2a979a78cfa43d9612fd512",
+    "oracle/c3.json": "61c0206e70693a8bd89eaac208dcfd1edfc8178df532b3552b19e8b37ad4ae48",
+    "oracle/c4.json": "6bc97dea9dc0424223e60468504fd5f2860e1b6f6ead5914a9f8fa5f9e468dd7",
+    "oracle/c5.json": "5be9132a91fe9f1ff78801d9da13bc3bd5701ae8b9e8340134de1a64f7c8b6c6",
+    "oracle/c6.json": "4cba7b0992ac199131198cfd635ddf6dcbd2d752877c5539f31573de3ec76661",
+    "oracle/c7.json": "901bbbbe79dee5f9e35de96fb8a25f6f7d1c48699c23948087626311fec1ccdc",
+    "oracle/c8.json": "3cf22c305ab032a0fb6f06b2d1b3976eb2c2b2c4d2fdad9b0597f467ef5a55eb",
+    "oracle/c9.json": "f718d4af592d17d71f7baf1bb523ca833df5fdfba4d733066e70e7f2a0574910"
+  },
+  "boundary": "Authoring/evaluation only. Twenty dev cases; no statistical or blind-test claim."
+}

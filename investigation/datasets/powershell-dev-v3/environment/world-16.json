@@ -1,0 +1,223 @@
+{
+  "environment_id": "18441f0ddb0f9a56c57ae34284332468",
+  "as_of": "2026-09-01T02:20:00+00:00",
+  "records_by_tool": {
+    "siem": [
+      {
+        "record_id": "5ef693cc09dba7d8f53a6d93001d93ae",
+        "payload": {
+          "view": "process_tree",
+          "host": "WS-116",
+          "user": "employee-g",
+          "process_id": "p-1616",
+          "process_guid": "83e2ba9efb36b74a891a83f763e2643d",
+          "event_id": "0294284bd7050cb843344552df30f485",
+          "occurred_at": "2026-09-01T02:14:00+00:00",
+          "observed_at": "2026-09-01T02:19:00+00:00",
+          "parent_process": "archive-viewer.exe",
+          "child_process": [],
+          "job_id": "NONE",
+          "script_hash": "h-partial-16",
+          "parameters": [
+            "encrypt"
+          ],
+          "script_observations": [
+            {
+              "operation": "encrypt",
+              "object": "team-documents",
+              "authorized": false,
+              "affected_count": 40
+            }
+          ]
+        },
+        "content_sha256": "34c2903ba076898a429742a5fce832eeae06469b2a33f7832ae9787a84312fb0",
+        "source_system": "edr",
+        "independence_group": "edr-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement",
+          "policy_version": "source-policy-v1"
+        }
+      }
+    ],
+    "threat_intel": [],
+    "asset": [
+      {
+        "record_id": "b8f2eff967f85dfc556b1bacd142aea7",
+        "payload": {
+          "host": "WS-116",
+          "published_at": "2026-09-01T02:19:00+00:00",
+          "purpose": "managed-workstation",
+          "system_type": "Windows",
+          "critical_asset": false,
+          "department": "synthetic-enterprise",
+          "approval_register_complete": true,
+          "approval_register_window": {
+            "start": "2026-09-01T02:10:00+00:00",
+            "end": "2026-09-01T02:20:00+00:00"
+          },
+          "approved_jobs": []
+        },
+        "content_sha256": "f059a898ec2a7664d60cd8af9d141e0f13bc846cd428b2477ad8ac6f8892ee1e",
+        "source_system": "change-register",
+        "independence_group": "change-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement",
+          "policy_version": "source-policy-v1"
+        }
+      }
+    ],
+    "history": [],
+    "attack": [
+      {
+        "record_id": "7bee21a7f190a7b8508765a2fccd0588",
+        "payload": {
+          "snapshot_version": "attack-local-v1",
+          "published_at": "2026-08-01T00:00:00+00:00",
+          "technique_id": "T1059.001",
+          "behavior_terms": [
+            "powershell_execution"
+          ],
+          "description": "PowerShell occurs in authorized and unauthorized activity; mapping is not a verdict."
+        },
+        "content_sha256": "c56136a6f89da61baacc8e4f086f261ee6347feeb5d7d8735b90c8e822aca2e6",
+        "source_system": "local-attack-knowledge",
+        "independence_group": "knowledge-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement",
+          "policy_version": "source-policy-v1"
+        }
+      }
+    ]
+  },
+  "query_rules": [
+    {
+      "tool": "siem",
+      "argument_constraints": {
+        "view": "process_tree",
+        "host": "WS-116"
+      },
+      "record_ids": [
+        "5ef693cc09dba7d8f53a6d93001d93ae"
+      ],
+      "status": "partial",
+      "coverage": {
+        "scope": {
+          "view": "process_tree",
+          "host": "WS-116",
+          "user": null,
+          "process_id": null
+        },
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "completeness": "partial",
+        "truncated": false,
+        "missing_sources": [
+          "process_start"
+        ]
+      },
+      "retryable": false,
+      "error_code": null
+    },
+    {
+      "tool": "siem",
+      "argument_constraints": {
+        "view": "network_events",
+        "host": "WS-116"
+      },
+      "record_ids": [],
+      "status": "empty",
+      "coverage": {
+        "scope": {
+          "view": "network_events",
+          "host": "WS-116",
+          "user": null,
+          "process_id": null
+        },
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "completeness": "complete",
+        "truncated": false,
+        "missing_sources": []
+      },
+      "retryable": false,
+      "error_code": null
+    },
+    {
+      "tool": "asset",
+      "argument_constraints": {
+        "host": "WS-116"
+      },
+      "record_ids": [
+        "b8f2eff967f85dfc556b1bacd142aea7"
+      ],
+      "status": "ok",
+      "coverage": {
+        "scope": {
+          "host": "WS-116",
+          "as_of": "2026-09-01T02:20:00+00:00"
+        },
+        "window": null,
+        "completeness": "complete",
+        "truncated": false,
+        "missing_sources": []
+      },
+      "retryable": false,
+      "error_code": null
+    },
+    {
+      "tool": "history",
+      "argument_constraints": {
+        "entity_type": "user",
+        "entity": "employee-g"
+      },
+      "record_ids": [],
+      "status": "unavailable",
+      "coverage": {
+        "scope": {
+          "entity_type": "user",
+          "entity": "employee-g"
+        },
+        "window": {
+          "start": "2026-08-31T02:20:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "completeness": "partial",
+        "truncated": false,
+        "missing_sources": [
+          "history_retention_unavailable"
+        ]
+      },
+      "retryable": false,
+      "error_code": "history_retention_unavailable"
+    },
+    {
+      "tool": "attack",
+      "argument_constraints": {
+        "snapshot_version": "attack-local-v1"
+      },
+      "record_ids": [
+        "7bee21a7f190a7b8508765a2fccd0588"
+      ],
+      "status": "ok",
+      "coverage": {
+        "scope": {
+          "snapshot_version": "attack-local-v1"
+        },
+        "window": null,
+        "completeness": "complete",
+        "truncated": false,
+        "missing_sources": []
+      },
+      "retryable": false,
+      "error_code": null
+    }
+  ],
+  "fixture_version": "powershell-dev-v3"
+}

@@ -1,0 +1,207 @@
+{
+  "case_id": "C6",
+  "family_id": "powershell-office-exfil-v1",
+  "split": "dev",
+  "ground_truth": "malicious",
+  "complete_world_evidence": {
+    "E0": {
+      "source": "alert",
+      "record_ids": [
+        "c958fe17ad2360f52194c5eb62c26654"
+      ],
+      "observation": "PowerShell detector fired; detector text is not verified behavior."
+    },
+    "E1": {
+      "source": "siem",
+      "record_ids": [
+        "85e2f9c24fcc0c1c48e246dfa4908d0c"
+      ],
+      "observation": {
+        "view": "process_tree",
+        "host": "WS-106",
+        "user": "analyst-c",
+        "process_id": "p-606",
+        "process_guid": "7e248d4bab7aecfe9c106fdfd0257385",
+        "event_id": "3c995274485630b1b7d4f1a3be97e9ef",
+        "occurred_at": "2026-09-01T02:14:00+00:00",
+        "observed_at": "2026-09-01T02:19:00+00:00",
+        "parent_process": "WINWORD.EXE",
+        "child_process": [],
+        "job_id": "DOC-UNKNOWN",
+        "script_hash": "h-office-unknown",
+        "parameters": [
+          "collect",
+          "upload"
+        ],
+        "script_observations": [
+          {
+            "operation": "read",
+            "object": "browser-credential-store",
+            "authorized": false,
+            "produces": "browser-secrets"
+          },
+          {
+            "operation": "upload",
+            "object": "browser-secrets",
+            "destination": "203.0.113.106"
+          }
+        ]
+      }
+    },
+    "E2": {
+      "source": "siem",
+      "record_ids": [
+        "7d41c9d9aae6af3f8720618ec6eee55c"
+      ],
+      "observation": {
+        "view": "network_events",
+        "host": "WS-106",
+        "user": "analyst-c",
+        "process_id": "p-606",
+        "process_guid": "7e248d4bab7aecfe9c106fdfd0257385",
+        "event_id": "bc8176452398b122ba1b9838670fdd81",
+        "occurred_at": "2026-09-01T02:14:00+00:00",
+        "observed_at": "2026-09-01T02:19:00+00:00",
+        "observed_destinations": [
+          "203.0.113.106"
+        ],
+        "all_connections_captured": true,
+        "destination_ip": "203.0.113.106",
+        "destination_port": 443
+      }
+    },
+    "E3": {
+      "source": "asset",
+      "record_ids": [
+        "97908f996c7beadcd55382040d5293b9"
+      ],
+      "observation": {
+        "host": "WS-106",
+        "published_at": "2026-09-01T02:19:00+00:00",
+        "purpose": "managed-workstation",
+        "system_type": "Windows",
+        "critical_asset": false,
+        "department": "synthetic-enterprise",
+        "approval_register_complete": true,
+        "approval_register_window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "approved_jobs": []
+      }
+    },
+    "E7": {
+      "source": "threat_intel",
+      "record_ids": [
+        "8917616efbcc16cf11444c952955bab2"
+      ],
+      "observation": {
+        "indicator_type": "ip",
+        "value": "203.0.113.106",
+        "published_at": "2026-09-01T02:19:00+00:00",
+        "reputation": "malicious",
+        "provider": "local-mock",
+        "not_a_real_ioc_assessment": true
+      }
+    },
+    "E5": {
+      "source": "attack",
+      "record_ids": [
+        "50f9f5085d6642d419fb677b5520a9b2"
+      ],
+      "observation": {
+        "snapshot_version": "attack-local-v1",
+        "published_at": "2026-08-01T00:00:00+00:00",
+        "technique_id": "T1059.001",
+        "behavior_terms": [
+          "powershell_execution"
+        ],
+        "description": "PowerShell occurs in authorized and unauthorized activity; mapping is not a verdict."
+      }
+    }
+  },
+  "observable_fact_keys": [
+    "E0",
+    "E1",
+    "E2",
+    "E3",
+    "E7",
+    "E5"
+  ],
+  "critical_fact_keys": [
+    "E1",
+    "E2",
+    "E3"
+  ],
+  "distractor_fact_keys": [
+    "E5",
+    "E7"
+  ],
+  "sufficient_sets": {
+    "TP": [
+      [
+        "E1",
+        "E2",
+        "E3"
+      ]
+    ],
+    "FP": []
+  },
+  "acceptable_verdicts": [
+    "TP"
+  ],
+  "resolvable_with_full_observable_evidence": true,
+  "expected_actions": [
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E1"
+      ],
+      "acceptable_tools": [
+        "siem"
+      ],
+      "argument_constraints": {
+        "view": "process_tree",
+        "host": "WS-106",
+        "process_id": "p-606"
+      },
+      "evidence_goal": "Inspect grounded current process behavior."
+    },
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E2"
+      ],
+      "acceptable_tools": [
+        "siem"
+      ],
+      "argument_constraints": {
+        "view": "network_events",
+        "host": "WS-106",
+        "process_id": "p-606"
+      },
+      "evidence_goal": "Inspect same-instance network effects and coverage."
+    },
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E3"
+      ],
+      "acceptable_tools": [
+        "asset"
+      ],
+      "argument_constraints": {
+        "host": "WS-106"
+      },
+      "evidence_goal": "Check execution details against complete approvals."
+    }
+  ],
+  "rubric_version": "powershell-v1",
+  "annotation_rationale": "Unauthorized browser-secret collection and same-instance upload, with complete negative approval coverage."
+}

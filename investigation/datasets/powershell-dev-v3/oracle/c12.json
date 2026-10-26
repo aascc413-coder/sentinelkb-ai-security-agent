@@ -1,0 +1,182 @@
+{
+  "case_id": "C12",
+  "family_id": "powershell-direct-destructive-v1",
+  "split": "dev",
+  "ground_truth": "malicious",
+  "complete_world_evidence": {
+    "E0": {
+      "source": "alert",
+      "record_ids": [
+        "441921e4a8dca9d09a75a9c03ea9281c"
+      ],
+      "observation": "PowerShell detector fired; detector text is not verified behavior."
+    },
+    "E1": {
+      "source": "siem",
+      "record_ids": [
+        "401e0b286d4b532dd391e9c918b848e6"
+      ],
+      "observation": {
+        "view": "process_tree",
+        "host": "WS-112",
+        "user": "employee-e",
+        "process_id": "p-1212",
+        "process_guid": "ab066b3056b18331228ea50afdbb24ee",
+        "event_id": "c67d626217eaf5c10c5ed7f6cb0d4ba0",
+        "occurred_at": "2026-09-01T02:14:00+00:00",
+        "observed_at": "2026-09-01T02:19:00+00:00",
+        "parent_process": "invoice-viewer.exe",
+        "child_process": [],
+        "job_id": "NONE",
+        "script_hash": "h-destructive-12",
+        "parameters": [
+          "encrypt",
+          "recursive"
+        ],
+        "script_observations": [
+          {
+            "operation": "encrypt",
+            "object": "user-documents",
+            "authorized": false,
+            "affected_count": 250
+          }
+        ]
+      }
+    },
+    "E2": {
+      "source": "siem",
+      "record_ids": [
+        "4ec2de425b9add1de926cc78ad475fa5"
+      ],
+      "observation": {
+        "view": "network_events",
+        "host": "WS-112",
+        "user": "employee-e",
+        "process_id": "p-1212",
+        "process_guid": "ab066b3056b18331228ea50afdbb24ee",
+        "event_id": "1f906cfc7b0c93df06a0162ccbdcaf0c",
+        "occurred_at": "2026-09-01T02:14:00+00:00",
+        "observed_at": "2026-09-01T02:19:00+00:00",
+        "observed_destinations": [],
+        "all_connections_captured": true
+      }
+    },
+    "E3": {
+      "source": "asset",
+      "record_ids": [
+        "d18fd6b1980ed60b161a4a08ab99362e"
+      ],
+      "observation": {
+        "host": "WS-112",
+        "published_at": "2026-09-01T02:19:00+00:00",
+        "purpose": "managed-workstation",
+        "system_type": "Windows",
+        "critical_asset": false,
+        "department": "synthetic-enterprise",
+        "approval_register_complete": true,
+        "approval_register_window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "approved_jobs": []
+      }
+    },
+    "E5": {
+      "source": "attack",
+      "record_ids": [
+        "4890f61671446db34af0375358d9c999"
+      ],
+      "observation": {
+        "snapshot_version": "attack-local-v1",
+        "published_at": "2026-08-01T00:00:00+00:00",
+        "technique_id": "T1059.001",
+        "behavior_terms": [
+          "powershell_execution"
+        ],
+        "description": "PowerShell occurs in authorized and unauthorized activity; mapping is not a verdict."
+      }
+    }
+  },
+  "observable_fact_keys": [
+    "E0",
+    "E1",
+    "E2",
+    "E3",
+    "E5"
+  ],
+  "critical_fact_keys": [
+    "E1",
+    "E2",
+    "E3"
+  ],
+  "distractor_fact_keys": [
+    "E5"
+  ],
+  "sufficient_sets": {
+    "TP": [
+      [
+        "E1",
+        "E2",
+        "E3"
+      ]
+    ],
+    "FP": []
+  },
+  "acceptable_verdicts": [
+    "TP"
+  ],
+  "resolvable_with_full_observable_evidence": true,
+  "expected_actions": [
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E1"
+      ],
+      "acceptable_tools": [
+        "siem"
+      ],
+      "argument_constraints": {
+        "view": "process_tree",
+        "host": "WS-112",
+        "process_id": "p-1212"
+      },
+      "evidence_goal": "Inspect grounded current process behavior."
+    },
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E2"
+      ],
+      "acceptable_tools": [
+        "siem"
+      ],
+      "argument_constraints": {
+        "view": "network_events",
+        "host": "WS-112",
+        "process_id": "p-1212"
+      },
+      "evidence_goal": "Inspect same-instance network effects and coverage."
+    },
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E3"
+      ],
+      "acceptable_tools": [
+        "asset"
+      ],
+      "argument_constraints": {
+        "host": "WS-112"
+      },
+      "evidence_goal": "Check execution details against complete approvals."
+    }
+  ],
+  "rubric_version": "powershell-v1",
+  "annotation_rationale": "High-quality EDR directly records unauthorized encryption; complete network and approval scopes exclude alternatives."
+}

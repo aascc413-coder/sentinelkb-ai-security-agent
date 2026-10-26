@@ -1,0 +1,207 @@
+{
+  "case_id": "C13",
+  "family_id": "powershell-office-exfil-v1",
+  "split": "dev",
+  "ground_truth": "malicious",
+  "complete_world_evidence": {
+    "E0": {
+      "source": "alert",
+      "record_ids": [
+        "c5ba9f35787ff72b059ddff09319626c"
+      ],
+      "observation": "PowerShell detector fired; detector text is not verified behavior."
+    },
+    "E1": {
+      "source": "siem",
+      "record_ids": [
+        "79076d86d61dd887d713c6ba3d454c57"
+      ],
+      "observation": {
+        "view": "process_tree",
+        "host": "WS-113",
+        "user": "developer-f",
+        "process_id": "p-1313",
+        "process_guid": "032f9cb5fcdc7375aae3d2044f58873c",
+        "event_id": "575bf52ef6c6bd2f97d736ea83de8ddf",
+        "occurred_at": "2026-09-01T02:14:00+00:00",
+        "observed_at": "2026-09-01T02:19:00+00:00",
+        "parent_process": "code-editor.exe",
+        "child_process": [],
+        "job_id": "NONE",
+        "script_hash": "h-key-exfil-13",
+        "parameters": [
+          "collect",
+          "send"
+        ],
+        "script_observations": [
+          {
+            "operation": "read",
+            "object": "private-key-store",
+            "authorized": false,
+            "produces": "ssh-private-key-blob"
+          },
+          {
+            "operation": "send",
+            "object": "ssh-private-key-blob",
+            "destination": "203.0.113.113"
+          }
+        ]
+      }
+    },
+    "E2": {
+      "source": "siem",
+      "record_ids": [
+        "51e1d042dd7f53ad48518d2f3938421a"
+      ],
+      "observation": {
+        "view": "network_events",
+        "host": "WS-113",
+        "user": "developer-f",
+        "process_id": "p-1313",
+        "process_guid": "032f9cb5fcdc7375aae3d2044f58873c",
+        "event_id": "3db955aa3cef24edd71a9ada51eca6c4",
+        "occurred_at": "2026-09-01T02:14:00+00:00",
+        "observed_at": "2026-09-01T02:19:00+00:00",
+        "observed_destinations": [
+          "203.0.113.113"
+        ],
+        "all_connections_captured": true,
+        "destination_ip": "203.0.113.113",
+        "destination_port": 443
+      }
+    },
+    "E3": {
+      "source": "asset",
+      "record_ids": [
+        "c24521df05032037e812c43f768f844b"
+      ],
+      "observation": {
+        "host": "WS-113",
+        "published_at": "2026-09-01T02:19:00+00:00",
+        "purpose": "managed-workstation",
+        "system_type": "Windows",
+        "critical_asset": false,
+        "department": "synthetic-enterprise",
+        "approval_register_complete": true,
+        "approval_register_window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "approved_jobs": []
+      }
+    },
+    "E7": {
+      "source": "threat_intel",
+      "record_ids": [
+        "4c3c309da22eece9b752b6ee8bb0f917"
+      ],
+      "observation": {
+        "indicator_type": "ip",
+        "value": "203.0.113.113",
+        "published_at": "2026-09-01T02:19:00+00:00",
+        "reputation": "benign",
+        "provider": "local-mock",
+        "not_a_real_ioc_assessment": true
+      }
+    },
+    "E5": {
+      "source": "attack",
+      "record_ids": [
+        "80cba6a4817ae897db7018610895baff"
+      ],
+      "observation": {
+        "snapshot_version": "attack-local-v1",
+        "published_at": "2026-08-01T00:00:00+00:00",
+        "technique_id": "T1059.001",
+        "behavior_terms": [
+          "powershell_execution"
+        ],
+        "description": "PowerShell occurs in authorized and unauthorized activity; mapping is not a verdict."
+      }
+    }
+  },
+  "observable_fact_keys": [
+    "E0",
+    "E1",
+    "E2",
+    "E3",
+    "E7",
+    "E5"
+  ],
+  "critical_fact_keys": [
+    "E1",
+    "E2",
+    "E3"
+  ],
+  "distractor_fact_keys": [
+    "E5",
+    "E7"
+  ],
+  "sufficient_sets": {
+    "TP": [
+      [
+        "E1",
+        "E2",
+        "E3"
+      ]
+    ],
+    "FP": []
+  },
+  "acceptable_verdicts": [
+    "TP"
+  ],
+  "resolvable_with_full_observable_evidence": true,
+  "expected_actions": [
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E1"
+      ],
+      "acceptable_tools": [
+        "siem"
+      ],
+      "argument_constraints": {
+        "view": "process_tree",
+        "host": "WS-113",
+        "process_id": "p-1313"
+      },
+      "evidence_goal": "Inspect grounded current process behavior."
+    },
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E2"
+      ],
+      "acceptable_tools": [
+        "siem"
+      ],
+      "argument_constraints": {
+        "view": "network_events",
+        "host": "WS-113",
+        "process_id": "p-1313"
+      },
+      "evidence_goal": "Inspect same-instance network effects and coverage."
+    },
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E3"
+      ],
+      "acceptable_tools": [
+        "asset"
+      ],
+      "argument_constraints": {
+        "host": "WS-113"
+      },
+      "evidence_goal": "Check execution details against complete approvals."
+    }
+  ],
+  "rubric_version": "powershell-v1",
+  "annotation_rationale": "Unauthorized private-key collection and same-instance transfer outweigh benign TI metadata."
+}

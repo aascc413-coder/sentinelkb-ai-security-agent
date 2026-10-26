@@ -86,9 +86,11 @@ class DeterministicPlanner:
         network_call = ToolCall("siem", SIEMQuery(
             "network_events", window, host=alert.host,
             process_id=alert.process_id, limit=50)) if alert.host else None
+        history_entity_type = "user" if alert.user else "host"
+        history_entity = alert.user or alert.host
         history_call = ToolCall("history", HistoryQuery(
-            "host", alert.host, history_window, host=alert.host,
-            user=alert.user, limit=50)) if alert.host else None
+            history_entity_type, history_entity, history_window, host=alert.host,
+            user=alert.user, limit=50)) if history_entity else None
         process_attempted = bool(process_call and attempted(process_call))
         candidates = []
         if process_call is not None and not attempted(process_call):
@@ -120,8 +122,9 @@ class DeterministicPlanner:
                 availability=2 if malicious_signal else 1,
                 malicious_ids=malicious_ids, benign_ids=benign_ids,
             ))
-        core_attempted = all(call is not None and attempted(call)
-                             for call in (process_call, asset_call, network_call))
+        core_calls = tuple(call for call in (process_call, asset_call, network_call)
+                           if call is not None)
+        core_attempted = all(attempted(call) for call in core_calls)
         if core_attempted and history_call is not None and not attempted(history_call):
             candidates.append(_candidate(
                 "history", history_call,

@@ -1,0 +1,287 @@
+{
+  "environment_id": "0e1e9b309c561c585b5f8ad7bfbb92e2",
+  "as_of": "2026-09-01T02:20:00+00:00",
+  "records_by_tool": {
+    "siem": [
+      {
+        "record_id": "1a10bb7c580ac76cd162de35cc7542e7",
+        "payload": {
+          "view": "process_tree",
+          "host": "OPS-114",
+          "user": "svc-inventory",
+          "process_id": "p-1414",
+          "process_guid": "4e0f94ae28d4e55a1e430428abd53e8f",
+          "event_id": "60665e65c1952273b77cd72056347385",
+          "occurred_at": "2026-09-01T02:14:00+00:00",
+          "observed_at": "2026-09-01T02:19:00+00:00",
+          "parent_process": "inventory-agent.exe",
+          "child_process": [],
+          "job_id": "INV-14",
+          "script_hash": "h-inventory-14",
+          "parameters": [
+            "inventory",
+            "publish"
+          ],
+          "script_observations": [
+            {
+              "operation": "read",
+              "object": "software-inventory",
+              "authorized": true
+            },
+            {
+              "operation": "write",
+              "object": "inventory-report",
+              "authorized": true
+            }
+          ]
+        },
+        "content_sha256": "828ae673e9dbcf2f74277bf869488ef9e23fc79e1f2b4a111b1aaf35aa3e2ce1",
+        "source_system": "edr",
+        "independence_group": "edr-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement",
+          "policy_version": "source-policy-v1"
+        }
+      },
+      {
+        "record_id": "f8b04f87b6d5ca441a13e3fee0384259",
+        "payload": {
+          "view": "network_events",
+          "host": "OPS-114",
+          "user": "svc-inventory",
+          "process_id": "p-1414",
+          "process_guid": "4e0f94ae28d4e55a1e430428abd53e8f",
+          "event_id": "15a3a863b79671016e4a6c0bd22f48f2",
+          "occurred_at": "2026-09-01T02:14:00+00:00",
+          "observed_at": "2026-09-01T02:19:00+00:00",
+          "observed_destinations": [
+            "10.40.0.14"
+          ],
+          "all_connections_captured": true,
+          "destination_ip": "10.40.0.14",
+          "destination_port": 443
+        },
+        "content_sha256": "0a3394969742051ab4ea0c716302dea4b2f3ee260fa76d55bbdc04a65740496c",
+        "source_system": "network-sensor",
+        "independence_group": "network-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement",
+          "policy_version": "source-policy-v1"
+        }
+      },
+      {
+        "record_id": "2a74fa09e56ce847e8046cebfb4a7879",
+        "payload": {
+          "view": "network_events",
+          "host": "OPS-114",
+          "user": "svc-inventory",
+          "process_id": "p-1414",
+          "process_guid": "4e0f94ae28d4e55a1e430428abd53e8f",
+          "event_id": "15a3a863b79671016e4a6c0bd22f48f2",
+          "occurred_at": "2026-09-01T02:14:00+00:00",
+          "observed_at": "2026-09-01T02:19:00+00:00",
+          "observed_destinations": [
+            "10.40.0.14"
+          ],
+          "all_connections_captured": true,
+          "destination_ip": "10.40.0.14",
+          "destination_port": 443
+        },
+        "content_sha256": "0a3394969742051ab4ea0c716302dea4b2f3ee260fa76d55bbdc04a65740496c",
+        "source_system": "network-sensor",
+        "independence_group": "network-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement",
+          "policy_version": "source-policy-v1"
+        }
+      }
+    ],
+    "threat_intel": [],
+    "asset": [
+      {
+        "record_id": "b017d3313e061aed775085abbccb02e1",
+        "payload": {
+          "host": "OPS-114",
+          "published_at": "2026-09-01T02:19:00+00:00",
+          "purpose": "managed-workstation",
+          "system_type": "Windows",
+          "critical_asset": false,
+          "department": "synthetic-enterprise",
+          "approval_register_complete": true,
+          "approval_register_window": {
+            "start": "2026-09-01T02:10:00+00:00",
+            "end": "2026-09-01T02:20:00+00:00"
+          },
+          "approved_jobs": [
+            {
+              "host": "OPS-114",
+              "user": "svc-inventory",
+              "job_id": "INV-14",
+              "script_hash": "h-inventory-14",
+              "parameters": [
+                "inventory",
+                "publish"
+              ],
+              "window": {
+                "start": "2026-09-01T02:00:00+00:00",
+                "end": "2026-09-01T03:00:00+00:00"
+              },
+              "allowed_destinations": [
+                "10.40.0.14"
+              ],
+              "expected_observations": [
+                {
+                  "operation": "read",
+                  "object": "software-inventory",
+                  "authorized": true
+                },
+                {
+                  "operation": "write",
+                  "object": "inventory-report",
+                  "authorized": true
+                }
+              ]
+            }
+          ]
+        },
+        "content_sha256": "6a13466279b5da6b3aa4d74e28ce12589f5ac73d8a9f0ca38ed78239fa5eebdd",
+        "source_system": "change-register",
+        "independence_group": "change-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement",
+          "policy_version": "source-policy-v1"
+        }
+      }
+    ],
+    "history": [],
+    "attack": [
+      {
+        "record_id": "aef5379e980cb7c9d45ea7f1d737607e",
+        "payload": {
+          "snapshot_version": "attack-local-v1",
+          "published_at": "2026-08-01T00:00:00+00:00",
+          "technique_id": "T1059.001",
+          "behavior_terms": [
+            "powershell_execution"
+          ],
+          "description": "PowerShell occurs in authorized and unauthorized activity; mapping is not a verdict."
+        },
+        "content_sha256": "c56136a6f89da61baacc8e4f086f261ee6347feeb5d7d8735b90c8e822aca2e6",
+        "source_system": "local-attack-knowledge",
+        "independence_group": "knowledge-01",
+        "reliability": {
+          "level": "high",
+          "basis": "Frozen synthetic source measurement",
+          "policy_version": "source-policy-v1"
+        }
+      }
+    ]
+  },
+  "query_rules": [
+    {
+      "tool": "siem",
+      "argument_constraints": {
+        "view": "process_tree",
+        "host": "OPS-114"
+      },
+      "record_ids": [
+        "1a10bb7c580ac76cd162de35cc7542e7"
+      ],
+      "status": "ok",
+      "coverage": {
+        "scope": {
+          "view": "process_tree",
+          "host": "OPS-114",
+          "user": null,
+          "process_id": null
+        },
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "completeness": "complete",
+        "truncated": false,
+        "missing_sources": []
+      },
+      "retryable": false,
+      "error_code": null
+    },
+    {
+      "tool": "siem",
+      "argument_constraints": {
+        "view": "network_events",
+        "host": "OPS-114"
+      },
+      "record_ids": [
+        "f8b04f87b6d5ca441a13e3fee0384259",
+        "2a74fa09e56ce847e8046cebfb4a7879"
+      ],
+      "status": "ok",
+      "coverage": {
+        "scope": {
+          "view": "network_events",
+          "host": "OPS-114",
+          "user": null,
+          "process_id": null
+        },
+        "window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "completeness": "complete",
+        "truncated": false,
+        "missing_sources": []
+      },
+      "retryable": false,
+      "error_code": null
+    },
+    {
+      "tool": "asset",
+      "argument_constraints": {
+        "host": "OPS-114"
+      },
+      "record_ids": [
+        "b017d3313e061aed775085abbccb02e1"
+      ],
+      "status": "ok",
+      "coverage": {
+        "scope": {
+          "host": "OPS-114",
+          "as_of": "2026-09-01T02:20:00+00:00"
+        },
+        "window": null,
+        "completeness": "complete",
+        "truncated": false,
+        "missing_sources": []
+      },
+      "retryable": false,
+      "error_code": null
+    },
+    {
+      "tool": "attack",
+      "argument_constraints": {
+        "snapshot_version": "attack-local-v1"
+      },
+      "record_ids": [
+        "aef5379e980cb7c9d45ea7f1d737607e"
+      ],
+      "status": "ok",
+      "coverage": {
+        "scope": {
+          "snapshot_version": "attack-local-v1"
+        },
+        "window": null,
+        "completeness": "complete",
+        "truncated": false,
+        "missing_sources": []
+      },
+      "retryable": false,
+      "error_code": null
+    }
+  ],
+  "fixture_version": "powershell-dev-v3"
+}

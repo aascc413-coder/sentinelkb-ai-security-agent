@@ -235,6 +235,9 @@ def evaluate_sufficiency(alert: Alert, registry: EvidenceRegistry,
     asset = asset_rows[0] if asset_rows else (None, None, None)
     pp, peid, prec = process
     np, neid, nrec = network
+    network_scope_ids = tuple(dict.fromkeys(
+        (neid, *(network_acq.operational_ids if network_acq else ()))
+    ))
     approval_entries = [(payload, evidence_id, record, asset_acq)
                         for payload, evidence_id, record in asset_rows]
     approval_entries.extend(
@@ -321,7 +324,7 @@ def evaluate_sufficiency(alert: Alert, registry: EvidenceRegistry,
                              for value in network_times) if network_rows
                          else network_acq and _complete(network_acq.result)))
     g1_out = "met" if same_instance and times_ok else "unmet" if known_conflict else "unknown"
-    g1 = _check("G1", g1_out, (peid, neid),
+    g1 = _check("G1", g1_out, (peid, *network_scope_ids),
                 "Process and network observations share a stable instance and valid timestamps."
                 if g1_out == "met" else "Current behavior lacks a verified same-instance correlation chain.")
 
@@ -369,7 +372,7 @@ def evaluate_sufficiency(alert: Alert, registry: EvidenceRegistry,
     )
     g2_out = "met" if malicious_chain and approval_state in {"none", "mismatch"} else \
         "unmet" if approval_state == "match" else "unknown"
-    g2 = _check("G2", g2_out, (peid, neid, *approval_ids),
+    g2 = _check("G2", g2_out, (peid, *network_scope_ids, *approval_ids),
                 "Grounded same-instance observations establish a recognized unauthorized harmful effect."
                 if g2_out == "met" else "No verified unauthorized malicious behavior chain is available.")
 
@@ -388,7 +391,7 @@ def evaluate_sufficiency(alert: Alert, registry: EvidenceRegistry,
                          for record in approval_records) and bool(
                              process_rows and approval_records)
     g4_out = "met" if coverage_ok and quality_ok else "unknown"
-    g4 = _check("G4", g4_out, (peid, neid, *approval_ids),
+    g4 = _check("G4", g4_out, (peid, *network_scope_ids, *approval_ids),
                 "Material process, network and approval scopes have complete reliable coverage."
                 if g4_out == "met" else "At least one material behavior or approval scope is incomplete.")
 
@@ -417,14 +420,14 @@ def evaluate_sufficiency(alert: Alert, registry: EvidenceRegistry,
         observations_known and not behavior_match
         or network_complete and allowed is not None and not destinations <= allowed))
     b2 = _check("B2", "met" if b2_met else "unmet" if b2_known_bad else "unknown",
-                (peid, neid, *approval_ids),
+                (peid, *network_scope_ids, *approval_ids),
                 "Observed behavior and same-instance effects stay inside the approved backup scope."
                 if b2_met else "Current behavior is outside the approved scope or remains unverified.")
 
     b3_met = b1_out == "met" and b2_met and g2_out != "met" and coverage_ok
     b3_bad = g2_out == "met" or b2_known_bad
     b3 = _check("B3", "met" if b3_met else "unmet" if b3_bad else "unknown",
-                (peid, neid, *approval_ids),
+                (peid, *network_scope_ids, *approval_ids),
                 "Complete alert-scoped checks found no unresolved malicious counterevidence."
                 if b3_met else "Material risk counterevidence exists or the checked scope is incomplete.")
 

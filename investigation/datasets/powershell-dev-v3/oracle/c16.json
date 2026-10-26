@@ -1,0 +1,190 @@
+{
+  "case_id": "C16",
+  "family_id": "powershell-partial-destructive-v1",
+  "split": "dev",
+  "ground_truth": "malicious",
+  "complete_world_evidence": {
+    "E0": {
+      "source": "alert",
+      "record_ids": [
+        "0d192f43276b3b5b114e945c5862fc0c"
+      ],
+      "observation": "PowerShell detector fired; detector text is not verified behavior."
+    },
+    "E1": {
+      "source": "siem",
+      "record_ids": [
+        "5ef693cc09dba7d8f53a6d93001d93ae"
+      ],
+      "observation": {
+        "view": "process_tree",
+        "host": "WS-116",
+        "user": "employee-g",
+        "process_id": "p-1616",
+        "process_guid": "83e2ba9efb36b74a891a83f763e2643d",
+        "event_id": "0294284bd7050cb843344552df30f485",
+        "occurred_at": "2026-09-01T02:14:00+00:00",
+        "observed_at": "2026-09-01T02:19:00+00:00",
+        "parent_process": "archive-viewer.exe",
+        "child_process": [],
+        "job_id": "NONE",
+        "script_hash": "h-partial-16",
+        "parameters": [
+          "encrypt"
+        ],
+        "script_observations": [
+          {
+            "operation": "encrypt",
+            "object": "team-documents",
+            "authorized": false,
+            "affected_count": 40
+          }
+        ]
+      }
+    },
+    "E2": {
+      "source": "siem",
+      "record_ids": [],
+      "arguments": {
+        "view": "network_events",
+        "host": "WS-116"
+      },
+      "operational_status": "empty",
+      "observation": "Complete network scope returned zero matching events."
+    },
+    "E3": {
+      "source": "asset",
+      "record_ids": [
+        "b8f2eff967f85dfc556b1bacd142aea7"
+      ],
+      "observation": {
+        "host": "WS-116",
+        "published_at": "2026-09-01T02:19:00+00:00",
+        "purpose": "managed-workstation",
+        "system_type": "Windows",
+        "critical_asset": false,
+        "department": "synthetic-enterprise",
+        "approval_register_complete": true,
+        "approval_register_window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "approved_jobs": []
+      }
+    },
+    "E4": {
+      "source": "history",
+      "record_ids": [],
+      "operational_status": "unavailable",
+      "reason": "history_retention_unavailable"
+    },
+    "E5": {
+      "source": "attack",
+      "record_ids": [
+        "7bee21a7f190a7b8508765a2fccd0588"
+      ],
+      "observation": {
+        "snapshot_version": "attack-local-v1",
+        "published_at": "2026-08-01T00:00:00+00:00",
+        "technique_id": "T1059.001",
+        "behavior_terms": [
+          "powershell_execution"
+        ],
+        "description": "PowerShell occurs in authorized and unauthorized activity; mapping is not a verdict."
+      }
+    }
+  },
+  "observable_fact_keys": [
+    "E0",
+    "E1",
+    "E2",
+    "E3",
+    "E4",
+    "E5"
+  ],
+  "critical_fact_keys": [
+    "E1",
+    "E2",
+    "E3"
+  ],
+  "distractor_fact_keys": [
+    "E5"
+  ],
+  "sufficient_sets": {
+    "TP": [],
+    "FP": []
+  },
+  "acceptable_verdicts": [
+    "Abstain"
+  ],
+  "resolvable_with_full_observable_evidence": false,
+  "expected_actions": [
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E1"
+      ],
+      "acceptable_tools": [
+        "siem"
+      ],
+      "argument_constraints": {
+        "view": "process_tree",
+        "host": "WS-116",
+        "process_id": "p-1616"
+      },
+      "evidence_goal": "Inspect grounded current process behavior."
+    },
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E2"
+      ],
+      "acceptable_tools": [
+        "siem"
+      ],
+      "argument_constraints": {
+        "view": "network_events",
+        "host": "WS-116",
+        "process_id": "p-1616"
+      },
+      "evidence_goal": "Inspect same-instance network effects and coverage."
+    },
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E3"
+      ],
+      "acceptable_tools": [
+        "asset"
+      ],
+      "argument_constraints": {
+        "host": "WS-116"
+      },
+      "evidence_goal": "Check execution details against complete approvals."
+    },
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E4"
+      ],
+      "acceptable_tools": [
+        "history"
+      ],
+      "argument_constraints": {
+        "entity_type": "user",
+        "entity": "employee-g"
+      },
+      "evidence_goal": "Check comparable user history."
+    }
+  ],
+  "rubric_version": "powershell-v1",
+  "annotation_rationale": "A harmful-looking partial record cannot satisfy complete process coverage and requires human review."
+}

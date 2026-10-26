@@ -3,3 +3,8 @@ investigation/datasets/*.json text eol=lf
 investigation/datasets/**/*.json text eol=lf
 # Evaluation annotations are also deterministically generated and byte-compared.
 investigation/evaluation/annotations/*.json text eol=lf
+# M10c protocol assets are byte-hashed and must not vary by checkout platform.
+investigation/evaluation/freeze/*.json text eol=lf
+investigation/rubrics/*.json text eol=lf
+investigation/src/evidence_investigation/prompts/*.txt text eol=lf
+docs/evidence-aware-investigation/m10c-authoring-guide.md text eol=lf

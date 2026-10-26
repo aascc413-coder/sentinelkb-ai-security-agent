@@ -6,6 +6,8 @@
 
 `powershell-dev-v2/` 是 M10b 的独立版本化开发集，在不改变本目录五案种子字节的前提下扩展到 12 案。其说明、manifest、public/environment/oracle 文件均在该目录；对应评测标注为 `../evaluation/annotations/powershell-dev-v2.json`。
 
+`powershell-dev-v3/` 是 M10c 的 20 案开发集冻结候选。它保留 v2 的前 12 案，新增第三组 counterfactual、可重试与永久故障、部分覆盖、成功空结果、重复同源记录和 TI 干扰案例；对应评测标注与机器冻结协议分别为 `../evaluation/annotations/powershell-dev-v3.json` 和 `../evaluation/freeze/powershell-dev-v3.json`。
+
 - `public/`：仅告警，加载后交给 runtime。
 - `environment/`：工具服务持有，不提前交给模型。
 - `oracle/`：评测独占，含完整世界、可观察性和替代充分组合。

@@ -1,0 +1,174 @@
+{
+  "case_id": "C20",
+  "family_id": "powershell-direct-destructive-v1",
+  "split": "dev",
+  "ground_truth": "malicious",
+  "complete_world_evidence": {
+    "E0": {
+      "source": "alert",
+      "record_ids": [
+        "d0bb0b8afb60e8a1c463dfa85ccd799b"
+      ],
+      "observation": "PowerShell detector fired; detector text is not verified behavior."
+    },
+    "E1": {
+      "source": "siem",
+      "record_ids": [
+        "155d8a81d855b0fec2247ad05ab1de3a"
+      ],
+      "observation": {
+        "view": "process_tree",
+        "host": "WS-120",
+        "user": "employee-j",
+        "process_id": "p-2020",
+        "process_guid": "724992f6124e36d8022d18b42a54988d",
+        "event_id": "a4aee8bed790945ade26e0c7fbc0516d",
+        "occurred_at": "2026-09-01T02:14:00+00:00",
+        "observed_at": "2026-09-01T02:19:00+00:00",
+        "parent_process": "document-converter.exe",
+        "child_process": [],
+        "job_id": "NONE",
+        "script_hash": "h-delete-20",
+        "parameters": [
+          "delete",
+          "recursive"
+        ],
+        "script_observations": [
+          {
+            "operation": "delete",
+            "object": "shared-documents",
+            "authorized": false,
+            "affected_count": 75
+          }
+        ]
+      }
+    },
+    "E2": {
+      "source": "siem",
+      "record_ids": [],
+      "arguments": {
+        "view": "network_events",
+        "host": "WS-120"
+      },
+      "operational_status": "empty",
+      "observation": "Complete network scope returned zero matching events."
+    },
+    "E3": {
+      "source": "asset",
+      "record_ids": [
+        "b1786a4dcdcaf99d90c9d637cb7ed6e6"
+      ],
+      "observation": {
+        "host": "WS-120",
+        "published_at": "2026-09-01T02:19:00+00:00",
+        "purpose": "managed-workstation",
+        "system_type": "Windows",
+        "critical_asset": false,
+        "department": "synthetic-enterprise",
+        "approval_register_complete": true,
+        "approval_register_window": {
+          "start": "2026-09-01T02:10:00+00:00",
+          "end": "2026-09-01T02:20:00+00:00"
+        },
+        "approved_jobs": []
+      }
+    },
+    "E5": {
+      "source": "attack",
+      "record_ids": [
+        "6773e54889efcf5feaeb4ba7c27b8c1c"
+      ],
+      "observation": {
+        "snapshot_version": "attack-local-v1",
+        "published_at": "2026-08-01T00:00:00+00:00",
+        "technique_id": "T1059.001",
+        "behavior_terms": [
+          "powershell_execution"
+        ],
+        "description": "PowerShell occurs in authorized and unauthorized activity; mapping is not a verdict."
+      }
+    }
+  },
+  "observable_fact_keys": [
+    "E0",
+    "E1",
+    "E2",
+    "E3",
+    "E5"
+  ],
+  "critical_fact_keys": [
+    "E1",
+    "E2",
+    "E3"
+  ],
+  "distractor_fact_keys": [
+    "E5"
+  ],
+  "sufficient_sets": {
+    "TP": [
+      [
+        "E1",
+        "E2",
+        "E3"
+      ]
+    ],
+    "FP": []
+  },
+  "acceptable_verdicts": [
+    "TP"
+  ],
+  "resolvable_with_full_observable_evidence": true,
+  "expected_actions": [
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E1"
+      ],
+      "acceptable_tools": [
+        "siem"
+      ],
+      "argument_constraints": {
+        "view": "process_tree",
+        "host": "WS-120",
+        "process_id": "p-2020"
+      },
+      "evidence_goal": "Inspect grounded current process behavior."
+    },
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E2"
+      ],
+      "acceptable_tools": [
+        "siem"
+      ],
+      "argument_constraints": {
+        "view": "network_events",
+        "host": "WS-120",
+        "process_id": "p-2020"
+      },
+      "evidence_goal": "Inspect same-instance network effects and coverage."
+    },
+    {
+      "when_observed_fact_keys": [
+        "E0"
+      ],
+      "when_missing_fact_keys": [
+        "E3"
+      ],
+      "acceptable_tools": [
+        "asset"
+      ],
+      "argument_constraints": {
+        "host": "WS-120"
+      },
+      "evidence_goal": "Check execution details against complete approvals."
+    }
+  ],
+  "rubric_version": "powershell-v1",
+  "annotation_rationale": "Direct unauthorized bulk deletion plus complete approval and zero-network scopes supports early TP."
+}

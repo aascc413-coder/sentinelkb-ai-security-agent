@@ -150,11 +150,37 @@ def audit_dataset(root: Path = LAB / "datasets") -> dict:
                     f"{case_id}/{fact_key}: tools must match actual references",
                 )
             if fact_key in oracle.observable_fact_keys and not references:
-                if fact.get("operational_status") != "unavailable" or not any(
-                    rule.tool == source and rule.status == "unavailable"
-                    and rule.error_code == fact.get("reason")
-                    for rule in environment.query_rules
-                ):
+                operational_status = fact.get("operational_status")
+                if operational_status not in {
+                    "empty", "partial", "unavailable", "timeout", "error",
+                }:
+                    raise ProtocolViolation("ungrounded_annotation", f"{case_id}/{fact_key}")
+                matching_rules = [
+                    rule for rule in environment.query_rules
+                    if rule.tool == source and rule.status == operational_status
+                ]
+                arguments = fact.get("arguments")
+                if operational_status != "unavailable":
+                    if type(arguments) is not dict:
+                        raise ProtocolViolation("ungrounded_annotation", f"{case_id}/{fact_key}")
+                    matching_rules = [
+                        rule for rule in matching_rules
+                        if rule.argument_constraints == arguments
+                    ]
+                if operational_status in {"unavailable", "timeout", "error"}:
+                    matching_rules = [
+                        rule for rule in matching_rules
+                        if rule.error_code == fact.get("reason")
+                    ]
+                if operational_status in {"timeout", "error"} \
+                        and type(fact.get("retryable")) is not bool:
+                    raise ProtocolViolation("ungrounded_annotation", f"{case_id}/{fact_key}")
+                if "retryable" in fact:
+                    matching_rules = [
+                        rule for rule in matching_rules
+                        if rule.retryable is fact.get("retryable")
+                    ]
+                if not matching_rules:
                     raise ProtocolViolation("ungrounded_annotation", f"{case_id}/{fact_key}")
 
         family_splits[oracle.family_id].add(oracle.split)

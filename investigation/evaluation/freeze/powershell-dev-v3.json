@@ -1,0 +1,25 @@
+{
+  "freeze_version": "powershell-dev-protocol-v1",
+  "dataset_version": "powershell-dev-v3",
+  "annotation_version": "powershell-dev-eval-v3",
+  "rubric_version": "powershell-v1",
+  "budget_profile": {
+    "max_tool_calls": 6,
+    "max_tokens": 16000,
+    "max_investigation_steps": 8,
+    "max_time_seconds": 90.0,
+    "finalization_token_reserve": 2500
+  },
+  "file_sha256": {
+    "docs/evidence-aware-investigation/m10c-authoring-guide.md": "1dd3628b0a7274d39fe6f3059c3334b3bcbb0e7270633567d2fb5cb69785773a",
+    "investigation/datasets/powershell-dev-v3/manifest.json": "44db35439e017146ba044bcb2e7a221cfcc20fe9ac13f7757e65eacd44fc2844",
+    "investigation/evaluation/annotations/powershell-dev-v3.json": "af037928eccea9467bcecf711f5843947815959f1f4ed25366c4b8272a331764",
+    "investigation/rubrics/powershell-v1.json": "bb139cb055365e4833a339b889b90cde34db309458df4ab545a853df08bfff56",
+    "investigation/src/evidence_investigation/prompts/direct-v1.txt": "bfeaeb58685907db36596a4b930fa3b83fc0711597dee32d53f55cdd83ca11e1",
+    "investigation/src/evidence_investigation/prompts/fixed-final-v1.txt": "5028f9ac803a537b0958ab0cb73f63286a196e592d886efe816df6afb87f729a",
+    "investigation/src/evidence_investigation/prompts/hypothesis-v2.txt": "85ef01c02896b1a7d0e6ed70c7a731e54407310974bd4dca29dab4330eb14d8e",
+    "investigation/src/evidence_investigation/prompts/react-v1.txt": "610a5134d97ba903aff867dddff6d3c6dda929b988bd674010d48e1007e87ab3",
+    "investigation/src/evidence_investigation/prompts/sufficiency-v1.txt": "36f40dd02866a91878b060bb0bd04bbf2ea09107337be41a3ec2cea1eefe2d22"
+  },
+  "boundary": "Changing any bound file or budget requires a new protocol or dataset version before M10d blind test authoring."
+}

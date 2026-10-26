@@ -202,6 +202,24 @@ def test_planner_initial_action_is_process_and_window_is_frozen():
             - plan.candidates[0].call.arguments.window.start).total_seconds() == 600
 
 
+def test_planner_uses_user_history_when_host_is_missing():
+    case, _ = case_tools(1)
+    checks = tuple(CriterionCheck(cid, "unknown", (), "missing")
+                   for cid in ("G0", "G1", "G2", "G3", "G4"))
+    fp = (checks[0], checks[1]) + tuple(CriterionCheck(cid, "unknown", (), "missing")
+                                        for cid in ("B1", "B2", "B3"))
+    evaluation = SufficiencyEvaluation(
+        SufficiencyResult("powershell-v1", checks, fp, None, ("open",), (),
+                          ("user_history",), True), (), ())
+    user_only = replace(case.alert, host=None, process_id=None)
+    plan = DeterministicPlanner().plan(user_only, (), evaluation)
+    assert plan.selected_action_id == "query:history"
+    selected = next(item for item in plan.candidates
+                    if item.action_id == plan.selected_action_id)
+    assert selected.call.arguments.entity_type == "user"
+    assert selected.call.arguments.entity == case.alert.user
+
+
 @pytest.mark.asyncio
 @pytest.mark.parametrize("index,expected", [
     (1, "TP"), (2, "FP"), (3, "Suspicious"), (4, "Abstain"), (5, "Abstain"),
@@ -228,6 +246,12 @@ async def test_proposed_five_case_behavior_and_trace(tmp_path, index, expected):
     if index == 3:
         assert final.risk_flags == ("approval_execution_mismatch",)
         assert final.stop_reason == "no_available_tool"
+        history_request = next(
+            event.payload for event in bundle.events
+            if event.event_type == "tool_requested" and event.payload["tool"] == "history"
+        )
+        assert history_request["arguments"]["entity_type"] == "user"
+        assert history_request["arguments"]["entity"] == case.alert.user
     if index in (4, 5):
         assert final.risk_flags == ()
         snapshots = [event.payload["state"] for event in bundle.events

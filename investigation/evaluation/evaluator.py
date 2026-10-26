@@ -101,9 +101,18 @@ def matched_fact_keys(fact: ReplayFact, oracle: OracleCase, *, namespace: str = 
         if not isinstance(annotation, dict) or not _source_matches(fact, annotation):
             continue
         if 'operational_status' in annotation:
-            if (fact.fact_key.startswith('source:')
-                    and fact.value.get('status') == annotation['operational_status']
-                    and fact.value.get('error_code') == annotation.get('reason')):
+            status = annotation['operational_status']
+            prefix_valid = (
+                fact.fact_key.startswith('absence:')
+                and status == 'empty'
+                and fact.value.get('absence_provable') is True
+            ) or (
+                fact.fact_key.startswith('source:') and status != 'empty'
+            )
+            if (prefix_valid
+                    and fact.value.get('status') == status
+                    and fact.value.get('error_code') == annotation.get('reason')
+                    and fact.value.get('retryable') == annotation.get('retryable', False)):
                 matched.add(key)
             continue
         if not set(fact.record_ids) & _record_ids(annotation, namespace):
